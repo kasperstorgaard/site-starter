@@ -1,0 +1,33 @@
+// @import 'https://unpkg.com/open-props@1.1.1/easings.min.css';
+// @import 'https://unpkg.com/open-props@1.1.1/sizes.min.css';
+// @import 'https://unpkg.com/open-props@1.1.1/animations.min.css';
+// @import 'https://unpkg.com/open-props@1.1.1/zindex.min.css';
+// @import 'https://unpkg.com/open-props@1.1.1/colors.min.css';
+
+.accordion {
+  --accordion-pad: var(--size-2);
+  --accordion-header-bg: var(--grape-2);
+
+  details {
+    overflow: hidden;
+
+    z-index: var(--layer-1);
+  }
+
+  summary {
+    position: relative;
+    z-index: var(--layer-1);
+    padding: var(--accordion-pad);
+
+    list-style: none;
+    cursor: pointer;
+    background: var(--accordion-header-bg);
+  }
+
+  details summary ~ * {
+    padding: var(--accordion-pad);
+  }
+
+  // details[open] summary ~ * {
+  // }
+}

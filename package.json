@@ -1,0 +1,35 @@
+{
+  "name": "site-starter",
+  "version": "0.0.1",
+  "description": "A website starter template with 11ty, web components and open props",
+  "main": "index.js",
+  "scripts": {
+    "build": "eleventy",
+    "start": "eleventy --serve",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "11ty",
+    "vite",
+    "static",
+    "web",
+    "components"
+  ],
+  "author": "kasperstorgaard",
+  "license": "ISC",
+  "dependencies": {
+    "@11ty/eleventy": "^0.12.1",
+    "@11ty/eleventy-img": "^1.0.0",
+    "concurrently": "^7.0.0",
+    "eleventy-plugin-svg-sprite": "^1.2.2",
+    "esbuild-sass-plugin": "2.0.1",
+    "lit": "^2.1.1",
+    "vite": "^2.7.13"
+  },
+  "devDependencies": {
+    "eslint": "^8.6.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-nuxt": "^3.1.0"
+  }
+}

@@ -1,35 +1,11 @@
-import { adoptStyles, css, html, LitElement, PropertyValues } from 'lit';
+import { css, html, LitElement } from 'lit';
 
-import { customElement, property } from 'lit/decorators.js';
-import { OverlayController } from '../../base/controllers/overlay-controller';
+import { customElement } from 'lit/decorators.js';
+import { Overlayable } from '../overlay/overlay-mixin';
 
 @customElement('sg-sidebar')
-export class SidebarElement extends LitElement {
-  private readonly overlay = new OverlayController(this, SidebarElement);
-
-  @property({ type: Boolean, attribute: 'is-open' })
-  isOpen = false;
-
-  protected createRenderRoot(): Element | ShadowRoot {
-    return this.overlay.renderRoot;
-  }
-
-  connectedCallback() {
-    super.connectedCallback();
-
-    // TODO: make method on overlay to do this.
-    this.overlay.element.addEventListener('click', () => this.overlay.close());
-  }
-
-  updated(changed: PropertyValues) {
-    if (changed.has('isOpen')) {
-      if (this.isOpen) {
-        this.overlay.open();
-      } else {
-        this.overlay.close();
-      }
-    }
-  }
+export class SidebarElement extends Overlayable(LitElement) {
+  static styles = [getStyles()];
 
   render() {
     return html`
@@ -54,5 +30,17 @@ export class SidebarElement extends LitElement {
 
 function getStyles() {
   return css`
+  :host {
+    position: fixed;
+    left: auto;
+    /* on mobile: 100%, on desktop: 40% */
+    width: max(40%, min(460px, 100vw));
+    top: 0;
+    height: 100%;
+    right: 0;
+    background: white;
+
+    z-index: var(--layer-2);
+  }
   `;
 }

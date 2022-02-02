@@ -1,47 +1,30 @@
-import { css, html, LitElement } from 'lit';
-import { customElement, property, query } from 'lit/decorators.js';
+import { css, LitElement } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
 
 @customElement('sg-overlay')
 export class OverlayElement extends LitElement {
   static styles = [styles()];
 
-  @property({ type: Boolean, reflect: true, attribute: 'has-content' })
-  _hasContent = false;
+  @property({ type: Boolean, reflect: true, attribute: 'is-open' })
+  isOpen = true;
 
   @property({ type: Boolean, reflect: true, attribute: 'is-animating' })
-  _isAnimating = false;
+  isAnimating = false;
 
-  @query('slot')
-  _slot: HTMLSlotElement;
-
-  constructor() {
-    super();
-
-    this.addEventListener('animationstart', () => this._isAnimating = true);
-    this.addEventListener('animationend', () => this._isAnimating = false);
-    this.addEventListener('animationcancel', () => this._isAnimating = false);
-  }
-
-  protected firstUpdated() {
-    const updateHasContent = () => {
-      const nodes = this._slot?.assignedNodes();
-      if ((!!nodes.length) !== this._hasContent) {
-        this._hasContent = !!nodes.length;
-      }
-    };
-
-    this._slot?.addEventListener('slotchange', updateHasContent);
-    updateHasContent();
-  }
-
-  connectedCallback() {
+  connectedCallback(): void {
     super.connectedCallback();
+
+    this.addEventListener('animationstart', () => this.isAnimating = true);
+    this.addEventListener('animationend', () => this.isAnimating = false);
+    this.addEventListener('animationcancel', () => this.isAnimating = false);
   }
 
-  render() {
-    return html`
-      <slot></slot>
-    `;
+  protected updated(props: Map<string | number | symbol, unknown>): void {
+    super.updated(props);
+
+    if (props.has('isOpen') && props.get('isOpen') != null) {
+      this.isAnimating = true;
+    }
   }
 }
 
@@ -49,21 +32,24 @@ function styles() {
   return css`
   :host {
     position: fixed;
-    left: 0;
-    top: 0;
     width: 0;
     height: 0;
+    left: 0;
+    top: 0;
 
     background: black;
   }
 
-  :host([has-content]) {
+  :host([is-open]) {
     width: 100%;
     height: 100%;
+  }
+
+  :host([is-open][is-animating]) {
     animation: fade-in 1s ease-out;
   }
 
-  :host(:not([has-content])) {
+  :host(:not([is-open])[is-animating]) {
     animation: fade-out 1s ease-in;
   }
 

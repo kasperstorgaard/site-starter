@@ -21,7 +21,10 @@ module.exports = config => {
   const setupAssetBuilder = () => {
     return esbuild.build({
       bundle: true,
-      entryPoints: ['./src/main.scss', './src/main.ts'],
+      entryPoints: [
+        './src/main.scss',
+        './src/main.ts'
+      ],
       outdir: '_site/assets',
       minify: isProd,
       sourcemap: !isProd,

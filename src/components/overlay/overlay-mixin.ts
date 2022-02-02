@@ -26,9 +26,11 @@ export const Overlayable =
         document.body.appendChild(this._overlayElement);
 
         this._overlayElement.addEventListener('click', () => {
-          console.log('click!');
+          if (!this.isOpen) {
+            return;
+          }
+
           this.isOpen = false;
-          this.requestUpdate('isOpen', true);
         });
       }
 
@@ -38,9 +40,7 @@ export const Overlayable =
         }
 
         if (changes.has('isOpen')) {
-          const value = changes.get('isOpen');
           this._overlayElement.isOpen = this.isOpen;
-          this._overlayElement.requestUpdate('isOpen', Boolean(value));
         }
       }
 

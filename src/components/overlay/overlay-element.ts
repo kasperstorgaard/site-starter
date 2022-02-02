@@ -8,22 +8,21 @@ export class OverlayElement extends LitElement {
   @property({ type: Boolean, reflect: true, attribute: 'is-open' })
   isOpen = true;
 
-  @property({ type: Boolean, reflect: true, attribute: 'is-animating' })
-  isAnimating = false;
+  @property({ type: Boolean, reflect: true, attribute: 'should-animate' })
+  shouldAnimate = false;
 
   connectedCallback(): void {
     super.connectedCallback();
 
-    this.addEventListener('animationstart', () => this.isAnimating = true);
-    this.addEventListener('animationend', () => this.isAnimating = false);
-    this.addEventListener('animationcancel', () => this.isAnimating = false);
+    this.addEventListener('animationend', () => this.shouldAnimate = false);
+    this.addEventListener('animationcancel', () => this.shouldAnimate = false);
   }
 
   protected updated(props: Map<string | number | symbol, unknown>): void {
     super.updated(props);
 
     if (props.has('isOpen') && props.get('isOpen') != null) {
-      this.isAnimating = true;
+      this.shouldAnimate = true;
     }
   }
 }
@@ -32,25 +31,25 @@ function styles() {
   return css`
   :host {
     position: fixed;
-    width: 0;
-    height: 0;
     left: 0;
     top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: var(--level-backdrop);
 
     background: black;
   }
 
-  :host([is-open]) {
-    width: 100%;
-    height: 100%;
+  :host(:not([is-open], [should-animate])) {
+    display: none;
   }
 
-  :host([is-open][is-animating]) {
-    animation: fade-in 1s ease-out;
+  :host([is-open][should-animate]) {
+    animation: var(--animation-fade-in);
   }
 
-  :host(:not([is-open])[is-animating]) {
-    animation: fade-out 1s ease-in;
+  :host(:not([is-open])[should-animate]) {
+    animation: var(--animation-fade-out);
   }
 
   @keyframes fade-in {

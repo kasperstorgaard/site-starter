@@ -1,27 +1,32 @@
-.accordion {
-  --accordion-pad: var(--size-2);
-  --accordion-header-bg: var(--grape-2);
+sg-accordion {
+  --accordion-item-header-padding: var(--size-2) var(--app-box-spacer);
+  --accordion-item-content-padding: var(--size-2) var(--app-box-spacer);
 
   details {
-    overflow: hidden;
-
-    z-index: var(--layer-1);
+    border-top: var(--accordion-item-border, var(--border-base));
   }
 
   summary {
-    position: relative;
-    z-index: var(--layer-1);
-    padding: var(--accordion-pad);
+    display: flex;
+    flex-wrap: none;
+    justify-content: space-between;
+    align-items: center;
 
-    list-style: none;
+    padding: var(--accordion-item-header-padding);
+
     cursor: pointer;
-    background: var(--accordion-header-bg);
+  }
+
+  summary::-webkit-details-marker,
+  summary::marker {
+    display: none
   }
 
   details summary ~ * {
-    padding: var(--accordion-pad);
+    padding: var(--accordion-item-content-padding);
   }
 
-  // details[open] summary ~ * {
-  // }
+  details summary ~ span {
+    display: block;
+  }
 }

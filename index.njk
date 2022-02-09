@@ -1,13 +1,25 @@
 <head>
   <link rel="stylesheet" href="assets/main.css" />
-  <link rel="stylesheet" href="components/main.css" />
+  <link rel="stylesheet" href="assets/components/accordion/accordion.css" />
+  <link rel="stylesheet" href="assets/fonts.css" />
   <script src="assets/main.js" type="module" defer></script>
 </head>
 <body>
   <main>
-    <sg-sidebar is-open>
-      <span>hi there in the sidebar :)</span>
-    </sg-sidebar>
+    <sg-accordion>
+      <details open>
+        <summary>header 1</summary>
+        <span>This is just some content</span>
+      </details>
+      <details>
+        <summary>header 2</summary>
+        <span>This is just some content</span>
+      </details>
+      <details>
+        <summary>header 3</summary>
+        <span>This is just some content</span>
+      </details>
+    </sg-accordion>
   </main>
   {% svgsprite %}
 </body>

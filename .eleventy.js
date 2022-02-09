@@ -12,7 +12,7 @@ module.exports = config => {
 
   // creates an svg sprite of all svgs in directory
   config.addPlugin(svgSprite, {
-    path: './src/assets/icons',
+    path: './assets/icons',
   });
 
   // Set up esbuild for scripts and styles
@@ -23,15 +23,24 @@ module.exports = config => {
       bundle: true,
       entryPoints: [
         './src/main.scss',
+        './src/components/accordion/accordion.scss',
+        './src/fonts.css',
         './src/main.ts'
       ],
       outdir: '_site/assets',
       minify: isProd,
       sourcemap: !isProd,
+      loader: {
+        '.woff': 'file',
+        '.woff2': 'file',
+        '.ttf': 'file',
+      },
       // only go for incremental builds in watch mode
       incremental: isWatchMode,
       plugins: [
-        sassPlugin(),
+        sassPlugin({
+          filter: /.(s[ac]ss)$/
+        }),
       ],
     });
   }

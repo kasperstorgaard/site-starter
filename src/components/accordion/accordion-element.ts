@@ -53,8 +53,8 @@ export class AccordionElement extends LitElement {
   /**
    * If multiple items are allowed to be open or not
    */
-  @property({ type: Boolean })
-  multi = true;
+  @property({ type: Boolean, attribute: 'single-open' })
+  singleOpen = false;
 
   firstUpdated(changes: PropertyValues): void {
     super.firstUpdated(changes);
@@ -84,7 +84,7 @@ export class AccordionElement extends LitElement {
    * The open handler takes care of any cross cutting logic.
    */
   private _onElementOpen(target: HTMLElement) {
-    if (this.multi) {
+    if (!this.singleOpen) {
       return;
     }
 

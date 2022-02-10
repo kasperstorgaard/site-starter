@@ -1,0 +1,40 @@
+---
+// Component Imports
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Tour from '../components/tour/Tour.astro';
+// You can import components from any supported Framework here!
+/* ASTRO:COMPONENT_IMPORTS */
+
+// Full Astro Component Syntax:
+// https://docs.astro.build/core-concepts/astro-components/
+---
+<BaseLayout>
+  <Tour />
+
+  <!-- Script and styles needed for accordion -->
+  <script type="module" src={Astro.resolve('../components/accordion/accordion-element.ts')}></script>
+  <link rel="stylesheet" property="stylesheet" href={Astro.resolve('../components/accordion/accordion.scss')} />
+  <sg-accordion>
+    <details open>
+      <summary>header 1</summary>
+      <span>This is just some content</span>
+    </details>
+    <details>
+      <summary>header 2</summary>
+      <span>This is just some content</span>
+    </details>
+    <details>
+      <summary>header 3</summary>
+      <span>This is just some content</span>
+    </details>
+  </sg-accordion>
+
+  <!--
+  You can also use imported framework components directly in your markup!
+
+  Note: by default, these components are NOT interactive on the client.
+  The `:visible` directive tells Astro to make it interactive.
+
+  See https://docs.astro.build/core-concepts/component-hydration/
+  -->
+</BaseLayout>

@@ -4,9 +4,10 @@
   "description": "A website starter template with 11ty, web components and open props",
   "main": "index.js",
   "scripts": {
-    "build": "eleventy",
-    "start": "eleventy --serve",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
   },
   "keywords": [
     "11ty",
@@ -20,6 +21,8 @@
   "dependencies": {
     "@11ty/eleventy": "^0.12.1",
     "@11ty/eleventy-img": "^1.0.0",
+    "astro": "^0.22.20",
+    "astro-icon": "^0.5.3",
     "body-scroll-lock": "^4.0.0-beta.0",
     "concurrently": "^7.0.0",
     "eleventy-plugin-svg-sprite": "^1.2.2",

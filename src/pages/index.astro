@@ -1,33 +1,56 @@
 ---
-// Component Imports
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Tour from '../components/tour/Tour.astro';
-// You can import components from any supported Framework here!
-/* ASTRO:COMPONENT_IMPORTS */
 
-// Full Astro Component Syntax:
-// https://docs.astro.build/core-concepts/astro-components/
+const testGuesses = JSON.stringify([
+  {
+    letters: [
+      { value: 'p', state: 'unused' },
+      { value: 'o', state: 'used' },
+      { value: 'l', state: 'guessed' },
+      { value: 'k', state: 'unused' },
+      { value: 'a', state: 'guessed' },
+    ],
+  }
+]);
 ---
 <BaseLayout>
-  <Tour />
 
-  <!-- Script and styles needed for accordion -->
-  <script type="module" src={Astro.resolve('../components/accordion/accordion-element.ts')}></script>
-  <link rel="stylesheet" property="stylesheet" href={Astro.resolve('../components/accordion/accordion.scss')} />
-  <sg-accordion>
-    <details open>
-      <summary>header 1</summary>
-      <span>This is just some content</span>
-    </details>
-    <details>
-      <summary>header 2</summary>
-      <span>This is just some content</span>
-    </details>
-    <details>
-      <summary>header 3</summary>
-      <span>This is just some content</span>
-    </details>
-  </sg-accordion>
+  <style lang="scss">
+    aside {
+      width: 100%;
+    }
+
+    section {
+      flex-grow: 1;
+      align-self: center;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
+      max-width: 28rem;
+      height: 100%;
+      margin-bottom: var(--size-5);
+    }
+  </style>
+
+  <!-- Script needed for guess-grid -->
+  <script type="module" src={Astro.resolve('../components/guess-grid/guess-grid-element.ts')}></script>
+
+  <section>
+    <sg-guess-grid guesses={testGuesses}></sg-guess-grid>
+  </section>
+
+  <aside>
+    <!-- Script needed for keyboard -->
+    <script type="module" src={Astro.resolve('../components/virtual-keyboard/virtual-keyboard-element.ts')}></script>
+
+    <sg-virtual-keyboard
+      unused-letters="pk"
+      guessed-letters="la"
+      used-letters="o"
+    ></sg-virtual-keyboard>
+  </aside>
 
   <!--
   You can also use imported framework components directly in your markup!

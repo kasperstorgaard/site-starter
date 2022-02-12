@@ -1,10 +1,6 @@
 ---
-// Component Script:
-// You can write any JavaScript/TypeScript that you'd like here.
-// It will run during the build, but never in the browser.
-// All variables are available to use in the HTML template below.
-let title = 'My Astro Site';
-
+import Header from '../components/header/Header.astro';
+const title = 'Ordkle';
 ---
 <html lang="en">
 <head>
@@ -17,28 +13,31 @@ let title = 'My Astro Site';
 	<link rel="stylesheet" href={Astro.resolve('../styles/props.scss')} />
 	<link rel="stylesheet" href={Astro.resolve('../styles/brand.scss')} />
 	<link rel="stylesheet" href={Astro.resolve('../styles/fonts.css')} />
-
-  <slot name="head" />
-
-	<style>
-		header {
-			display: flex;
-			flex-direction: column;
-			gap: 1em;
-			max-width: min(100%, 68ch);
-		}
-	</style>
 </head>
 <body>
-	<main>
-		<header>
-			<div>
-				<img width="60" height="80" src="/assets/logo.svg" alt="Astro logo">
-				<h1>Welcome to <a href="https://astro.build/">Astro</a></h1>
-			</div>
-		</header>
+	<style>
+    body, html {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
 
-    <!-- slot: your page content will be injected here. -->
+    main {
+      flex-grow: 1;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: stretch;
+      align-items: stretch;
+
+      max-width: 36em;
+      width: 100%;
+      margin: 0 auto;
+      padding: var(--app-box-spacer) var(--app-gutter);
+		}
+	</style>
+  <Header />
+  <main>
     <slot />
 	</main>
 </body>

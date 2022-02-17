@@ -1,17 +1,5 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-
-const testGuesses = JSON.stringify([
-  {
-    letters: [
-      { value: 'p', state: 'unused' },
-      { value: 'o', state: 'used' },
-      { value: 'l', state: 'guessed' },
-      { value: 'k', state: 'unused' },
-      { value: 'a', state: 'guessed' },
-    ],
-  }
-]);
 ---
 <BaseLayout>
 
@@ -35,22 +23,11 @@ const testGuesses = JSON.stringify([
   </style>
 
   <!-- Script needed for guess-grid -->
-  <script type="module" src={Astro.resolve('../components/guess-grid/guess-grid-element.ts')}></script>
+  <script type="module" src={Astro.resolve('../components/board/board-element.ts')}></script>
 
   <section>
-    <sg-guess-grid guesses={testGuesses}></sg-guess-grid>
+    <sg-board></sg-board>
   </section>
-
-  <aside>
-    <!-- Script needed for keyboard -->
-    <script type="module" src={Astro.resolve('../components/virtual-keyboard/virtual-keyboard-element.ts')}></script>
-
-    <sg-virtual-keyboard
-      unused-letters="pk"
-      guessed-letters="la"
-      used-letters="o"
-    ></sg-virtual-keyboard>
-  </aside>
 
   <!--
   You can also use imported framework components directly in your markup!

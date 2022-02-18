@@ -1,7 +1,8 @@
 import { css, html, LitElement, PropertyValues } from 'lit';
 
 import { customElement, property } from 'lit/decorators.js';
-import { Overlayable } from '../overlay/overlay-mixin';
+import { Overlayable } from '../overlay/overlayable-mixin';
+import '../overlay/overlay';
 
 @customElement('sg-sidebar')
 export class SidebarElement extends Overlayable(LitElement) {
@@ -15,9 +16,7 @@ export class SidebarElement extends Overlayable(LitElement) {
 
   render() {
     return html`
-    <aside>
-      <slot></slot>
-    </aside>
+    <slot></slot>
     `;
   }
 
@@ -26,6 +25,10 @@ export class SidebarElement extends Overlayable(LitElement) {
 
     this.addEventListener('animationend', () => this.shouldAnimate = false);
     this.addEventListener('animationcancel', () => this.shouldAnimate = false);
+
+    if (!this.hasAttribute('role')) {
+      this.setAttribute('role', 'complementary');
+    }
   }
 
   updated(props: PropertyValues) {

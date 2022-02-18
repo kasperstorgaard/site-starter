@@ -7,7 +7,10 @@
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro build",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "storybook": "start-storybook -p 6006",
+    "storybook:build": "build-storybook",
+    "build-storybook": "build-storybook"
   },
   "keywords": [
     "11ty",
@@ -19,23 +22,26 @@
   "author": "kasperstorgaard",
   "license": "ISC",
   "dependencies": {
-    "@11ty/eleventy": "^0.12.1",
-    "@11ty/eleventy-img": "^1.0.0",
     "@lit-labs/motion": "^1.0.2",
     "astro": "^0.22.20",
     "astro-icon": "^0.5.3",
     "body-scroll-lock": "^4.0.0-beta.0",
-    "concurrently": "^7.0.0",
-    "eleventy-plugin-svg-sprite": "^1.2.2",
-    "esbuild-sass-plugin": "2.0.1",
     "lit": "^2.1.1",
     "vite": "^2.7.13"
   },
   "devDependencies": {
+    "@babel/core": "^7.17.4",
+    "@mdx-js/preact": "^2.0.0",
+    "@storybook/addon-actions": "^6.4.19",
+    "@storybook/addon-essentials": "^6.4.19",
+    "@storybook/addon-links": "^6.4.19",
+    "@storybook/html": "^6.4.19",
     "@types/body-scroll-lock": "^3.1.0",
+    "babel-loader": "^8.2.3",
     "eslint": "^8.6.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.25.4",
-    "eslint-plugin-nuxt": "^3.1.0"
+    "lit-html": "^2.1.3",
+    "storybook-builder-vite": "^0.1.16"
   }
 }

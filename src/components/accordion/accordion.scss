@@ -1,32 +1,33 @@
 sg-accordion {
-  --accordion-item-header-padding: var(--size-2) var(--app-box-spacer);
-  --accordion-item-content-padding: var(--size-2) var(--app-box-spacer);
+  --accordion-item-header-padding: var(--size-2) var(--app-gutter);
+  --accordion-item-content-padding: var(--size-2) var(--app-gutter);
+  --accordion-animation-easing: var(--ease-2);
+  --accordion-animation-duration: .5s;
+  --accordion-summary-display: list-item;
+  --accordion-item-border: var(--border-base);
+
+  display: block;
+  border-bottom: var(--accordion-item-border);
 
   details {
-    border-top: var(--accordion-item-border, var(--border-base));
+    border-top: var(--accordion-item-border);
   }
 
   summary {
-    display: flex;
-    flex-wrap: none;
-    justify-content: space-between;
-    align-items: center;
-
+    display: var(--accordion-summary-display);
     padding: var(--accordion-item-header-padding);
 
-    cursor: pointer;
+    & ~ * {
+      padding: var(--accordion-item-content-padding);
+    }
   }
 
   summary::-webkit-details-marker,
   summary::marker {
-    display: none
+    margin-right: 2ch;
   }
 
-  details summary ~ * {
-    padding: var(--accordion-item-content-padding);
-  }
-
-  details summary ~ span {
+  summary ~ span {
     display: block;
   }
 }

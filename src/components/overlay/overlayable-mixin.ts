@@ -1,23 +1,28 @@
 import { LitElement, PropertyValues } from 'lit';
 import { property } from 'lit/decorators.js';
 import { ScrollLockController } from '../scroll-lock/scroll-lock-mixin';
-import { OverlayElement } from './overlay-element';
+import { OverlayElement } from './overlay';
 
 type Constructor<T> = new (...args: any[]) => T;
 
 declare class OverlayableInterface {
   isOpen: boolean;
+  isScrollDisabled: boolean;
 }
 
 export const Overlayable =
   <T extends Constructor<LitElement>>(superClass: T) => {
     class OverlayableElement extends superClass {
-      scrollLock = new ScrollLockController(this, 'isOpen');
+      private _overlayElement: OverlayElement;
+
+      scrollLock = new ScrollLockController(this);
 
       @property({ type: Boolean, reflect: true, attribute: 'is-open' })
       isOpen = false;
 
-      private _overlayElement: OverlayElement;
+      get isScrollDisabled() {
+        return this.isOpen;
+      }
 
       connectedCallback(): void {
         super.connectedCallback();

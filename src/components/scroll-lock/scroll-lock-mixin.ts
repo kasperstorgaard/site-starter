@@ -1,49 +1,27 @@
 import { LitElement, ReactiveController, ReactiveElement } from 'lit';
 import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
 
-export class ScrollLockController<T extends LitElement> implements ReactiveController {
-  private _host: LitElement;
-  private _property: string;
+export interface ScrollLockElement extends LitElement {
+  isScrollDisabled: boolean;
+}
 
-  private _enabled = false;
+export class ScrollLockController<T extends ScrollLockElement> implements ReactiveController {
+  private _host: T;
 
-  public get enabled() {
-    return this._enabled;
-  }
-
-  constructor(host: T, property?: keyof Exclude<T, LitElement>) {
+  constructor(host: T) {
     this._host = host;
-    this._property = property as string;
+    this._host.addController(this);
   }
 
   hostUpdated(): void {
-    if (!this._property) {
-      return;
-    }
-
-    const propertyValue = Boolean(this[this._property]);
-    if (this.enabled === propertyValue) {
-      return;
-    }
-
-    if (propertyValue) {
-      this.enable();
+    if (this._host.isScrollDisabled) {
+      disableBodyScroll(this._host);
     } else {
-      this.disable();
+      enableBodyScroll(this._host);
     }
   }
 
   hostDisconnected(): void {
-    this.disable();
-  }
-
-  enable() {
-    this._enabled = true;
     enableBodyScroll(this._host);
-  }
-
-  disable() {
-    this._enabled = false;
-    disableBodyScroll(this._host);
   }
 }

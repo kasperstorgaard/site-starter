@@ -1,6 +1,6 @@
 import { css, html, LitElement, PropertyValues } from 'lit'
 import { customElement, property, query, queryAssignedElements } from 'lit/decorators.js';
-import { DetailsAnimator } from './details-animator';
+import { DetailsAnimator } from './_internal/details-animator';
 
 /*
   ACCORDION ELEMENT
@@ -53,8 +53,8 @@ export class AccordionElement extends LitElement {
   /**
    * If multiple items are allowed to be open or not
    */
-  @property({ type: Boolean, attribute: 'single-open' })
-  singleOpen = false;
+  @property({ type: String })
+  mode: 'multi'|'single' = 'multi';
 
   firstUpdated(changes: PropertyValues): void {
     super.firstUpdated(changes);
@@ -64,13 +64,18 @@ export class AccordionElement extends LitElement {
     const durationRaw = computedStyle.getPropertyValue('--accordion-animation-duration');
     const duration = getDurationMs(durationRaw);
 
+    const animationOptions = {
+      duration: duration ?? 500,
+      easing: easing || 'ease-in',
+    };
+
     // We need to watch for slot changes in order to perform any "items"
     // related tasks, as it is only a getter.
     this._slot.addEventListener('slotchange', () => {
       for (const element of this.items) {
         // make sure we only set up an element once.
         if (!this._animators.has(element)) {
-          this._setupElement(element, { easing, duration });
+          this._setupElement(element, animationOptions);
         }
       }
     });
@@ -84,7 +89,7 @@ export class AccordionElement extends LitElement {
    * The open handler takes care of any cross cutting logic.
    */
   private _onElementOpen(target: HTMLElement) {
-    if (!this.singleOpen) {
+    if (this.mode !== 'single') {
       return;
     }
 

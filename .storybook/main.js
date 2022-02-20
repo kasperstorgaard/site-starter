@@ -19,4 +19,5 @@ module.exports = {
       ...viteConfig,
     };
   },
+  staticDirs: ['../public'],
 };

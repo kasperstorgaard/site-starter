@@ -15,26 +15,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       display: flex;
       flex-direction: column;
       justify-content: center;
-
-      max-width: 28rem;
-      height: 100%;
-      margin-bottom: var(--size-5);
     }
   </style>
-
-  <!-- Script needed for guess-grid -->
-  <script type="module" src={Astro.resolve('../components/board/board-element.ts')}></script>
 
   <section>
     hi :)
   </section>
-
-  <!--
-  You can also use imported framework components directly in your markup!
-
-  Note: by default, these components are NOT interactive on the client.
-  The `:visible` directive tells Astro to make it interactive.
-
-  See https://docs.astro.build/core-concepts/component-hydration/
-  -->
 </BaseLayout>

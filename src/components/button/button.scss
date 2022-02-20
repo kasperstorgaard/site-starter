@@ -1,0 +1,54 @@
+.sg-button {
+  --button-primary-bg: var(--color-brand);
+  --button-primary-color: var(--gray-9);
+  --button-secondary-bg: var(--orange-3);
+  --button-secondary-color: var(--gray-9);
+
+  padding: var(--button-pad, .4em .75em);
+
+  background: var(--button-background, transparent);
+  border: min(2px, .15em) solid currentColor;
+  border-radius: var(--radius-1);
+
+  color: var(--button-color, inherit);
+  font-weight: var(--font-weight-7);
+  text-transform: uppercase;
+
+  &[theme=primary] {
+    --button-background: var(--color-brand);
+    --button-color: var(--gray-9);
+  }
+
+  &[theme=secondary] {
+    --button-background: var(--orange-3);
+    --button-color: var(--gray-9);
+  }
+
+  &[size=big] {
+    font-size: 1.25em;
+  }
+
+  &[size=small] {
+    font-size: .8em;
+  }
+
+  &[inverse][theme=primary] {
+    --button-color: var(--color-brand);
+    --button-background: unset;
+  }
+
+  &[inverse][theme=secondary] {
+    --button-color: var(--orange-3);
+    --button-background: transparent;
+  }
+
+  &:hover,
+  &:active {
+    transform: scale(1.025);
+    transition: transform .2s var(--ease-3);
+    filter: hue-rotate(270deg);
+
+    box-shadow: var(--shadow-3);
+    --shadow-color: currentColor;
+  }
+}

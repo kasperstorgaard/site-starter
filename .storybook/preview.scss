@@ -1,0 +1,40 @@
+.sb-grid {
+  table-layout: fixed;
+  max-width: 100%;
+
+  border-collapse: collapse;
+  border: var(--border-size-2) solid var(--gray-9);
+
+
+  /* legends */
+  th,
+  tbody td:first-child {
+    font-weight: var(--font-weight-5);
+  }
+
+  /* head */
+  thead tr {
+    border-bottom: solid var(--border-size-2) var(--gray-9);
+  }
+
+  th + th {
+    border-left: solid var(--border-size-2) var(--gray-9);
+  }
+
+  /* body */
+  th, td {
+    padding: var(--size-fluid-1);
+  }
+
+  td {
+    text-align: center;
+  }
+
+  tr + tr {
+    border-top: dashed var(--border-size-2) var(--gray-9);
+  }
+
+  td + td {
+    border-left: dashed var(--border-size-2) var(--gray-9);
+  }
+}

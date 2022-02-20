@@ -15,6 +15,7 @@ function overlayFactory(options?: Options) {
   const fn = (args?: Options) => {
     const template = html`
       <button
+        class="sg-button"
         @click=${() => document.querySelector('sg-overlay')?.setAttribute('is-open', '')}
       >
         open

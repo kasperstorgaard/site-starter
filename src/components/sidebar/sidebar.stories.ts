@@ -20,7 +20,10 @@ function sidebarFactory(options?: Options, content?: Content) {
     const container = document.createElement('div');
 
     const template = html`
-    <button @click=${() => document.querySelector('sg-sidebar')?.setAttribute('is-open', '')}>open</button>
+    <button
+      class="sg-button"
+      @click=${() => document.querySelector('sg-sidebar')?.setAttribute('is-open', '')}
+    >open</button>
     ${content?.outer ?? nothing}
     <sg-sidebar ?is-open=${args.isOpen}>
       ${content?.inner ?? 'hi from the sidebar :)'}

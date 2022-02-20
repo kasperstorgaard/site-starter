@@ -72,13 +72,5 @@ function styles() {
     animation: var(--animation-fade-out);
   }
 
-  @keyframes overlay-fade-in {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: var(--overlay-opacity);
-    }
-  }
   `;
 }

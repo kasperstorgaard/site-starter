@@ -1,6 +1,6 @@
 import { css, html, LitElement, PropertyValues } from 'lit';
 
-import { customElement, property } from 'lit/decorators.js';
+import { customElement, property, queryAssignedElements } from 'lit/decorators.js';
 import { Overlayable } from '../overlay/overlayable-mixin';
 import '../overlay/overlay';
 
@@ -8,16 +8,38 @@ import '../overlay/overlay';
 export class ModalElement extends Overlayable(LitElement) {
   static styles = [getStyles()];
 
+  @queryAssignedElements({ slot: 'header' })
+  private _headerItems: Array<HTMLElement>;
+
+  @queryAssignedElements({ slot: 'footer' })
+  private _footerItems: Array<HTMLElement>;
+
   @property({ type: Boolean, reflect: true, attribute: 'should-animate' })
   shouldAnimate = false;
 
   @property({ type: String, reflect: true })
   direction: 'up'|'down' = 'up';
 
+  @property({ type: String })
+  closeLabel = 'close';
+
   render() {
     return html`
-    <slot></slot>
-    `;
+    <header ?hidden=${!this._headerItems.length}>
+      <slot name="header"></slot>
+    </header>
+    <button
+      class="close"
+      @click=${this.close}
+      aria-label=${this.closeLabel}
+    >&#x2715</button>
+    <div>
+      <slot></slot>
+    </div>
+    <footer ?hidden=${!this._footerItems.length}>
+      <slot name="footer"></slot>
+    </footer>
+  `;
   }
 
   connectedCallback(): void {
@@ -60,8 +82,11 @@ function getStyles() {
     --modal-ratio: calc(4/3);
     --modal-width: min(var(--modal-size), 100vw);
     --modal-height: min(calc(var(--modal-size) / var(--modal-ratio)), 100vh);
+    --modal-pad: var(--size-4) var(--app-gutter);
 
     position: fixed;
+    display: flex;
+    flex-direction: column;
 
     width: var(--modal-width);
     height: var(--modal-height);
@@ -70,10 +95,50 @@ function getStyles() {
     left: calc(50% - (var(--modal-width) / 2));
     top: calc(50% - (var(--modal-height) / 2));
 
-    padding: var(--modal-pad, var(--size-4) var(--app-gutter));
     background: var(--modal-bg, var(--gray-0));
     border-radius: var(--modal-border-radius, var(--radius-1  ));
+    border: var(--border-size-2) solid var(--gray-9);
     box-shadow: var(--shadow-2);
+  }
+
+  :host > div {
+    flex-grow: 1;
+
+    padding: var(--modal-pad, var(--size-4) var(--app-gutter));
+  }
+
+  header {
+    padding: var(--modal-header-pad, var(--size-3) var(--app-gutter));
+
+    text-transform: uppercase;
+    font-weight: var(--font-weight-5);
+    border-bottom: var(--border-base);
+  }
+
+  .close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: var(--size-3) var(--app-gutter);
+
+    font-size: var(--font-size-2);
+    line-height: 1.5em;
+
+    background: none;
+    outline: none;
+    border: none;
+
+    transition: transform .33s var(--ease-3);
+  }
+
+  .close:hover,
+  .close:active {
+    transform: scale(1.05);
+  }
+
+  footer {
+    padding: var(--modal-header-pad, var(--size-3) var(--app-gutter));
+    border-top: var(--border-base);
   }
 
   /* hide when not open OR animating */

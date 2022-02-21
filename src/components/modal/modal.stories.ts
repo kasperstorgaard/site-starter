@@ -14,6 +14,8 @@ interface Options {
 interface Content {
   outer?: TemplateResult;
   inner?: TemplateResult;
+  header?: TemplateResult;
+  footer?: TemplateResult;
 }
 
 function modalFactory(options?: Options, content?: Content) {
@@ -27,7 +29,9 @@ function modalFactory(options?: Options, content?: Content) {
     >open</button>
     ${content?.outer ?? nothing}
     <sg-modal ?is-open=${args.isOpen} direction=${args.direction ?? 'up'}>
+      ${content?.header ? html`<div slot="header">${content.header}</div>` : nothing }
       ${content?.inner ?? 'hello, I\m a modal :\'{D'}
+      ${content?.footer ? html`<div slot="footer">${content.footer}</div>` : nothing }
     </sg-modal>
     `
 
@@ -51,6 +55,19 @@ function modalFactory(options?: Options, content?: Content) {
 export const Primary = modalFactory({ isOpen: false });
 export const PreOpened = modalFactory({ isOpen: true });
 export const Down = modalFactory({ direction: 'down', isOpen: false });
+export const Header = modalFactory({}, {
+  header: html`header`,
+  inner: html`main content`,
+});
+export const Footer = modalFactory({}, {
+  inner: html`main content`,
+  footer: html`footer`,
+});
+export const HeaderAndFooter = modalFactory({}, {
+  header: html`header`,
+  inner: html`main content`,
+  footer: html`footer`,
+});
 
 export const UseScrollLock = modalFactory(
   { isOpen: false},

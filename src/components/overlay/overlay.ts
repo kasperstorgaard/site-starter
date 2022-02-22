@@ -45,10 +45,6 @@ export class OverlayElement extends LitElement {
 
 function styles() {
   return css`
-  [hidden] {
-    display: none;
-  }
-
   :host {
     --overlay-opacity: .5;
     --overlay-color: var(--gray-7);

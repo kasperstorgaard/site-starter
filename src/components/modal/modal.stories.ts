@@ -29,9 +29,9 @@ function modalFactory(options?: Options, content?: Content) {
     >open</button>
     ${content?.outer ?? nothing}
     <sg-modal ?is-open=${args.isOpen} direction=${args.direction ?? 'up'}>
-      ${content?.header ? html`<div slot="header">${content.header}</div>` : nothing }
+      ${content?.header ? content.header : nothing }
       ${content?.inner ?? 'hello, I\m a modal :\'{D'}
-      ${content?.footer ? html`<div slot="footer">${content.footer}</div>` : nothing }
+      ${content?.footer ? content.footer : nothing }
     </sg-modal>
     `
 
@@ -56,17 +56,17 @@ export const Primary = modalFactory({ isOpen: false });
 export const PreOpened = modalFactory({ isOpen: true });
 export const Down = modalFactory({ direction: 'down', isOpen: false });
 export const Header = modalFactory({}, {
-  header: html`header`,
+  header: html`<h2 slot="header">header</h2>`,
   inner: html`main content`,
 });
 export const Footer = modalFactory({}, {
   inner: html`main content`,
-  footer: html`footer`,
+  footer: html`<button class="sg-button" theme="primary" slot="footer">sign me up</button>`,
 });
 export const HeaderAndFooter = modalFactory({}, {
-  header: html`header`,
+  header: html`<h2 slot="header">sign me up</h2>`,
   inner: html`main content`,
-  footer: html`footer`,
+  footer: html`<button class="sg-button" theme="primary" slot="footer">sign me up</button>`,
 });
 
 export const UseScrollLock = modalFactory(

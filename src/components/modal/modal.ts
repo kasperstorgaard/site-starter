@@ -76,6 +76,10 @@ export class ModalElement extends Overlayable(LitElement) {
 
 function getStyles() {
   return css`
+  [hidden] {
+    display: none !important;
+  }
+
   :host {
     /* on mobile: 100%, on desktop: 40% */
     --modal-size: 28rem;
@@ -116,6 +120,10 @@ function getStyles() {
     border-bottom: var(--border-base);
   }
 
+  header slot::slotted(*) {
+    font-size: inherit;
+  }
+
   .close {
     position: absolute;
     top: 0;
@@ -138,6 +146,13 @@ function getStyles() {
   }
 
   footer {
+    display: grid;
+    grid-auto-flow: column;
+    justify-content: center;
+    /* ideally this should be flex, but grid gap support is better than flex gap */
+
+    gap: var(--size-3);
+
     padding: var(--modal-header-pad, var(--size-3) var(--app-gutter));
     border-top: var(--border-base);
   }

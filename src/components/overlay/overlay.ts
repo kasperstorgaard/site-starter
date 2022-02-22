@@ -9,20 +9,20 @@ export class OverlayElement extends LitElement {
   isOpen = false;
 
   @property({ type: Boolean, reflect: true, attribute: 'should-animate' })
-  shouldAnimate = false;
+  animates = false;
 
   connectedCallback(): void {
     super.connectedCallback();
 
-    this.addEventListener('animationend', () => this.shouldAnimate = false);
-    this.addEventListener('animationcancel', () => this.shouldAnimate = false);
+    this.addEventListener('animationend', () => this.animates = false);
+    this.addEventListener('animationcancel', () => this.animates = false);
   }
 
   protected updated(props: Map<string | number | symbol, unknown>): void {
     super.updated(props);
 
     if (props.has('isOpen') && props.get('isOpen') != null) {
-      this.shouldAnimate = true;
+      this.animates = true;
     }
   }
 

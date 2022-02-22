@@ -15,7 +15,7 @@ export class ModalElement extends Overlayable(LitElement) {
   private _footerItems: Array<HTMLElement>;
 
   @property({ type: Boolean, reflect: true, attribute: 'should-animate' })
-  shouldAnimate = false;
+  animates = false;
 
   @property({ type: String, reflect: true })
   direction: 'up'|'down' = 'up';
@@ -45,8 +45,8 @@ export class ModalElement extends Overlayable(LitElement) {
   connectedCallback(): void {
     super.connectedCallback();
 
-    this.addEventListener('animationend', () => this.shouldAnimate = false);
-    this.addEventListener('animationcancel', () => this.shouldAnimate = false);
+    this.addEventListener('animationend', () => this.animates = false);
+    this.addEventListener('animationcancel', () => this.animates = false);
 
     if (!this.hasAttribute('role')) {
       this.setAttribute('role', 'complementary');
@@ -57,7 +57,7 @@ export class ModalElement extends Overlayable(LitElement) {
     super.updated(props)
 
     if (props.has('isOpen') && props.get('isOpen') != null) {
-      this.shouldAnimate = true;
+      this.animates = true;
     }
   }
 
@@ -112,6 +112,7 @@ function getStyles() {
 
     text-transform: uppercase;
     font-weight: var(--font-weight-5);
+
     border-bottom: var(--border-base);
   }
 

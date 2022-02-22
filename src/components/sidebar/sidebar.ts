@@ -8,23 +8,45 @@ import '../overlay/overlay';
 export class SidebarElement extends Overlayable(LitElement) {
   static styles = [getStyles()];
 
+  @queryAssignedElements({ slot: 'header' })
+  private _headerItems: Array<HTMLElement>;
+
+  @queryAssignedElements({ slot: 'footer' })
+  private _footerItems: Array<HTMLElement>;
+
   @property({ type: String, reflect: true })
   dir: 'left'|'right' = 'left';
 
   @property({ type: Boolean, reflect: true, attribute: 'should-animate' })
-  shouldAnimate = false;
+  animates = false;
+
+  @property({ type: String })
+  closeLabel: string = 'close';
 
   render() {
     return html`
-    <slot></slot>
+    <header ?hidden=${!this._headerItems.length}>
+      <slot name="header"></slot>
+    </header>
+    <button
+      class="close"
+      @click=${this.close}
+      aria-label=${this.closeLabel}
+    >&#x2715</button>
+    <div>
+      <slot></slot>
+    </div>
+    <footer ?hidden=${!this._footerItems.length}>
+      <slot name="footer"></slot>
+    </footer>
     `;
   }
 
   connectedCallback(): void {
     super.connectedCallback();
 
-    this.addEventListener('animationend', () => this.shouldAnimate = false);
-    this.addEventListener('animationcancel', () => this.shouldAnimate = false);
+    this.addEventListener('animationend', () => this.animates = false);
+    this.addEventListener('animationcancel', () => this.animates = false);
 
     if (!this.hasAttribute('role')) {
       this.setAttribute('role', 'complementary');
@@ -35,7 +57,7 @@ export class SidebarElement extends Overlayable(LitElement) {
     super.updated(props)
 
     if (props.has('isOpen') && props.get('isOpen') != null) {
-      this.shouldAnimate = true;
+      this.animates = true;
     }
   }
 

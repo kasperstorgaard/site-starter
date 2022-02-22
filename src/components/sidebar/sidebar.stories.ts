@@ -28,9 +28,9 @@ function sidebarFactory(options?: Options, content?: Content) {
     >open</button>
     ${content?.outer ?? nothing}
     <sg-sidebar ?is-open=${args.isOpen}>
-      ${content?.header ? html`<div slot="header">${content.header}</div>` : nothing}
+      ${content?.header ? content.header : nothing}
       ${content?.inner ?? 'hi from the sidebar :)'}
-      ${content?.footer ? html`<div slot="footer">${content.footer}</div>` : nothing}
+      ${content?.footer ? content.footer : nothing}
     </sg-sidebar>
     `
 
@@ -46,11 +46,19 @@ export const Primary = sidebarFactory({ isOpen: false });
 export const PreOpened = sidebarFactory({ isOpen: true });
 
 export const Header = sidebarFactory({}, { header: html`header` });
-export const Footer = sidebarFactory({}, { footer: html`footer` });
+export const Footer = sidebarFactory({}, {
+  footer: html`
+    <button class="sg-button" slot="footer" theme="primary">sign up</button>
+    <button class="sg-button" slot="footer" theme="secondary">close</button>
+  `
+});
 export const HeaderAndFooter = sidebarFactory({},
   {
-    header: html`header`,
-    footer: html`footer`
+    header: html`<h2 slot="header">header</h2>`,
+    footer: html`
+      <button class="sg-button" slot="footer" theme="primary">sign up</button>
+      <button class="sg-button" slot="footer" theme="secondary">close</button>
+    `
   }
 );
 

@@ -127,6 +127,12 @@ function getStyles() {
   }
 
   footer {
+    display: grid;
+    /* ideally this should be flex, but grid gap support is better than flex gap */
+    grid-auto-flow: column;
+    gap: var(--size-3);
+    justify-content: center;
+
     padding: var(--sidebar-footer-pad, var(--size-3) var(--app-gutter));
 
     border-top: var(--border-base);

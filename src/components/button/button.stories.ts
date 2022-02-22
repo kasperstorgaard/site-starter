@@ -68,7 +68,7 @@ function buttonGrid() {
             <td>${index === 0 ?
               theme :
               renderButton({
-                text: 'click me!',
+                text: state === 'small' ? 'yes' : 'click me',
                 theme,
                 size: sizes.includes(state) ? state : undefined,
                 inverse: state === 'inverse',

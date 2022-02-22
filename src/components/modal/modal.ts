@@ -120,7 +120,7 @@ function getStyles() {
     position: absolute;
     top: 0;
     right: 0;
-    padding: var(--size-3) var(--app-gutter);
+    padding: var(--modal-header-pad, var(--size-3) var(--app-gutter));
 
     font-size: var(--font-size-2);
     line-height: 1.5em;

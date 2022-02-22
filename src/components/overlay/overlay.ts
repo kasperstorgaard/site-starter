@@ -8,7 +8,7 @@ export class OverlayElement extends LitElement {
   @property({ type: Boolean, reflect: true, attribute: 'is-open' })
   isOpen = false;
 
-  @property({ type: Boolean, reflect: true, attribute: 'should-animate' })
+  @property({ type: Boolean, reflect: true, attribute: 'animates' })
   animates = false;
 
   connectedCallback(): void {
@@ -60,15 +60,15 @@ function styles() {
     opacity: var(--overlay-opacity);
   }
 
-  :host(:not([is-open], [should-animate])) {
+  :host(:not([is-open], [animates])) {
     display: none;
   }
 
-  :host([is-open][should-animate]) {
+  :host([is-open][animates]) {
     animation: overlay-fade-in .5s var(--ease-3);
   }
 
-  :host(:not([is-open])[should-animate]) {
+  :host(:not([is-open])[animates]) {
     animation: var(--animation-fade-out);
   }
 

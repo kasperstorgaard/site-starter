@@ -1,3 +1,3 @@
-sg-overlay:not([is-open], [should-animate]) {
+sg-overlay:not([is-open], [animates]) {
   display: none
 }

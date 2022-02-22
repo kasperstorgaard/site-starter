@@ -17,7 +17,7 @@ export class SidebarElement extends Overlayable(LitElement) {
   @property({ type: String, reflect: true })
   dir: 'left'|'right' = 'left';
 
-  @property({ type: Boolean, reflect: true, attribute: 'should-animate' })
+  @property({ type: Boolean, reflect: true, attribute: 'animates' })
   animates = false;
 
   @property({ type: String })
@@ -139,7 +139,7 @@ function getStyles() {
   }
 
   /* hide when not open OR animating */
-  :host(:not([is-open], [should-animate])) {
+  :host(:not([is-open], [animates])) {
     display: none;
   }
 
@@ -148,13 +148,13 @@ function getStyles() {
     right: 0;
   }
 
-  :host([dir=left][is-open][should-animate]) {
+  :host([dir=left][is-open][animates]) {
     animation:
       var(--animation-fade-in),
       var(--animation-slide-in-left);
   }
 
-  :host([dir=left]:not([is-open])[should-animate]) {
+  :host([dir=left]:not([is-open])[animates]) {
     animation:
       var(--animation-fade-out),
       var(--animation-slide-out-right);
@@ -165,13 +165,13 @@ function getStyles() {
     right: auto;
   }
 
-  :host([dir=right][is-open][should-animate]) {
+  :host([dir=right][is-open][animates]) {
     animation:
       var(--animation-fade-in),
       var(--animation-slide-in-right);
   }
 
-  :host([dir=right]:not([is-open])[should-animate]) {
+  :host([dir=right]:not([is-open])[animates]) {
     animation:
       var(--animation-fade-out),
       var(--animation-slide-out-left);

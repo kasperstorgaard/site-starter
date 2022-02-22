@@ -14,7 +14,7 @@ export class ModalElement extends Overlayable(LitElement) {
   @queryAssignedElements({ slot: 'footer' })
   private _footerItems: Array<HTMLElement>;
 
-  @property({ type: Boolean, reflect: true, attribute: 'should-animate' })
+  @property({ type: Boolean, reflect: true, attribute: 'animates' })
   animates = false;
 
   @property({ type: String, reflect: true })
@@ -158,37 +158,37 @@ function getStyles() {
   }
 
   /* hide when not open OR animating */
-  :host(:not([is-open], [should-animate])) {
+  :host(:not([is-open], [animates])) {
     display: none;
   }
 
-  :host([direction=up][should-animate]) {
+  :host([direction=up][animates]) {
     transform-origin: left center;
   }
 
-  :host([direction=up][is-open][should-animate]) {
+  :host([direction=up][is-open][animates]) {
     animation:
       var(--animation-fade-in),
       var(--animation-slide-in-up);
   }
 
-  :host([direction=up]:not([is-open])[should-animate]) {
+  :host([direction=up]:not([is-open])[animates]) {
     animation:
       var(--animation-fade-out),
       var(--animation-slide-out-down);
   }
 
-  :host([direction=up][should-animate]) {
+  :host([direction=up][animates]) {
     transform-origin: top center;
   }
 
-  :host([direction=down][is-open][should-animate]) {
+  :host([direction=down][is-open][animates]) {
     animation:
       var(--animation-fade-in),
       var(--animation-slide-in-down);
   }
 
-  :host([direction=down]:not([is-open])[should-animate]) {
+  :host([direction=down]:not([is-open])[animates]) {
     animation:
       var(--animation-fade-out),
       var(--animation-slide-out-up);

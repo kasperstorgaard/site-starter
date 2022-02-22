@@ -76,6 +76,10 @@ export class SidebarElement extends Overlayable(LitElement) {
 
 function getStyles() {
   return css`
+  [hidden] {
+    display: none;
+  }
+
   :host {
     position: fixed;
 

@@ -12,7 +12,9 @@ interface Options {
 
 interface Content {
   outer?: TemplateResult;
+  header?: TemplateResult;
   inner?: TemplateResult;
+  footer?: TemplateResult;
 }
 
 function sidebarFactory(options?: Options, content?: Content) {
@@ -26,7 +28,9 @@ function sidebarFactory(options?: Options, content?: Content) {
     >open</button>
     ${content?.outer ?? nothing}
     <sg-sidebar ?is-open=${args.isOpen}>
+      ${content?.header ? html`<div slot="header">${content.header}</div>` : nothing}
       ${content?.inner ?? 'hi from the sidebar :)'}
+      ${content?.footer ? html`<div slot="footer">${content.footer}</div>` : nothing}
     </sg-sidebar>
     `
 
@@ -40,6 +44,15 @@ function sidebarFactory(options?: Options, content?: Content) {
 
 export const Primary = sidebarFactory({ isOpen: false });
 export const PreOpened = sidebarFactory({ isOpen: true });
+
+export const Header = sidebarFactory({}, { header: html`header` });
+export const Footer = sidebarFactory({}, { footer: html`footer` });
+export const HeaderAndFooter = sidebarFactory({},
+  {
+    header: html`header`,
+    footer: html`footer`
+  }
+);
 
 export const UseScrollLock = sidebarFactory(
   { isOpen: false},

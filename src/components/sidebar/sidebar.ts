@@ -1,6 +1,6 @@
 import { css, html, LitElement, PropertyValues } from 'lit';
 
-import { customElement, property } from 'lit/decorators.js';
+import { customElement, property, queryAssignedElements } from 'lit/decorators.js';
 import { Overlayable } from '../overlay/overlayable-mixin';
 import '../overlay/overlay';
 
@@ -79,15 +79,53 @@ function getStyles() {
   :host {
     position: fixed;
 
+    display: flex;
+    flex-direction: column;
+
     /* on mobile: 100%, on desktop: 40% */
     width: max(40%, min(460px, 100vw));
     top: 0;
     height: 100%;
     z-index: var(--level-modal);
 
-    padding: var(--sidebar-pad, var(--size-4) var(--app-gutter));
-
     background: var(--sidebar-bg, white);
+  }
+
+  header {
+    padding: var(--sidebar-header-pad, var(--size-3) var(--app-gutter));
+
+    text-transform: uppercase;
+    font-weight: var(--font-weight-5);
+
+    border-bottom: var(--border-base);
+  }
+
+  .close {
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    padding: var(--sidebar-header-pad, var(--size-3) var(--app-gutter));
+
+    font-size: var(--font-size-2);
+    line-height: 1.5em;
+
+    background: none;
+    outline: none;
+    border: none;
+
+    transition: transform .33s var(--ease-3);
+  }
+
+  :host > div {
+    flex-grow: 1;
+    padding: var(--sidebar-pad, var(--size-4) var(--app-gutter));
+  }
+
+  footer {
+    padding: var(--sidebar-footer-pad, var(--size-3) var(--app-gutter));
+
+    border-top: var(--border-base);
   }
 
   /* hide when not open OR animating */

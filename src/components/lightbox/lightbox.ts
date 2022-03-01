@@ -172,7 +172,7 @@ function getStyles() {
 
     background: var(--lightbox-arrow-background, var(--gray-1));
     width: var(--lightbox-arrow-width, var(--lightbox-arrow-size));
-    height: var(--lightbox-arrow-width, var(--lightbox-arrow-size));
+    height: var(--lightbox-arrow-height, var(--lightbox-arrow-size));
 
     transform: var(--lightbox-arrow-transform, translateY(-50%));
 

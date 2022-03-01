@@ -45,7 +45,9 @@ function sidebarFactory(options?: Options, content?: Content) {
 export const Primary = sidebarFactory({ isOpen: false });
 export const PreOpened = sidebarFactory({ isOpen: true });
 
-export const Header = sidebarFactory({}, { header: html`header` });
+export const Header = sidebarFactory({}, {
+  header: html`<h2 slot="header">header</h2>`
+});
 export const Footer = sidebarFactory({}, {
   footer: html`
     <button class="sg-button" slot="footer" theme="primary">sign up</button>

@@ -1,30 +1,28 @@
 import { css, html, LitElement, PropertyValues } from 'lit';
 
 import { customElement, property, query } from 'lit/decorators.js';
-import { Overlayable } from '../overlay/overlayable-mixin';
+import { Overlayable, overlayableStyles } from '../overlay/overlayable-mixin';
 import { ScrollController } from '../scroll/scroll-controller';
 import '../overlay/overlay';
 
 @customElement('sg-lightbox')
 export class LightboxElement extends Overlayable(LitElement) {
-  static styles = [getStyles()];
+  static styles = [
+    overlayableStyles,
+    getStyles()
+  ];
 
   private _scroll: ScrollController<LightboxElement>
 
-  constructor(
-  ) {
+  constructor() {
     super();
+    // TODO: figure out why typescript does not like it
+    // if the controller is created directly when declaring the property
     this._scroll = new ScrollController(this);
   }
 
   @query('.container')
   scrollContainer: HTMLElement | null;
-
-  @property({ type: String, reflect: true })
-  dir: 'up'|'down' = 'up';
-
-  @property({ type: Boolean, reflect: true, attribute: 'animates' })
-  animates = false;
 
   @property({ type: String })
   closeLabel: string = 'close';
@@ -73,34 +71,7 @@ export class LightboxElement extends Overlayable(LitElement) {
 
   connectedCallback(): void {
     super.connectedCallback();
-
     this.addEventListener('click', () => this.close());
-    this.addEventListener('animationend', () => this.animates = false);
-    this.addEventListener('animationcancel', () => this.animates = false);
-
-    if (!this.hasAttribute('role')) {
-      this.setAttribute('role', 'complementary');
-    }
-  }
-
-  updated(props: PropertyValues) {
-    super.updated(props)
-
-    if (props.has('isOpen') && props.get('isOpen') != null) {
-      this.animates = true;
-    }
-  }
-
-  open() {
-    this.isOpen = true;
-  }
-
-  close() {
-    this.isOpen = false;
-  }
-
-  toggle() {
-    this.isOpen = !this.isOpen;
   }
 
   private _backHandler(event: Event) {
@@ -222,43 +193,6 @@ function getStyles() {
     max-height: 100%;
     max-height: 100vh;
     overflow-y: scroll;
-  }
-
-  /* hide when not open OR animating */
-  :host(:not([is-open], [animates])) {
-    display: none;
-  }
-
-  :host([direction=up][animates]) {
-    transform-origin: left center;
-  }
-
-  :host([direction=up][is-open][animates]) {
-    animation:
-      var(--animation-fade-in),
-      var(--animation-slide-in-up);
-  }
-
-  :host([direction=up]:not([is-open])[animates]) {
-    animation:
-      var(--animation-fade-out),
-      var(--animation-slide-out-down);
-  }
-
-  :host([direction=up][animates]) {
-    transform-origin: top center;
-  }
-
-  :host([direction=down][is-open][animates]) {
-    animation:
-      var(--animation-fade-in),
-      var(--animation-slide-in-down);
-  }
-
-  :host([direction=down]:not([is-open])[animates]) {
-    animation:
-      var(--animation-fade-out),
-      var(--animation-slide-out-up);
   }
   `;
 }

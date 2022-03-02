@@ -1,24 +1,21 @@
 import { css, html, LitElement, PropertyValues } from 'lit';
 
 import { customElement, property, queryAssignedElements } from 'lit/decorators.js';
-import { Overlayable } from '../overlay/overlayable-mixin';
+import { Overlayable, overlayableStyles } from '../overlay/overlayable-mixin';
 import '../overlay/overlay';
 
 @customElement('sg-modal')
 export class ModalElement extends Overlayable(LitElement) {
-  static styles = [getStyles()];
+  static styles = [
+    overlayableStyles,
+    getStyles()
+  ];
 
   @queryAssignedElements({ slot: 'header' })
   private _headerItems: Array<HTMLElement>;
 
   @queryAssignedElements({ slot: 'footer' })
   private _footerItems: Array<HTMLElement>;
-
-  @property({ type: Boolean, reflect: true, attribute: 'animates' })
-  animates = false;
-
-  @property({ type: String, reflect: true })
-  direction: 'up'|'down' = 'up';
 
   @property({ type: String })
   closeLabel = 'close';
@@ -40,37 +37,6 @@ export class ModalElement extends Overlayable(LitElement) {
       <slot name="footer"></slot>
     </footer>
   `;
-  }
-
-  connectedCallback(): void {
-    super.connectedCallback();
-
-    this.addEventListener('animationend', () => this.animates = false);
-    this.addEventListener('animationcancel', () => this.animates = false);
-
-    if (!this.hasAttribute('role')) {
-      this.setAttribute('role', 'complementary');
-    }
-  }
-
-  updated(props: PropertyValues) {
-    super.updated(props)
-
-    if (props.has('isOpen') && props.get('isOpen') != null) {
-      this.animates = true;
-    }
-  }
-
-  open() {
-    this.isOpen = true;
-  }
-
-  close() {
-    this.isOpen = false;
-  }
-
-  toggle() {
-    this.isOpen = !this.isOpen;
   }
 }
 
@@ -155,43 +121,6 @@ function getStyles() {
 
     padding: var(--modal-header-pad, var(--size-3) var(--app-gutter));
     border-top: var(--border-base);
-  }
-
-  /* hide when not open OR animating */
-  :host(:not([is-open], [animates])) {
-    display: none;
-  }
-
-  :host([direction=up][animates]) {
-    transform-origin: left center;
-  }
-
-  :host([direction=up][is-open][animates]) {
-    animation:
-      var(--animation-fade-in),
-      var(--animation-slide-in-up);
-  }
-
-  :host([direction=up]:not([is-open])[animates]) {
-    animation:
-      var(--animation-fade-out),
-      var(--animation-slide-out-down);
-  }
-
-  :host([direction=up][animates]) {
-    transform-origin: top center;
-  }
-
-  :host([direction=down][is-open][animates]) {
-    animation:
-      var(--animation-fade-in),
-      var(--animation-slide-in-down);
-  }
-
-  :host([direction=down]:not([is-open])[animates]) {
-    animation:
-      var(--animation-fade-out),
-      var(--animation-slide-out-up);
   }
   `;
 }

@@ -1,12 +1,15 @@
 import { css, html, LitElement, PropertyValues } from 'lit';
 
 import { customElement, property, queryAssignedElements } from 'lit/decorators.js';
-import { Overlayable } from '../overlay/overlayable-mixin';
+import { Overlayable, overlayableStyles } from '../overlay/overlayable-mixin';
 import '../overlay/overlay';
 
 @customElement('sg-sidebar')
 export class SidebarElement extends Overlayable(LitElement) {
-  static styles = [getStyles()];
+  static styles = [
+    overlayableStyles,
+    getStyles(),
+  ];
 
   @queryAssignedElements({ slot: 'header' })
   private _headerItems: Array<HTMLElement>;
@@ -15,10 +18,7 @@ export class SidebarElement extends Overlayable(LitElement) {
   private _footerItems: Array<HTMLElement>;
 
   @property({ type: String, reflect: true })
-  dir: 'left'|'right' = 'left';
-
-  @property({ type: Boolean, reflect: true, attribute: 'animates' })
-  animates = false;
+  direction: 'left' | 'right' = 'left';
 
   @property({ type: String })
   closeLabel: string = 'close';
@@ -40,37 +40,6 @@ export class SidebarElement extends Overlayable(LitElement) {
       <slot name="footer"></slot>
     </footer>
     `;
-  }
-
-  connectedCallback(): void {
-    super.connectedCallback();
-
-    this.addEventListener('animationend', () => this.animates = false);
-    this.addEventListener('animationcancel', () => this.animates = false);
-
-    if (!this.hasAttribute('role')) {
-      this.setAttribute('role', 'complementary');
-    }
-  }
-
-  updated(props: PropertyValues) {
-    super.updated(props)
-
-    if (props.has('isOpen') && props.get('isOpen') != null) {
-      this.animates = true;
-    }
-  }
-
-  open() {
-    this.isOpen = true;
-  }
-
-  close() {
-    this.isOpen = false;
-  }
-
-  toggle() {
-    this.isOpen = !this.isOpen;
   }
 }
 
@@ -138,43 +107,17 @@ function getStyles() {
     border-top: var(--border-base);
   }
 
-  /* hide when not open OR animating */
-  :host(:not([is-open], [animates])) {
-    display: none;
-  }
-
-  :host([dir=left]) {
+  /**
+   * Overlayable animation styles are in overlayable mixin.
+   */
+  :host([direction=left]) {
     left: auto;
     right: 0;
   }
 
-  :host([dir=left][is-open][animates]) {
-    animation:
-      var(--animation-fade-in),
-      var(--animation-slide-in-left);
-  }
-
-  :host([dir=left]:not([is-open])[animates]) {
-    animation:
-      var(--animation-fade-out),
-      var(--animation-slide-out-right);
-  }
-
-  :host([dir=right]) {
+  :host([direction=right]) {
     left: 0;
     right: auto;
-  }
-
-  :host([dir=right][is-open][animates]) {
-    animation:
-      var(--animation-fade-in),
-      var(--animation-slide-in-right);
-  }
-
-  :host([dir=right]:not([is-open])[animates]) {
-    animation:
-      var(--animation-fade-out),
-      var(--animation-slide-out-left);
   }
   `;
 }

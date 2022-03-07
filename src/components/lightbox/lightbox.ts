@@ -34,7 +34,6 @@ export class LightboxElement extends Overlayable(LitElement) {
   forwardLabel: string = 'forward';
 
   render() {
-    console.log(this._scroll.isAtEnd);
     return html`
     <div class="container">
       <slot

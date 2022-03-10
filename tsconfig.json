@@ -4,6 +4,8 @@
     "target": "ESNext",
     "experimentalDecorators": true,
     "moduleResolution": "node",
-    "useDefineForClassFields": false
+    "useDefineForClassFields": false,
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true
   }
 }

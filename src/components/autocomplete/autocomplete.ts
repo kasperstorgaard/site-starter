@@ -111,18 +111,16 @@ export class AutocompleteElement extends FormControllable(LitElement) {
     document.removeEventListener('click', this._closeOnClickOutside);
   }
 
-  updated(changes: Map<string, any>) {
+  updated(changes: Map<string, unknown>) {
     super.updated(changes);
 
-    if (changes.has('focusedIndex')) {
-      if (this.focusedIndex === -1) {
-        this.input.focus();
-        this.hide();
-        return;
-      }
-
-      const item = this.listItems[this.focusedIndex] as HTMLLIElement;
-      item?.focus();
+    if ((
+      changes.has('focusedIndex') ||
+      changes.has('open') ||
+      changes.has('items')
+      ) && this.open) {
+      const listItem = this.listItems[this.focusedIndex] as HTMLLIElement;
+      listItem?.focus();
     }
   }
 
@@ -160,6 +158,8 @@ export class AutocompleteElement extends FormControllable(LitElement) {
 
   hide() {
     this.open = false;
+    this.focusedIndex = -1;
+    this.input.focus();
   }
 
   show() {
@@ -170,7 +170,11 @@ export class AutocompleteElement extends FormControllable(LitElement) {
     switch (event.key) {
       case 'ArrowUp':
         event.preventDefault();
-        this._highlightOption(this.focusedIndex - 1);
+        if (!this.focusedIndex) {
+          this.hide();
+        } else {
+          this._highlightOption(this.focusedIndex - 1);
+        }
         break;
       case 'ArrowDown':
         event.preventDefault();
@@ -183,12 +187,10 @@ export class AutocompleteElement extends FormControllable(LitElement) {
         break;
       case 'Escape':
         this.hide();
-        this.focusedIndex = -1;
         this.input.focus();
         break;
       case 'Tab':
         this.hide();
-        this.focusedIndex = -1;
         break;
       default:
         this.input.focus()
@@ -212,7 +214,6 @@ export class AutocompleteElement extends FormControllable(LitElement) {
         break;
       case 'Escape':
         this.hide();
-        this.focusedIndex = -1;
         this.input.focus();
         break;
       default:
@@ -222,12 +223,7 @@ export class AutocompleteElement extends FormControllable(LitElement) {
   }
 
   private _highlightOption(index: number) {
-    if (!this.items.length) {
-      this.focusedIndex = -1;
-      return;
-    }
-
-    this.focusedIndex = Math.max(-1, Math.min(index, this.items.length - 1));
+    this.focusedIndex = Math.max(0, Math.min(index, this.items.length - 1));
   }
 
   private async _selectOption(index: number) {
@@ -241,13 +237,12 @@ export class AutocompleteElement extends FormControllable(LitElement) {
       await this._animateCollapse();
     } finally {
       this.hide();
-      this.focusedIndex = -1;
       this.input.focus();
       listItem?.classList.remove('is-selecting');
     }
   }
 
-  private _arrowClicked(event: MouseEvent) {
+  private _arrowClicked() {
     this.show();
     this.input.focus();
   }
@@ -388,7 +383,15 @@ function getStyles() {
     }
 
     li {
+      display: flex;
+      flex-direction: column;
+
       padding: var(--autocomplete-item-padding, .4em .55em);
+    }
+
+    li span + span {
+      margin-top: .25em;
+      font-size: .75em;
     }
 
     li + li {

@@ -231,11 +231,13 @@ export class AutocompleteElement extends FormControllable(LitElement) {
   }
 
   private async _selectOption(index: number) {
-    this.selectedKey = this.getKey(this.items[index]);
+    const item = this.items[index];
+    this.selectedKey = this.getKey(item);
     const listItem = this.listItems[index] as HTMLLIElement;
 
     try {
       listItem?.classList.add('is-selecting');
+      this.input.value = item.text ?? item.label;
       await this._animateCollapse();
     } finally {
       this.hide();

@@ -12,7 +12,7 @@ export default {
 
 interface Options {
   minlength?: number,
-  freeform?: boolean,
+  showCountry?: boolean,
 }
 
 export const autocompleteFactory = (options?: Options) => {
@@ -40,6 +40,7 @@ export const autocompleteFactory = (options?: Options) => {
         .map(city => ({
           key: city.geonameid.toString(),
           text: city.name,
+          description: options.showCountry ? city.country : undefined,
           value: city.name,
         }));
 
@@ -61,6 +62,7 @@ export const autocompleteFactory = (options?: Options) => {
 }
 
 export const Primary = autocompleteFactory();
+export const Description = autocompleteFactory({ showCountry: true });
 export const Minlength = autocompleteFactory({
   minlength: 4
 });

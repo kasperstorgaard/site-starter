@@ -65,12 +65,16 @@ function styles() {
   }
 
   :host([is-open][animates]) {
-    animation: overlay-fade-in .5s var(--ease-3);
+    animation: var(--animation-fade-in);
   }
 
   :host(:not([is-open])[animates]) {
     animation: var(--animation-fade-out);
   }
 
+  /* Local override of "fade-in" animation defined in shared */
+  @keyframes fade-in {
+    to { opacity: var(--overlay-opacity) }
+  }
   `;
 }

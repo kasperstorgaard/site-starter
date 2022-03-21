@@ -1,7 +1,8 @@
 import { debounce } from 'throttle-debounce';
 import { css, html, LitElement } from 'lit'
-import { ItemTemplate, KeyFn, repeat } from 'lit-html/directives/repeat.js';
-import { when } from 'lit-html/directives/when.js';
+import { ItemTemplate, KeyFn, repeat } from 'lit/directives/repeat.js';
+import { when } from 'lit/directives/when.js';
+import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import { customElement, property, query, queryAll, state } from 'lit/decorators.js';
 import { FormControllable } from '../form-control/form-controllable-mixin';
 
@@ -11,6 +12,7 @@ export interface AutocompleteItem extends Partial<Omit<Omit<HTMLOptionElement, k
   icon?: string;
   label?: string;
   description?: string;
+  highlights?: [number, number][];
   class?: string;
   style?: string;
 }
@@ -42,8 +44,8 @@ export class AutocompleteElement extends FormControllable(LitElement) {
   @queryAll('li')
   listItems: NodeList;
 
-  @property({ type: Number })
-  minLength = 2;
+  @property({ type: Number, attribute: 'minlength' })
+  minlength = 2;
 
   @property({ type: Number })
   maxItems = 10;
@@ -80,8 +82,8 @@ export class AutocompleteElement extends FormControllable(LitElement) {
         aria-selected=${this.focusedIndex === index || this.getKey(item) === this.selectedKey}
         tabindex="-1"
       >
-        <span>
-          ${ item.text ?? item.label ?? item.value }
+        <span >
+          ${unsafeHTML(this._getItemText(item))}
         </span>
         ${when(item.description, () => html`
         <span class="description">
@@ -126,32 +128,52 @@ export class AutocompleteElement extends FormControllable(LitElement) {
 
   render() {
     return html`
-      <input
-        aria-expanded=${this.open}
-        @click=${this.show}
-        @keyup=${this._input}
-      >
-      <slot
-        name="arrow"
-        class="arrow"
-        @click=${this._arrowClicked}
-      >▼</slot>
-      <ul
-        @keydown=${this._navigateMenu}
-        @click=${this._menuItemClicked}
-      >
-        ${this.renderItems(this.items, this.getKey, this.renderItem)}
-      </ul>
-      <div aria-live="polite" role="status" class="visually-hidden">
-        ${when(
-          this.items.length,
-          () => html`
-            ${this.items.length}&nbsp;<slot name="results-available">results available</slot>
-          `,
-          () => html`
-            <slot name="no-results">No results</slot>
-          `
-        )}
+      <label for="input">
+        <slot name="label">label</slot>
+      </label>
+      <div class="wrapper">
+        <input
+          id="input"
+          type="text"
+
+          autocapitalize="none"
+          autocomplete="off"
+
+          role="combobox"
+          aria-owns="list"
+          aria-autocomplete="list"
+          aria-expanded=${this.open}
+
+          @click=${this.show}
+          @keyup=${this._input}
+        >
+        <button
+          class="arrow"
+          @click=${this._arrowClicked}
+        >
+          <slot name="arrow">
+            <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" viewBox="0 0 960 560"><path d="M480 344.181 268.869 131.889c-15.756-15.859-41.3-15.859-57.054 0-15.754 15.857-15.754 41.57 0 57.431l237.632 238.937c8.395 8.451 19.562 12.254 30.553 11.698 10.993.556 22.159-3.247 30.555-11.698L748.186 189.32c15.756-15.86 15.756-41.571 0-57.431s-41.299-15.859-57.051 0L480 344.181z"/></svg>
+            <span class="visually-hidden">show items</span>
+          </slot>
+        </button>
+        <ul
+          id="list"
+          @keydown=${this._navigateMenu}
+          @click=${this._menuItemClicked}
+        >
+          ${this.renderItems(this.items, this.getKey, this.renderItem)}
+        </ul>
+        <div aria-live="polite" role="status" class="visually-hidden">
+          ${when(
+            this.items.length,
+            () => html`
+              ${this.items.length}&nbsp;<slot name="results-available">results available</slot>
+            `,
+            () => html`
+              <slot name="no-results">No results</slot>
+            `
+          )}
+        </div>
       </div>
     `;
   }
@@ -254,6 +276,32 @@ export class AutocompleteElement extends FormControllable(LitElement) {
     this._selectOption(index);
   }
 
+  private _getItemText(item: AutocompleteItem) {
+    const text = (item.text ?? item.label ?? item.value).toString();
+
+    let str = '';
+    let pointer = 0;
+    let index = 0;
+
+    while (pointer < text.length) {
+      const highlight = (item.highlights ?? [])[index];
+
+      if (highlight) {
+        // before
+        str = str + text.slice(pointer, highlight[0]);
+        // highlight
+        str = str + `<b>${text.slice(highlight[0], highlight[1])}</b>`;
+      } else {
+        str = str + text.slice(pointer);
+      }
+
+      pointer = highlight ? highlight[1] : text.length;
+      index = index + 1;
+    }
+
+    return str;
+  }
+
   private _animateCollapse() {
     if (!this.list) {
       return;
@@ -288,7 +336,7 @@ export class AutocompleteElement extends FormControllable(LitElement) {
   private _query = debounce(20, () => {
     const value = this.input.value;
 
-    if (!value || value.length < this.minLength) {
+    if (!value || value.length < this.minlength) {
       this.items = this.items.length ? [] : this.items;
       return;
     }
@@ -308,16 +356,14 @@ function getStyles() {
   return css`
     /* util, extract? */
     .visually-hidden {
-      position: absolute !important;
-
-      border: 0 !important;
-      clip: rect(0 0 0 0) !important;
-      width: 1px !important;
-      height: 1px !important;
-      overflow: hidden !important;
-
-      margin: -1px !important;
       padding: 0 !important;
+      clip: rect(0 0 0 0);
+      clip-path: inset(100%);
+      height: 1px;
+      overflow: hidden;
+      position: absolute;
+      white-space: nowrap;
+      width: 1px;
     }
 
     * {
@@ -326,13 +372,15 @@ function getStyles() {
 
     /* host */
     :host {
+      font-size: 1em;
+      line-height: 1em;
+    }
+
+    .wrapper {
       position: relative;
 
       display: flex;
       flex-direction: column;
-
-      font-size: 1em;
-      line-height: 1em;
     }
 
     /* input */
@@ -351,7 +399,16 @@ function getStyles() {
       right: 0;
       height: 100%;
 
-      padding: var(--autocomplete-input-padding, .4em .55em);
+      padding: var(--autocomplete-input-padding, .4em .65em);
+      width: 3.3em;
+
+      background: transparent;
+      outline: none;
+      border: none;
+    }
+
+    .arrow svg {
+      width: inherit;
     }
 
     /* dropdown */

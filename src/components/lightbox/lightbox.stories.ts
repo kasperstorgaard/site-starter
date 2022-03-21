@@ -56,7 +56,7 @@ function lightboxFactory(options?: Options, content?: Content) {
 
 function getImage(width = 1200, height = 800) {
   const cacheBust = Math.floor(Math.random() * 10000);
-  return html`<img src="https://picsum.photos/${width}/${height}?_cb=${cacheBust}">`;
+  return html`<img src="https://picsum.photos/${width}/${height}?_cb=${cacheBust}" alt="automatically generated image for testing purposes">`;
 }
 
 export const Primary = lightboxFactory({ isOpen: false });

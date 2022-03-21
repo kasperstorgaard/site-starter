@@ -1,6 +1,6 @@
 import { html, render } from 'lit';
-import { classMap } from 'lit-html/directives/class-map.js';
-import { map } from 'lit-html/directives/map.js';
+import { classMap } from 'lit/directives/class-map.js';
+import { map } from 'lit/directives/map.js';
 import './button.scss';
 
 export default {

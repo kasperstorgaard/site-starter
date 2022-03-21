@@ -1,6 +1,6 @@
 import { html, render } from 'lit';
-import { map } from 'lit-html/directives/map.js';
-import { range } from 'lit-html/directives/range.js';
+import { map } from 'lit/directives/map.js';
+import { range } from 'lit/directives/range.js';
 import './accordion';
 import './accordion.scss';
 

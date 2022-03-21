@@ -43,8 +43,7 @@ export class LightboxElement extends Overlayable(LitElement) {
     <button
       class="close"
       @click=${this.close}
-      aria-label=${this.closeLabel}
-    >&#x2715</button>
+    ><span class="visually-hidden">${this.closeLabel}</span></button>
     <button
       class="arrow-back"
       aria-label=${this.backLabel}
@@ -90,6 +89,17 @@ function getStyles() {
     display: none !important;
   }
 
+  /* util, extract? */
+  .visually-hidden {
+    clip: rect(0 0 0 0);
+    clip-path: inset(100%);
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+  }
+
   :host {
     --lightbox-width: min(42rem, 100vw);
     --lightbox-height: min(33rem, 100vh);
@@ -129,6 +139,10 @@ function getStyles() {
     border: none;
 
     transition: transform .33s var(--ease-3);
+  }
+
+  .close:before {
+    content: "✕";
   }
 
   .arrow-back,

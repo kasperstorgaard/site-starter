@@ -11,11 +11,12 @@ export default {
 };
 
 interface Options {
+  label?: string;
   minlength?: number,
   showCountry?: boolean,
 }
 
-export const autocompleteFactory = (options?: Options) => {
+const autocompleteFactory = (options?: Options) => {
   const fn = (options?: any) => {
     const container = document.createElement('div');
     const autocomplete = createRef<AutocompleteElement>();
@@ -23,8 +24,11 @@ export const autocompleteFactory = (options?: Options) => {
     render(html`
       <sg-autocomplete
         name="city"
+        minlength=${options.minlength}
         ${ref(autocomplete)}
-      ></sg-autocomplete>
+      >
+        <span slot="label">cities</span>
+      </sg-autocomplete>
     `, container);
 
     autocomplete.value?.addEventListener('query', (event: CustomEvent) => {
@@ -37,12 +41,24 @@ export const autocompleteFactory = (options?: Options) => {
           city.name.toLowerCase().includes(target) ||
           city.country.toLowerCase().includes(target)
         )
-        .map(city => ({
-          key: city.geonameid.toString(),
-          text: city.name,
-          description: options.showCountry ? city.country : undefined,
-          value: city.name,
-        }));
+        .map(city => {
+          const matcher = new RegExp(value, 'gi');
+
+          const highlights: [number, number][] = [];
+
+          let match: RegExpExecArray;
+          while (match = matcher.exec(city.name)) {
+            highlights.push([match.index, match.index + match[0].length]);
+          }
+
+          return {
+            key: city.geonameid.toString(),
+            text: city.name,
+            highlights,
+            description: options.showCountry ? city.country : undefined,
+            value: city.name,
+          };
+        });
 
       autocomplete.value.items = items;
     });
@@ -50,12 +66,25 @@ export const autocompleteFactory = (options?: Options) => {
     return container;
   }
 
-  fn.args = options;
+  fn.args = {
+    minlength: undefined,
+    showCountry: false,
+    ...options,
+  };
   fn.argTypes = {
     ...fn.argTypes,
+    label: {
+      control: 'text',
+      defaultValue: 'cities',
+    },
     minlength: {
+      control: 'number',
       defaultValue: 2,
     },
+    showCountry: {
+      control: 'boolean',
+      defaultValue: false,
+    }
   };
 
   return fn;
@@ -63,6 +92,4 @@ export const autocompleteFactory = (options?: Options) => {
 
 export const Primary = autocompleteFactory();
 export const Description = autocompleteFactory({ showCountry: true });
-export const Minlength = autocompleteFactory({
-  minlength: 4
-});
+export const Minlength = autocompleteFactory({ minlength: 4 });

@@ -1,7 +1,6 @@
-import { OverlayElement } from './overlay';
 import './overlay';
 import './overlay.scss';
-import { html, render } from 'lit-html';
+import { html, render } from 'lit';
 
 export default {
   title: 'Overlay',
@@ -32,7 +31,10 @@ function overlayFactory(options?: Options) {
     return container;
   }
 
-  fn.args = options;
+  fn.args = {
+    isOpen: false,
+    ...options,
+  };
   return fn;
 };
 

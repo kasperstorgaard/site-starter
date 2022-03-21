@@ -1,2 +1,5 @@
-sg-autocomplete {
+sg-autocomplete[display=custom] {
+  datalist {
+    display: block;
+  }
 }

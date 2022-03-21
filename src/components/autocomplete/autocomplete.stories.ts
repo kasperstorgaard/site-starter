@@ -10,34 +10,57 @@ export default {
   title: 'Autocomplete',
 };
 
-export const Primary = () => {
-  const container = document.createElement('div');
-  const autocomplete = createRef<AutocompleteElement>();
-
-
-  render(html`
-    <sg-autocomplete ${ref(autocomplete)}>
-      <input slot="input" list="autocomplete" />
-      <datalist id="autocomplete" ></datalist>
-    </sg-autocomplete>
-  `, container);
-
-  autocomplete.value!.addEventListener('query', (event: CustomEvent) => {
-    const value = event.detail as string;
-
-    const target = value.toLowerCase();
-
-    autocomplete.value!.items = cities
-      .filter(city =>
-        city.name.toLowerCase().includes(target) ||
-        city.country.toLowerCase().includes(target)
-      )
-      .map(city => ({
-        key: city.geonameid.toString(),
-        text: city.name,
-        value: city.name,
-      }));
-  });
-
-  return container;
+interface Options {
+  minlength?: number,
+  freeform?: boolean,
 }
+
+export const autocompleteFactory = (options?: Options) => {
+  const fn = (options?: any) => {
+    const container = document.createElement('div');
+    const autocomplete = createRef<AutocompleteElement>();
+
+    render(html`
+      <sg-autocomplete
+        name="city"
+        ${ref(autocomplete)}
+      ></sg-autocomplete>
+    `, container);
+
+    autocomplete.value?.addEventListener('query', (event: CustomEvent) => {
+      const value = event.detail as string;
+
+      const target = value.toLowerCase();
+
+      const items = cities
+        .filter(city =>
+          city.name.toLowerCase().includes(target) ||
+          city.country.toLowerCase().includes(target)
+        )
+        .map(city => ({
+          key: city.geonameid.toString(),
+          text: city.name,
+          value: city.name,
+        }));
+
+      autocomplete.value.items = items;
+    });
+
+    return container;
+  }
+
+  fn.args = options;
+  fn.argTypes = {
+    ...fn.argTypes,
+    minlength: {
+      defaultValue: 2,
+    },
+  };
+
+  return fn;
+}
+
+export const Primary = autocompleteFactory();
+export const Minlength = autocompleteFactory({
+  minlength: 4
+});

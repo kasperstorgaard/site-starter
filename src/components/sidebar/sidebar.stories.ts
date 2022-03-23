@@ -1,75 +1,87 @@
-import { html, nothing, render, TemplateResult } from 'lit';
+import { html, render } from 'lit';
+import { SidebarElement } from './sidebar';
 import './sidebar';
 import './sidebar.scss';
+import { createRef, ref } from 'lit/directives/ref.js';
 
 export default {
   title: 'Sidebar',
 };
 
-interface Options {
-  isOpen?: boolean;
+export function Primary() {
+  const container = document.createElement('div');
+  const sidebar = createRef<SidebarElement>();
+
+  const template = html`
+  <button
+    class="sg-button"
+    @click=${() => sidebar.value.open()}
+  >open</button>
+  <sg-sidebar ${ref(sidebar)}>
+    hi from the sidebar :)
+  </sg-sidebar>
+  `;
+
+
+  render(template, container);
+  return container;
 }
 
-interface Content {
-  outer?: TemplateResult;
-  header?: TemplateResult;
-  inner?: TemplateResult;
-  footer?: TemplateResult;
+export function PreOpened() {
+  const container = document.createElement('div');
+  const sidebar = createRef<SidebarElement>();
+
+  const template = html`
+  <button
+    class="sg-button"
+    @click=${() => sidebar.value.open()}
+  >open</button>
+  <sg-sidebar is-open ${ref(sidebar)}>
+    hi from the sidebar :)
+  </sg-sidebar>
+  `;
+
+  render(template, container);
+  return container;
 }
 
-function sidebarFactory(options?: Options, content?: Content) {
-  const fn = (args?: Options) => {
-    const container = document.createElement('div');
+export function HeaderAndFooter() {
+  const container = document.createElement('div');
+  const sidebar = createRef<SidebarElement>();
 
-    const template = html`
-    <button
-      class="sg-button"
-      @click=${() => document.querySelector('sg-sidebar')?.setAttribute('is-open', '')}
-    >open</button>
-    ${content?.outer ?? nothing}
-    <sg-sidebar ?is-open=${args.isOpen}>
-      ${content?.header ? content.header : nothing}
-      ${content?.inner ?? 'hi from the sidebar :)'}
-      ${content?.footer ? content.footer : nothing}
-    </sg-sidebar>
-    `
+  const template = html`
+  <button
+    class="sg-button"
+    @click=${() => sidebar.value.open()}
+  >open</button>
+  <sg-sidebar ${ref(sidebar)}>
+    <h2 slot="header">I'm a header</h2>
+    hi from the sidebar :)
+    <button class="sg-button" slot="footer">continue</button>
+  </sg-sidebar>
+  `;
 
-    render(template, container);
-    return container;
-  }
-
-  fn.args = options;
-  return fn;
+  render(template, container);
+  return container;
 }
 
-export const Primary = sidebarFactory({ isOpen: false });
-export const PreOpened = sidebarFactory({ isOpen: true });
+export function ScrollLock() {
+  const container = document.createElement('div');
+  const sidebar = createRef<SidebarElement>();
 
-export const Header = sidebarFactory({}, {
-  header: html`<h2 slot="header">header</h2>`
-});
-export const Footer = sidebarFactory({}, {
-  footer: html`
-    <button class="sg-button" slot="footer" theme="primary">sign up</button>
-    <button class="sg-button" slot="footer" theme="secondary">close</button>
-  `
-});
-export const HeaderAndFooter = sidebarFactory({},
-  {
-    header: html`<h2 slot="header">header</h2>`,
-    footer: html`
-      <button class="sg-button" slot="footer" theme="primary">sign up</button>
-      <button class="sg-button" slot="footer" theme="secondary">close</button>
-    `
-  }
-);
+  const template = html`
+  <button
+    class="sg-button"
+    @click=${() => sidebar.value.open()}
+  >open</button>
+  <div style="height: 200vh; background: var(--cyan-1); margin-top: 1em; padding: 1em;">
+    This is a test to see that scrolling while the sidebar is open, does not scroll the underlying page.
+  </div>
+  <sg-sidebar ${ref(sidebar)}>
+    hi from the sidebar :)
+  </sg-sidebar>
+  `;
 
-export const UseScrollLock = sidebarFactory(
-  { isOpen: false},
-  { outer: html`
-    <div style="height: 300vh; background: var(--gradient-1); padding: var(--size-5); color: var(--gray-1)">
-      try to scroll while closed
-    </div>`,
-  }
-);
-
+  render(template, container);
+  return container;
+};

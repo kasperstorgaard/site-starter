@@ -121,6 +121,8 @@ function getStyles() {
       ".     .     .";
     align-items: center;
 
+    outline: none;
+
     z-index: var(--level-modal);
   }
 
@@ -135,7 +137,6 @@ function getStyles() {
     line-height: 1.5em;
 
     background: none;
-    outline: none;
     border: none;
 
     transition: transform .33s var(--ease-3);

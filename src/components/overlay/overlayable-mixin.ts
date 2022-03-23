@@ -1,5 +1,6 @@
 import { css, LitElement, PropertyValues } from 'lit';
 import { property } from 'lit/decorators.js';
+import { FocusTrapController } from '../focus-trap/focus-trap-controller';
 import { ScrollLockController } from '../scroll-lock/scroll-lock-controller';
 import { OverlayElement } from './overlay';
 
@@ -10,6 +11,7 @@ export const Overlayable = <T extends Constructor<LitElement>>(superClass: T) =>
       private _overlayElement: OverlayElement;
 
       scrollLock = new ScrollLockController(this);
+      focusTrap = new FocusTrapController(this);
 
       @property({ type: Boolean, reflect: true, attribute: 'is-open' })
       isOpen = false;
@@ -24,6 +26,10 @@ export const Overlayable = <T extends Constructor<LitElement>>(superClass: T) =>
         return this.isOpen;
       }
 
+      get isFocusTrapped() {
+        return this.isOpen;
+      }
+
       connectedCallback(): void {
         super.connectedCallback();
 
@@ -32,6 +38,8 @@ export const Overlayable = <T extends Constructor<LitElement>>(superClass: T) =>
 
         this.addEventListener('animationend', () => this.animates = false);
         this.addEventListener('animationcancel', () => this.animates = false);
+
+        window.addEventListener('keyup', this._closeOnEscape);
 
         if (!this.hasAttribute('role')) {
           this.setAttribute('role', 'complementary');
@@ -63,6 +71,7 @@ export const Overlayable = <T extends Constructor<LitElement>>(superClass: T) =>
       disconnectedCallback(): void {
         super.disconnectedCallback();
         this._overlayElement?.remove();
+        window.removeEventListener('keyup', this._closeOnEscape);
       }
 
       open() {
@@ -75,6 +84,12 @@ export const Overlayable = <T extends Constructor<LitElement>>(superClass: T) =>
 
       toggle() {
         this.isOpen = !this.isOpen;
+      }
+
+      private _closeOnEscape = (event: KeyboardEvent) => {
+        if (this.isOpen && event.key === 'Escape') {
+          this.close();
+        }
       }
     }
 

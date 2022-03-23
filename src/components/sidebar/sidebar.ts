@@ -28,17 +28,25 @@ export class SidebarElement extends Overlayable(LitElement) {
     <header ?hidden=${!this._headerItems.length}>
       <slot name="header"></slot>
     </header>
-    <button
-      class="close"
-      @click=${this.close}
-    ><span class="visually-hidden">${this.closeLabel}</span></button>
     <div>
       <slot></slot>
     </div>
     <footer ?hidden=${!this._footerItems.length}>
       <slot name="footer"></slot>
     </footer>
+    <button
+      class="close"
+      @click=${this.close}
+    ><span class="visually-hidden">${this.closeLabel}</span></button>
     `;
+  }
+
+  open() {
+    this.isOpen = true;
+  }
+
+  close() {
+    this.isOpen = false;
   }
 }
 
@@ -70,6 +78,7 @@ function getStyles() {
     top: 0;
     height: 100%;
     z-index: var(--level-modal);
+    outline: none;
 
     background: var(--sidebar-bg, white);
   }
@@ -94,8 +103,8 @@ function getStyles() {
     line-height: 1.5em;
 
     background: none;
-    outline: none;
     border: none;
+    cursor: pointer;
 
     transition: transform .33s var(--ease-3);
   }

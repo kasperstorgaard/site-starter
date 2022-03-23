@@ -79,6 +79,7 @@ function getStyles() {
     border-radius: var(--modal-border-radius, var(--radius-1  ));
     border: var(--border-size-2) solid var(--gray-9);
     box-shadow: var(--shadow-2);
+    outline: none;
   }
 
   :host > div {
@@ -110,7 +111,6 @@ function getStyles() {
     line-height: 1.5em;
 
     background: none;
-    outline: none;
     border: none;
 
     transition: transform .33s var(--ease-3);

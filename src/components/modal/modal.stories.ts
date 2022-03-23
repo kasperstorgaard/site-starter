@@ -57,23 +57,20 @@ export const PreOpened = modalFactory({ isOpen: true });
 export const Down = modalFactory({ direction: 'down', isOpen: false });
 export const Header = modalFactory({}, {
   header: html`<h2 slot="header">header</h2>`,
-  inner: html`main content`,
 });
 export const Footer = modalFactory({}, {
-  inner: html`main content`,
   footer: html`<button class="sg-button" theme="primary" slot="footer">sign me up</button>`,
 });
 export const HeaderAndFooter = modalFactory({}, {
   header: html`<h2 slot="header">sign me up</h2>`,
-  inner: html`main content`,
   footer: html`<button class="sg-button" theme="primary" slot="footer">sign me up</button>`,
 });
 
-export const UseScrollLock = modalFactory(
+export const ScrollLock = modalFactory(
   { isOpen: false},
   { outer: html`
-    <div style="height: 300vh; background: var(--gradient-1); padding: var(--size-5); color: var(--gray-1)">
-      try to scroll while closed
+    <div style="height: 200vh; background: var(--cyan-1); margin-top: 1em; padding: 1em;">
+      This is a a test to make sure the underlying page does not scroll when the modal is open
     </div>`,
   }
 );

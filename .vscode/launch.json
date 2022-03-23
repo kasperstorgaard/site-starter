@@ -1,0 +1,57 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "storybook",
+      "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/ava",
+      "runtimeArgs": [
+        "${file}:${lineNumber}"
+      ],
+      "env": {
+        "DEBUG": "pw:input",
+        "DEVICE": "android"
+      },
+      "resolveSourceMapLocations": [
+        "${workspaceFolder}/**",
+        "!**/node_modules/**"
+      ],
+      "sourceMaps": true,
+      "port": 9229,
+      "outputCapture": "std",
+      "skipFiles": [
+        "<node_internals>/**/*.js",
+        "**/node_modules/**"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "storybook:headless",
+      "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/ava",
+      "runtimeArgs": [
+        "${file}:${lineNumber}"
+      ],
+      "resolveSourceMapLocations": [
+        "${workspaceFolder}/**",
+        "!**/node_modules/**"
+      ],
+      "env": {
+        "DEBUG": "pw:input",
+        "HEADLESS": "false",
+        "DEVICE": "android"
+      },
+      "sourceMaps": true,
+      "port": 9229,
+      "outputCapture": "std",
+      "skipFiles": [
+        "<node_internals>/**/*.js",
+        "**/node_modules/**"
+      ]
+    }
+  ]
+}

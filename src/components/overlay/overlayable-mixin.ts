@@ -1,6 +1,6 @@
 import { css, LitElement, PropertyValues } from 'lit';
 import { property } from 'lit/decorators.js';
-import { ScrollLockController } from '../scroll-lock/scroll-lock-mixin';
+import { ScrollLockController } from '../scroll-lock/scroll-lock-controller';
 import { OverlayElement } from './overlay';
 
 type Constructor<T> = new (...args: any[]) => T;

@@ -25,16 +25,16 @@ export class ModalElement extends Overlayable(LitElement) {
     <header ?hidden=${!this._headerItems.length}>
       <slot name="header"></slot>
     </header>
-    <button
-      class="close"
-      @click=${this.close}
-    ><span class="visually-hidden">${this.closeLabel}</span></button>
     <div>
       <slot></slot>
     </div>
     <footer ?hidden=${!this._footerItems.length}>
       <slot name="footer"></slot>
     </footer>
+    <button
+      class="close"
+      @click=${this.close}
+    ><span class="visually-hidden">${this.closeLabel}</span></button>
   `;
   }
 }

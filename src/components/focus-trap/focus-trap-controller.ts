@@ -53,13 +53,17 @@ export class FocusTrapController<T extends FocusTrapElement> implements Reactive
     const tabbableElements = getTabbableElements(this._host.shadowRoot);
     const direction = event.shiftKey ? -1 : 1;
 
+    const activeElement = document.activeElement === this._host ?
+      this._host.shadowRoot.activeElement :
+      document.activeElement;
+
     // if we somehow have no current focus, focus the first or last, depending on direction wanted
-    if (!document.activeElement || document.activeElement === this._host) {
+    if (!activeElement) {
       const target = direction === -1 ? tabbableElements.length - 1 : 0;
       tabbableElements[target].focus();
     // otherwise focus the next in order, wrapping around the list if needed.
     } else {
-      const index = tabbableElements.indexOf(document.activeElement as HTMLElement);
+      const index = tabbableElements.indexOf(activeElement as HTMLElement);
       const target = (index + direction + tabbableElements.length) % tabbableElements.length;
       tabbableElements[target].focus();
     }
@@ -67,23 +71,24 @@ export class FocusTrapController<T extends FocusTrapElement> implements Reactive
 }
 
 // Gets the tabable elements of a shadow root and any elements assigned to slots.
-function getTabbableElements(root: ShadowRoot): HTMLElement[] {
+function getTabbableElements(root: Element | ShadowRoot): HTMLElement[] {
   const treeWalker = document.createTreeWalker(
     root,
     NodeFilter.SHOW_ELEMENT,
-    { acceptNode: (node: HTMLElement) => node.tabIndex >= 0 || node instanceof HTMLSlotElement ?
-      NodeFilter.FILTER_ACCEPT :
-      NodeFilter.FILTER_SKIP,
+    { acceptNode: (node: HTMLElement) => node instanceof HTMLSlotElement || node.tabIndex >= 0 ?
+        NodeFilter.FILTER_ACCEPT :
+        NodeFilter.FILTER_SKIP,
     },
   );
 
-  let node = treeWalker.nextNode();
   const nodes: HTMLElement[] = [];
+  let node = treeWalker.nextNode();
 
   while (node) {
     if (node instanceof HTMLSlotElement) {
       const subNodes = node.assignedElements()
-        .filter((element: HTMLElement) => element.tabIndex >= 0) as HTMLElement[];
+        .filter(node => (node as HTMLElement).tabIndex >= 0) as HTMLElement[]
+
       nodes.push(...subNodes);
     } else {
       nodes.push(node as HTMLElement);
@@ -92,5 +97,6 @@ function getTabbableElements(root: ShadowRoot): HTMLElement[] {
     node = treeWalker.nextNode();
   }
 
-  return nodes;
+  const visibleNodes = nodes.filter(node => node.offsetHeight > 0 && node.offsetWidth > 0);
+  return visibleNodes;
 }

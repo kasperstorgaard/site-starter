@@ -8,17 +8,20 @@ sg-accordion {
   display: block;
 
   details {
-    background: var(--accordion-background, var(--gray-1));
+    border: var(--border-size-1) solid var(--accordion-background, var(--gray-1));
   }
 
   details + details {
-    margin-top: 2px;
+    margin-top: .25em;
   }
 
   summary {
     display: flex;
     justify-content: space-between;
     padding: var(--accordion-item-header-padding);
+
+    background: var(--accordion-background, var(--gray-1));
+
     cursor: pointer;
 
     &:after {
@@ -28,8 +31,6 @@ sg-accordion {
       width: 1.5em;
       height: 1.5em;
       text-align: center;
-
-      transition: transform .25s var(--ease-1);
     }
 
     & ~ * {

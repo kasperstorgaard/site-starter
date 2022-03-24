@@ -119,7 +119,8 @@ export class AccordionElement extends LitElement {
     // This is the default click handling for an accordion item,
     // which also takes care of keyboard navigation,
     // since you can TAB to the details element and then open using space.
-    element.addEventListener('click', (event: Event) => {
+    const summary = element.querySelector('summary');
+    summary.addEventListener('click', (event: Event) => {
       // Stop default behaviour from the browser, which lets us take control,
       // so we can start animation, and set open state when done.
       event.preventDefault();

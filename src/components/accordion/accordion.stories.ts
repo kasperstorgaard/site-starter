@@ -22,7 +22,7 @@ function accordionFactory(options: Options) {
         ${map(range(args.numberOfItems), (_item, index) => html`
           <details>
             <summary>Item ${index}</summary>
-            <span>This is some content</span>
+            <span>This is some content ${index}</span>
           </details>
         `)}
       </sg-accordion>

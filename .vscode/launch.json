@@ -7,45 +7,16 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "storybook",
+      "name": "storybook:debug",
       "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/ava",
       "runtimeArgs": [
         "${file}:${lineNumber}"
-      ],
-      "env": {
-        "DEBUG": "pw:input",
-        "DEVICE": "android"
-      },
-      "resolveSourceMapLocations": [
-        "${workspaceFolder}/**",
-        "!**/node_modules/**"
-      ],
-      "sourceMaps": true,
-      "port": 9229,
-      "outputCapture": "std",
-      "skipFiles": [
-        "<node_internals>/**/*.js",
-        "**/node_modules/**"
-      ]
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "storybook:headless",
-      "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/ava",
-      "runtimeArgs": [
-        "${file}:${lineNumber}"
-      ],
-      "resolveSourceMapLocations": [
-        "${workspaceFolder}/**",
-        "!**/node_modules/**"
       ],
       "env": {
         "DEBUG": "pw:input",
         "HEADLESS": "false",
         "DEVICE": "android"
       },
-      "sourceMaps": true,
       "port": 9229,
       "outputCapture": "std",
       "skipFiles": [

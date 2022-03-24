@@ -1,4 +1,4 @@
-const viteConfig = require('../vite.config.js');
+const viteConfig = require('../vite.config.cjs');
 
 module.exports = {
   stories: [

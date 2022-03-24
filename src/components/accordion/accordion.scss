@@ -6,10 +6,13 @@ sg-accordion {
   --accordion-item-border: var(--border-base);
 
   display: block;
-  border-bottom: var(--accordion-item-border);
 
   details {
-    border-top: var(--accordion-item-border);
+    background: var(--accordion-background, var(--gray-1));
+  }
+
+  details + details {
+    margin-top: 2px;
   }
 
   summary {

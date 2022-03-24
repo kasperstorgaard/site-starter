@@ -1,19 +1,19 @@
 import test from 'ava';
-import { useStory, env } from '../../shared/test-utils';
+import { useStory, env } from '../../shared/test-utils.js';
 
-test.serial('should expand on click', useStory('modal'), async (t, page) => {
+test('should expand on click', useStory('modal'), async (t, page) => {
   await page.locator('text=open').click();
   await page.locator('text=hello').waitFor();
   t.pass();
 });
 
-test.serial('should close when clicking close button', useStory('modal', 'pre-opened'), async (t, page) => {
+test('should close when clicking close button', useStory('modal', 'pre-opened'), async (t, page) => {
   await page.locator('text=close').click();
   await page.locator('text=hello').waitFor({ state: 'hidden'});
   t.pass();
 });
 
-test.serial('should close when clicking outside container on desktop', useStory('modal', 'pre-opened'), async (t, page) => {
+test('should close when clicking outside container on desktop', useStory('modal', 'pre-opened'), async (t, page) => {
   if (env.isMobile) {
     t.pass('modal only has "scrim" background element on desktop');
     return;
@@ -26,7 +26,7 @@ test.serial('should close when clicking outside container on desktop', useStory(
   t.pass();
 });
 
-test.serial('should not scroll body on long page', useStory('modal', 'scroll-lock'), async (t, page) => {
+test('should not scroll body on long page', useStory('modal', 'scroll-lock'), async (t, page) => {
   await page.locator('button >> text=open').click();
   await page.mouse.wheel(0, 1000);
   await page.locator('text=close').click();
@@ -34,14 +34,14 @@ test.serial('should not scroll body on long page', useStory('modal', 'scroll-loc
   t.is(0, scrollTop);
 });
 
-test.serial('should set focus to container when opening', useStory('modal'), async (t, page) => {
+test('should set focus to container when opening', useStory('modal'), async (t, page) => {
   await page.locator('text=open').click();
   await page.locator('text=hello').waitFor();
   const focusedTag = await page.evaluate(() => document.activeElement?.tagName);
   t.is(focusedTag, 'SG-MODAL');
 });
 
-test.serial('should send back focus to opening element when closing', useStory('modal'), async (t, page) => {
+test('should send back focus to opening element when closing', useStory('modal'), async (t, page) => {
   await page.locator('text=open').click();
   await page.locator('text=hello').waitFor();
   await page.locator('text=close').click();
@@ -49,7 +49,7 @@ test.serial('should send back focus to opening element when closing', useStory('
   t.is(focusedText, 'open');
 });
 
-test.serial('should focus first focusable element on tab', useStory('modal', 'header-and-footer'), async (t, page) => {
+test('should focus first focusable element on tab', useStory('modal', 'header-and-footer'), async (t, page) => {
   await page.locator('text=open').click();
   await page.locator('text=hello').waitFor();
   await page.keyboard.press('Tab');
@@ -57,7 +57,7 @@ test.serial('should focus first focusable element on tab', useStory('modal', 'he
   t.is(focusedText, 'sign me up');
 });
 
-test.serial('should be able to close the with keyboard', useStory('modal', 'header-and-footer'), async (t, page) => {
+test('should be able to close the with keyboard', useStory('modal', 'header-and-footer'), async (t, page) => {
   await page.locator('text=open').click();
   await page.locator('text=hello').waitFor();
   await page.keyboard.press('Tab');
@@ -68,7 +68,7 @@ test.serial('should be able to close the with keyboard', useStory('modal', 'head
   t.pass();
 });
 
-test.serial('should be able to close with keyboard when tabbing backwards', useStory('modal', 'header-and-footer'), async (t, page) => {
+test('should be able to close with keyboard when tabbing backwards', useStory('modal', 'header-and-footer'), async (t, page) => {
   await page.locator('text=open').click();
   await page.locator('text=hello').waitFor();
   await page.keyboard.press('Shift+Tab');
@@ -78,7 +78,7 @@ test.serial('should be able to close with keyboard when tabbing backwards', useS
   t.pass();
 });
 
-test.serial('should wrap around focus when tabbing past elements', useStory('modal', 'header-and-footer'), async (t, page) => {
+test('should wrap around focus when tabbing past elements', useStory('modal', 'header-and-footer'), async (t, page) => {
   await page.locator('text=open').click();
   await page.locator('text=hello').waitFor();
   await page.keyboard.press('Tab');
@@ -89,7 +89,7 @@ test.serial('should wrap around focus when tabbing past elements', useStory('mod
   t.is(focusedText, 'sign me up');
 });
 
-test.serial('should close on escape', useStory('modal'), async (t, page) => {
+test('should close on escape', useStory('modal'), async (t, page) => {
   await page.locator('text=open').click();
   await page.locator('text=hello').waitFor();
   await page.keyboard.press('Escape');

@@ -7,6 +7,7 @@
     "build": "astro build",
     "build-storybook": "build-storybook",
     "dev": "astro dev",
+    "lint": "eslint",
     "preview": "astro preview",
     "start": "astro dev",
     "storybook": "start-storybook -p 6006",
@@ -45,6 +46,7 @@
     "babel-loader": "^8.2.3",
     "eslint": "^8.6.0",
     "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-ava": "^13.2.0",
     "eslint-plugin-import": "^2.25.4",
     "playwright": "^1.20.0",
     "storybook-builder-vite": "^0.1.16",
@@ -64,5 +66,23 @@
     "ignoredByWatcher": [
       "!**/*.{ts}"
     ]
+  },
+  "eslintConfig": {
+    "env": {
+      "browser": true,
+      "node": true,
+      "es2021": true
+    },
+    "extends": [
+      "eslint:recommended",
+      "prettier"
+    ],
+    "plugins": ["prettier", "import", "ava"],
+    "rules": {
+      "semi": ["error", "always"],
+      "object-curly-spacing": ["warn", "always"],
+      "comma-dangle": ["warn", "always-multiline"],
+      "quotes": ["warn", "single"]
+    }
   }
 }

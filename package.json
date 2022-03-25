@@ -2,7 +2,7 @@
   "name": "site-starter",
   "version": "0.0.1",
   "description": "A website starter template with 11ty, web components and open props",
-  "main": "index.js",
+  "type": "module",
   "scripts": {
     "build": "astro build",
     "build-storybook": "build-storybook",
@@ -39,6 +39,7 @@
     "@storybook/addon-links": "^6.4.19",
     "@storybook/html": "^6.4.19",
     "@storybook/testing-library": "0.0.9",
+    "@swc-node/register": "^1.4.2",
     "@types/body-scroll-lock": "^3.1.0",
     "ava": "^4.1.0",
     "babel-loader": "^8.2.3",
@@ -47,21 +48,21 @@
     "eslint-plugin-import": "^2.25.4",
     "playwright": "^1.20.0",
     "storybook-builder-vite": "^0.1.16",
-    "ts-node": "^10.7.0",
     "typescript": "^4.6.2",
     "vite": "^2.7.13"
   },
-  "type": "module",
   "ava": {
-		"extensions": {
-			"ts": "module"
-		},
-		"nodeArguments": [
-			"--loader=ts-node/esm"
-		],
+    "extensions": [
+      "ts"
+    ],
+    "require": [
+      "@swc-node/register"
+    ],
     "files": [
       "src/**/*.spec.ts"
     ],
-    "ignoredByWatcher": ["!**/*.{ts}"]
-	}
+    "ignoredByWatcher": [
+      "!**/*.{ts}"
+    ]
+  }
 }

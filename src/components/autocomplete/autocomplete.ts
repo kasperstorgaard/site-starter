@@ -145,6 +145,7 @@ export class AutocompleteElement extends FormControllable(LitElement) {
           aria-expanded=${this.open}
 
           @click=${this.show}
+          @keydown=${this._inputTabHandler}
           @keyup=${this._input}
         >
         <button
@@ -219,14 +220,20 @@ export class AutocompleteElement extends FormControllable(LitElement) {
     }
   }
 
+  private _inputTabHandler(event: KeyboardEvent) {
+    if (event.key === 'Tab') {
+      this.hide();
+    }
+  }
+
   private _input(event: KeyboardEvent) {
     switch (event.key) {
       case 'ArrowUp':
       case 'ArrowLeft':
       case 'ArrowRight':
       case ' ':
-      case 'Enter':
       case 'Tab':
+      case 'Enter':
       case 'Shift':
         // ignore otherwise the menu will show
         break;

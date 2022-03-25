@@ -1,5 +1,5 @@
 import test from 'ava';
-import { useStory, env } from '../../shared/test-utils.js';
+import { useStory, env } from '../../shared/test-utils';
 
 test('should expand on click', useStory('modal'), async (t, page) => {
   await page.locator('text=open').click();

@@ -1,5 +1,5 @@
 import test from 'ava';
-import { useStory } from '../../shared/test-utils.js';
+import { useStory } from '../../shared/test-utils';
 
 test('should expand on click', useStory('accordion'), async (t, page) => {
   await page.locator('text=item 0').click();

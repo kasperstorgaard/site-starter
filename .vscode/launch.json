@@ -7,11 +7,37 @@
     {
       "type": "node",
       "request": "launch",
+      "name": "storybook:test",
+      "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/ava",
+      "runtimeArgs": [
+        "--serial",
+        "${file}",
+        // TODO: check again if line numbers can work with .ts and ava setup
+        // "${file}:${lineNumber}"
+      ],
+      "sourceMaps": true,
+      "env": {
+        "DEVICE": "android"
+      },
+      "port": 9229,
+      "outputCapture": "std",
+      "skipFiles": [
+        "<node_internals>/**",
+        "**/node_modules/**"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
       "name": "storybook:debug",
       "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/ava",
       "runtimeArgs": [
-        "${file}:${lineNumber}"
+        "--serial",
+        "${file}",
+        // TODO: check again if line numbers can work with .ts and ava setup
+        // "${file}:${lineNumber}"
       ],
+      "sourceMaps": true,
       "env": {
         "DEBUG": "pw:input",
         "HEADLESS": "false",
@@ -20,7 +46,7 @@
       "port": 9229,
       "outputCapture": "std",
       "skipFiles": [
-        "<node_internals>/**/*.js",
+        "<node_internals>/**",
         "**/node_modules/**"
       ]
     }

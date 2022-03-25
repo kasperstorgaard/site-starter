@@ -3,7 +3,7 @@ import { useStory } from '../../shared/test-utils';
 
 test('should expand on click', useStory('accordion'), async (t, page) => {
   await page.locator('text=item 0').click();
-  await page.locator('text=this is some content').waitFor();
+  await page.locator('text=content 0').waitFor();
   t.pass();
 });
 

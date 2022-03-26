@@ -58,3 +58,47 @@ export function Interaction() {
   render(template, container);
   return container;
 }
+
+export function Long() {
+  const container = document.createElement('div');
+  const snackbar = createRef<SnackbarElement>();
+
+  const template = html`
+  <button
+    class="sg-button"
+    @click=${() => snackbar.value.show()}
+  >open</button>
+  <sg-snackbar
+    timeout="long"
+    ${ref(snackbar)}
+  >
+    Hello I'm a long snackbar message :)
+  </sg-snackbar>
+  `;
+
+
+  render(template, container);
+  return container;
+}
+
+export function Short() {
+  const container = document.createElement('div');
+  const snackbar = createRef<SnackbarElement>();
+
+  const template = html`
+  <button
+    class="sg-button"
+    @click=${() => snackbar.value.show()}
+  >open</button>
+  <sg-snackbar
+    timeout="short"
+    ${ref(snackbar)}
+  >
+    Hello I'm a short snackbar message :)
+  </sg-snackbar>
+  `;
+
+
+  render(template, container);
+  return container;
+}

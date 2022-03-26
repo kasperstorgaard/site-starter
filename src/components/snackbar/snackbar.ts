@@ -7,17 +7,57 @@ export class SnackbarElement extends LitElement {
     getStyles(),
   ];
 
+  private _timeout = 5000;
+  private _open = false;
   private _hideTimer = 0;
   private _focusOrigin: HTMLElement | null = null;
 
-  @property({ type: Number })
-  timeout = 5000;
+  get timeout() {
+    return this._timeout;
+  }
 
-  @property({ type: Boolean, reflect: true })
-  open = false;
+  @property({ noAccessor: true })
+  set timeout(value: 'short'|'medium'|'long'|number) {
+    const oldVal = this._timeout;
 
-  @property({ type: Boolean, reflect: true })
-  animates = false;
+    switch (value) {
+      case 'short': {
+        this._timeout = 2500;
+        break;
+      }
+      case 'long': {
+        this._timeout = 7500;
+        break;
+      }
+      default: {
+        this._timeout = parseInt(value.toString());
+        break;
+      }
+    }
+
+    this.requestUpdate('timeout', oldVal);
+  }
+
+  get open() {
+    return this._open;
+  }
+
+  @property({ type: Boolean, reflect: true, noAccessor: true })
+  set open(value: boolean) {
+    const oldVal = this._open;
+
+    if (value !== oldVal) {
+      this._open = value;
+      this.setAttribute('animates', 'animates');
+      this.requestUpdate('open', oldVal);
+
+      if (value) {
+        this.setAttribute('aria-live', 'polite');
+      } else {
+        this.removeAttribute('aria-live');
+      }
+    }
+  }
 
   @property({ type: String })
   closeLabel = 'close';
@@ -28,8 +68,8 @@ export class SnackbarElement extends LitElement {
   connectedCallback(): void {
     super.connectedCallback();
 
-    this.addEventListener('animationend', () => this.animates = false);
-    this.addEventListener('animationcancel', () => this.animates = false);
+    this.addEventListener('animationend', () => this.removeAttribute('animates'));
+    this.addEventListener('animationcancel', () => this.removeAttribute('animates'));
 
     document.addEventListener('focusin', this._storeFocusOrigin);
   }
@@ -61,10 +101,6 @@ export class SnackbarElement extends LitElement {
 
     if (changes.has('open')) {
       window.clearTimeout(this._hideTimer);
-
-      if (changes.get('open') != null) {
-        this.animates = true;
-      }
 
       if (this.open) {
         this._hideTimer = window.setTimeout(() => {
@@ -130,18 +166,21 @@ function getStyles() {
     }
 
     :host {
+      --snackbar-pad-top: var(--size-3);
+      --snackbar-pad-side: var(--size-4);
+
       display: flex;
       justify-content: space-between;
       align-content: center;
 
       position: fixed;
-      bottom: var(--snackbar-bot, var(--size-3));
+      bottom: var(--snackbar-pad-top);
       left: 0;
       right: 0;
-      max-width: min(24rem, 100vw - var(--size-3) * 2);
+      max-width: min(24rem, 100vw - var(--snackbar-pad-side) * 2);
 
       margin: 0 auto;
-      padding: var(--snackbar-pad, var(--size-3) var(--size-4));
+      padding: var(--snackbar-pad, var(--snackbar-pad-top) var(--snackbar-pad-side));
 
       background: var(--snackbar-bg, var(--gray-2));
       transform-origin: top center;
@@ -154,6 +193,10 @@ function getStyles() {
     .close {
       font-size: var(--font-size-2);
       line-height: 1.5em;
+
+      padding: var(--snackbar-pad-top) var(--snackbar-pad-side);
+      margin: calc(-1 * var(--snackbar-pad-top)) calc(-1 * var(--snackbar-pad-side));
+      margin-left: var(--snackbar-pad-side);
 
       background: none;
       border: none;

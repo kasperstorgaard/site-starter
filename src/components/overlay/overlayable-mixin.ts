@@ -9,18 +9,27 @@ type Constructor<T> = new (...args: any[]) => T;
 export const Overlayable = <T extends Constructor<LitElement>>(superClass: T) => {
     class OverlayableElement extends superClass {
       private _overlayElement: OverlayElement;
+      private _isOpen = false;
 
       scrollLock = new ScrollLockController(this);
       focusTrap = new FocusTrapController(this);
 
-      @property({ type: Boolean, reflect: true, attribute: 'is-open' })
-      isOpen = false;
+      get isOpen() {
+        return this._isOpen;
+      }
+
+      @property({ type: Boolean, reflect: true, attribute: 'is-open', noAccessor: true })
+      set isOpen(value: boolean) {
+        const oldVal = this._isOpen;
+        if (value !== oldVal) {
+          this._isOpen = value;
+          this.setAttribute('animates', 'animates');
+          this.requestUpdate('isOpen', oldVal);
+        }
+      }
 
       @property({ type: String, reflect: true })
       direction: 'up' | 'down' | 'left' | 'right' = 'up';
-
-      @property({ type: Boolean, reflect: true, attribute: 'animates' })
-      animates = false;
 
       get isScrollDisabled() {
         return this.isOpen;
@@ -36,8 +45,8 @@ export const Overlayable = <T extends Constructor<LitElement>>(superClass: T) =>
         this._overlayElement = document.createElement('sg-overlay') as OverlayElement;
         document.body.appendChild(this._overlayElement);
 
-        this.addEventListener('animationend', () => this.animates = false);
-        this.addEventListener('animationcancel', () => this.animates = false);
+        this.addEventListener('animationend', () => this.removeAttribute('animates'));
+        this.addEventListener('animationcancel', () => this.removeAttribute('animates'));
 
         window.addEventListener('keyup', this._closeOnEscape);
 
@@ -55,16 +64,10 @@ export const Overlayable = <T extends Constructor<LitElement>>(superClass: T) =>
       }
 
       updated(changes: PropertyValues) {
-        if (super.updated) {
-          super.updated(changes);
-        }
+        super.updated(changes);
 
         if (changes.has('isOpen')) {
           this._overlayElement.isOpen = this.isOpen;
-
-          if (changes.get('isOpen') != null) {
-            this.animates = true;
-          }
         }
       }
 

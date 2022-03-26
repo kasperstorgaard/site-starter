@@ -49,10 +49,9 @@ test('should send back focus to opening element when closing', useStory('sidebar
   t.is(focusedText, 'open');
 });
 
-test('should focus first focusable element on tab', useStory('sidebar', 'header-and-footer'), async (t, page) => {
+test('should focus first focusable element on open', useStory('sidebar', 'header-and-footer'), async (t, page) => {
   await page.locator('text=open').click();
   await page.locator('text=hi from the sidebar :)').waitFor();
-  await page.keyboard.press('Tab');
   const focusedText = await page.evaluate(() => document.activeElement?.textContent);
   t.is(focusedText, 'continue');
 });
@@ -60,7 +59,6 @@ test('should focus first focusable element on tab', useStory('sidebar', 'header-
 test('should be able to close the sidebar with keyboard', useStory('sidebar', 'header-and-footer'), async (t, page) => {
   await page.locator('text=open').click();
   await page.locator('text=hi from the sidebar :)').waitFor();
-  await page.keyboard.press('Tab');
   await page.keyboard.press('Tab');
   await page.keyboard.press('Space');
 
@@ -81,7 +79,6 @@ test('should be able to close sidebar with keyboard when tabbing backwards', use
 test('should wrap around focus when tabbing past elements', useStory('sidebar', 'header-and-footer'), async (t, page) => {
   await page.locator('text=open').click();
   await page.locator('text=hi from the sidebar :)').waitFor();
-  await page.keyboard.press('Tab');
   await page.keyboard.press('Tab');
   await page.keyboard.press('Tab');
 

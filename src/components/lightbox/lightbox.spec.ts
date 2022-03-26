@@ -19,7 +19,7 @@ test('should navigate forward on arrow click', useStory('lightbox'), async (t, p
   await page.locator('text=open').click();
   await page.locator('img').first().waitFor();
   await page.locator('text=forward').click();
-  await page.waitForTimeout(1000);
+  await page.waitForTimeout(2000);
 
   const bounds = await page.locator('img').nth(1).boundingBox();
   t.is(bounds.x, 0);
@@ -39,7 +39,6 @@ test('should navigate back on arrow click', useStory('lightbox'), async (t, page
 test('should wrap focus', useStory('lightbox'), async (t, page) => {
   await page.locator('text=open').click();
   await page.locator('img').first().waitFor();
-  await page.keyboard.press('Tab');
   await page.keyboard.press('Tab');
   await page.keyboard.press('Tab');
 
@@ -64,6 +63,14 @@ test('should not scroll body on long page', useStory('lightbox', 'scroll-lock'),
   await page.locator('text=close').click();
   const scrollTop = await page.locator('html').evaluate(body => body.scrollTop);
   t.is(0, scrollTop);
+});
+
+test('should select first focusable element when opened', useStory('lightbox', 'links'), async (t, page) => {
+  await page.keyboard.press('Tab');
+  await page.keyboard.press('Space');
+  await page.locator('text=link').first().waitFor();
+  const focusText = await page.evaluate(() => document.activeElement.textContent);
+  t.is(focusText, 'link');
 });
 
 

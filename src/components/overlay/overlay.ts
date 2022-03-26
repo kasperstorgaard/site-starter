@@ -5,25 +5,28 @@ import { customElement, property } from 'lit/decorators.js';
 export class OverlayElement extends LitElement {
   static styles = [styles()];
 
-  @property({ type: Boolean, reflect: true, attribute: 'is-open' })
-  isOpen = false;
+  private _isOpen = false;
 
-  @property({ type: Boolean, reflect: true, attribute: 'animates' })
-  animates = false;
+  get isOpen() {
+    return this._isOpen;
+  }
+
+  @property({ type: Boolean, reflect: true, attribute: 'is-open', noAccessor: true })
+  set isOpen(value: boolean) {
+    const oldVal = this._isOpen;
+
+    if (value !== oldVal) {
+      this._isOpen = value;
+      this.setAttribute('animates', 'animates');
+      this.requestUpdate('isOpen', oldVal);
+    }
+  }
 
   connectedCallback(): void {
     super.connectedCallback();
 
-    this.addEventListener('animationend', () => this.animates = false);
-    this.addEventListener('animationcancel', () => this.animates = false);
-  }
-
-  protected updated(props: Map<string | number | symbol, unknown>): void {
-    super.updated(props);
-
-    if (props.has('isOpen') && props.get('isOpen') != null) {
-      this.animates = true;
-    }
+    this.addEventListener('animationend', () => this.removeAttribute('animates'));
+    this.addEventListener('animationcancel', () => this.removeAttribute('animates'));
   }
 
   open() {

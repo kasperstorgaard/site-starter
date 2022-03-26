@@ -1,7 +1,9 @@
 import { LitElement, ReactiveController } from 'lit';
+import { getChildrenIncludingSlotted, isElementVisible } from '../../shared/element-helpers';
 
 export interface FocusTrapElement extends LitElement {
   isFocusTrapped: boolean;
+  focusableBounds?: DOMRect | null;
 }
 
 export class FocusTrapController<T extends FocusTrapElement> implements ReactiveController {
@@ -12,10 +14,6 @@ export class FocusTrapController<T extends FocusTrapElement> implements Reactive
   constructor(host: T) {
     this._host = host;
     this._host.addController(this);
-
-    if (!this._host.hasAttribute('tabindex')) {
-      this._host.setAttribute('tabindex', '0');
-    }
   }
 
   hostUpdated(): void {
@@ -32,7 +30,7 @@ export class FocusTrapController<T extends FocusTrapElement> implements Reactive
 
   private _trapFocus() {
     this._focusOrigin = document.activeElement instanceof HTMLElement ? document.activeElement : null;
-    this._host.focus();
+    this._focusNext();
     this._host.addEventListener('keydown', this._handleTabs);
     this._isActive = true;
   }
@@ -49,9 +47,15 @@ export class FocusTrapController<T extends FocusTrapElement> implements Reactive
     }
 
     event.preventDefault();
+    const direction = event.shiftKey ? 'back' : 'forward';
 
-    const tabbableElements = getTabbableElements(this._host.shadowRoot);
-    const direction = event.shiftKey ? -1 : 1;
+    this._focusNext(direction);
+  }
+
+  private _focusNext(direction: 'forward'|'back' = 'forward') {
+    const bounds = this._host.focusableBounds;
+
+    const tabbableElements = getTabbableElements(this._host.shadowRoot, bounds);
 
     const activeElement = document.activeElement === this._host ?
       this._host.shadowRoot.activeElement :
@@ -59,44 +63,25 @@ export class FocusTrapController<T extends FocusTrapElement> implements Reactive
 
     // if we somehow have no current focus, focus the first or last, depending on direction wanted
     if (!activeElement) {
-      const target = direction === -1 ? tabbableElements.length - 1 : 0;
+      const target = direction === 'back' ? tabbableElements.length - 1 : 0;
       tabbableElements[target].focus();
     // otherwise focus the next in order, wrapping around the list if needed.
     } else {
       const index = tabbableElements.indexOf(activeElement as HTMLElement);
-      const target = (index + direction + tabbableElements.length) % tabbableElements.length;
+      const offset = direction === 'forward' ? 1 : -1;
+      const target = (index + offset + tabbableElements.length) % tabbableElements.length;
       tabbableElements[target].focus();
     }
   }
 }
 
 // Gets the tabable elements of a shadow root and any elements assigned to slots.
-function getTabbableElements(root: Element | ShadowRoot): HTMLElement[] {
-  const treeWalker = document.createTreeWalker(
-    root,
-    NodeFilter.SHOW_ELEMENT,
-    { acceptNode: (node: HTMLElement) => node instanceof HTMLSlotElement || node.tabIndex >= 0 ?
-        NodeFilter.FILTER_ACCEPT :
-        NodeFilter.FILTER_SKIP,
-    },
-  );
+function getTabbableElements(root: Element | ShadowRoot, bounds?: DOMRect): HTMLElement[] {
+  const elements = getChildrenIncludingSlotted(root);
 
-  const nodes: HTMLElement[] = [];
-  let node = treeWalker.nextNode();
-
-  while (node) {
-    if (node instanceof HTMLSlotElement) {
-      const subNodes = node.assignedElements()
-        .filter(node => (node as HTMLElement).tabIndex >= 0) as HTMLElement[]
-
-      nodes.push(...subNodes);
-    } else {
-      nodes.push(node as HTMLElement);
-    }
-
-    node = treeWalker.nextNode();
-  }
-
-  const visibleNodes = nodes.filter(node => node.offsetHeight > 0 && node.offsetWidth > 0);
-  return visibleNodes;
+  return elements
+    // make sure the element can receive tabs.
+    .filter(element => element.tabIndex >= 0)
+    // filter out any hidden elements and elements outside bounds.
+    .filter(node => isElementVisible(node, bounds));
 }

@@ -34,11 +34,12 @@ test('should not scroll body on long page', useStory('modal', 'scroll-lock'), as
   t.is(0, scrollTop);
 });
 
-test('should set focus to container when opening', useStory('modal'), async (t, page) => {
+test('should set focus to close button when opening', useStory('modal'), async (t, page) => {
   await page.locator('text=open').click();
   await page.locator('text=hello').waitFor();
-  const focusedTag = await page.evaluate(() => document.activeElement?.tagName);
-  t.is(focusedTag, 'SG-MODAL');
+  const modal$ = page.locator('sg-modal');
+  const focusedText = await modal$.evaluate(el => el.shadowRoot.activeElement?.textContent);
+  t.regex(focusedText, /close/);
 });
 
 test('should send back focus to opening element when closing', useStory('modal'), async (t, page) => {
@@ -49,10 +50,9 @@ test('should send back focus to opening element when closing', useStory('modal')
   t.is(focusedText, 'open');
 });
 
-test('should focus first focusable element on tab', useStory('modal', 'header-and-footer'), async (t, page) => {
+test('should focus first focusable element on open', useStory('modal', 'header-and-footer'), async (t, page) => {
   await page.locator('text=open').click();
   await page.locator('text=hello').waitFor();
-  await page.keyboard.press('Tab');
   const focusedText = await page.evaluate(() => document.activeElement?.textContent);
   t.is(focusedText, 'sign me up');
 });
@@ -60,7 +60,6 @@ test('should focus first focusable element on tab', useStory('modal', 'header-an
 test('should be able to close the with keyboard', useStory('modal', 'header-and-footer'), async (t, page) => {
   await page.locator('text=open').click();
   await page.locator('text=hello').waitFor();
-  await page.keyboard.press('Tab');
   await page.keyboard.press('Tab');
   await page.keyboard.press('Space');
 
@@ -81,7 +80,6 @@ test('should be able to close with keyboard when tabbing backwards', useStory('m
 test('should wrap around focus when tabbing past elements', useStory('modal', 'header-and-footer'), async (t, page) => {
   await page.locator('text=open').click();
   await page.locator('text=hello').waitFor();
-  await page.keyboard.press('Tab');
   await page.keyboard.press('Tab');
   await page.keyboard.press('Tab');
 

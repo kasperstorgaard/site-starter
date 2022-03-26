@@ -45,6 +45,10 @@ export class LightboxElement extends Overlayable(LitElement) {
     return this._scroll.index;
   }
 
+  get focusableBounds() {
+    return this.scrollContainer?.getBoundingClientRect() ?? null;
+  }
+
   @property({ type: String })
   backLabel: string = 'back';
 

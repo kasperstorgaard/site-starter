@@ -5,6 +5,17 @@ import './lightbox';
 
 export default {
   title: 'Lightbox',
+  argTypes: {
+    index: {
+      control: 'number',
+      defaultValue: 0,
+    },
+    direction: {
+      options: ['up', 'down'],
+      control: 'select',
+      defaultValue: 'up',
+    },
+  }
 };
 
 interface Options {
@@ -51,19 +62,6 @@ function lightboxFactory(options?: Options, content?: Content) {
   }
 
   fn.args = options;
-  fn.argTypes = {
-    ...fn.argTypes,
-    index: {
-      control: 'number',
-      defaultValue: 0,
-    },
-    direction: {
-      options: ['up', 'down'],
-      control: 'select',
-      defaultValue: 'up',
-    },
-  };
-
   return fn;
 }
 
@@ -100,3 +98,63 @@ export const ScrollLock = lightboxFactory(
   }
 );
 
+export const Links = (args?: Options) => {
+  const container = document.createElement('div');
+  const lightbox = createRef<LightboxElement>();
+
+  const template = html`
+    <style>
+    sg-lightbox > div {
+      display: grid;
+      align-items: flex-end;
+      justify-items: center;
+    }
+
+    sg-lightbox > div > * {
+      grid-column: -1/1;
+      grid-row: -1/1;
+    }
+
+    sg-lightbox > div > a {
+      display: block;
+      padding: var(--size-2) var(--size-3);
+      background: var(--gray-1);
+    }
+
+    sg-lightbox > div > a:focus {
+      outline: 1px solid var(--red-2);
+    }
+  </style>
+  <button
+    class="sg-button"
+    @click=${() => lightbox.value?.open()}
+  >open</button>
+  <sg-lightbox
+    ${ref(lightbox)}
+    index=${args.index}
+    ?is-open=${args.isOpen}
+    direction=${args.direction ?? 'up'}
+  >
+
+    <div>
+      ${getImage(0)}
+      <a href="#">link</a>
+    </div>
+    <div>
+      ${getImage(1)}
+      <a href="#">link</a>
+    </div>
+    <div>
+      ${getImage(2)}
+      <a href="#">link</a>
+    </div>
+    <div>
+      ${getImage(3)}
+      <a href="#" style="grid-column: -1/1; grid-row: -1/1">link</a>
+    </div>
+  </sg-lightbox>
+  `
+
+  render(template, container);
+  return container;
+}

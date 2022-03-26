@@ -7,10 +7,10 @@ test('should show when activated', useStory('snackbar'), async (t, page) => {
   t.pass();
 });
 
-test('should hide itself after activation', useStory('snackbar'), async (t, page) => {
+test.only('should hide itself after activation', useStory('snackbar'), async (t, page) => {
   await page.locator('text=open').click();
   await page.locator('text=snackbar message').waitFor();
-  await page.locator('text=snackbar message').waitFor({ state: 'hidden', timeout: 5000 });
+  await page.locator('text=snackbar message').waitFor({ state: 'hidden', timeout: 6000 });
   t.pass();
 });
 

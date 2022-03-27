@@ -99,6 +99,7 @@ export class LightboxElement extends Overlayable(LitElement) {
   connectedCallback(): void {
     super.connectedCallback();
     this.addEventListener('click', () => this.close());
+    document.addEventListener('keyup', this._navigateArrows);
 
     if (!this.ariaLabel) {
       console.warn([
@@ -106,6 +107,12 @@ export class LightboxElement extends Overlayable(LitElement) {
         'https://www.w3.org/TR/wai-aria-practices/#carousel'
       ].join('\n'));
     }
+  }
+
+  disconnectedCallback(): void {
+    super.disconnectedCallback();
+
+    document.removeEventListener('keyup', this._navigateArrows);
   }
 
   private _backHandler(event: Event) {
@@ -116,6 +123,20 @@ export class LightboxElement extends Overlayable(LitElement) {
   private _forwardHandler(event: Event) {
     event.stopPropagation();
     this._scroll.goForward();
+  }
+
+  private _navigateArrows = (event: KeyboardEvent) => {
+    switch (event.key) {
+      case 'ArrowRight': {
+        this._scroll.goForward();
+        break;
+      }
+      case 'ArrowLeft': {
+        this._scroll.goBack();
+        break;
+      }
+      default: break;
+    }
   }
 
   private _setAriaItemAttributes() {

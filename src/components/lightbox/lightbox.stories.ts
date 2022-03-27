@@ -43,6 +43,7 @@ function lightboxFactory(options?: Options, content?: Content) {
     >open</button>
     ${content?.outer ?? nothing}
     <sg-lightbox
+      aria-label="image gallery"
       ${ref(lightbox)}
       index=${args.index}
       ?is-open=${args.isOpen}
@@ -70,8 +71,9 @@ function getImage(index: number, width = 1200, height = 800) {
   return html`
     <img
       src="https://picsum.photos/${width}/${height}?_cb=${cacheBust}"
-      alt="automatically generated image for testing purposes"
+      alt="auto generated ${index}"
       loading=${index === 0 ? 'eager' : 'lazy'}
+      aria-label="image ${index} of ?"
     >`;
 }
 

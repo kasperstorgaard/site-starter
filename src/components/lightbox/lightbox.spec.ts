@@ -73,4 +73,41 @@ test('should select first focusable element when opened', useStory('lightbox', '
   t.is(focusText, 'link');
 });
 
+test('should close on escape', useStory('lightbox'), async (t, page) => {
+  await page.keyboard.press('Tab');
+  await page.keyboard.press('Space');
+  await page.locator('img').first().waitFor();
+  await page.keyboard.press('Escape');
+  await page.locator('text=link').first().waitFor({ state: 'hidden' });
+  t.pass();
+});
 
+test('should navigate next on arrow right', useStory('lightbox'), async (t, page) => {
+  await page.keyboard.press('Tab');
+  await page.keyboard.press('Space');
+  await page.locator('img').first().waitFor();
+  await page.keyboard.press('ArrowRight');
+
+  // wait for animation
+  await page.waitForTimeout(1000);
+  const bounds = await page.locator('img').nth(2).boundingBox();
+  t.is(bounds.x, 0);
+});
+
+test('should navigate prev on arrow left', useStory('lightbox'), async (t, page) => {
+  await page.keyboard.press('Tab');
+  await page.keyboard.press('Space');
+  await page.locator('img').first().waitFor();
+
+  await page.keyboard.press('ArrowRight');
+  // wait for animation
+  await page.waitForTimeout(1000);
+  const boundsNextPos = await page.locator('img').nth(2).boundingBox();
+  t.is(boundsNextPos.x, 0);
+
+  await page.keyboard.press('ArrowLeft');
+  // wait for animation
+  await page.waitForTimeout(1000);
+  const boundsPrevPos = await page.locator('img').nth(2).boundingBox();
+  t.not(boundsPrevPos.x, 0);
+});

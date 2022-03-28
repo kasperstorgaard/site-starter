@@ -7,6 +7,15 @@ import './snackbar.scss';
 
 export default {
   title: 'Design System/Atoms/Snackbar',
+  args: {
+    timeout: 'medium',
+  },
+  argTypes: {
+    timeout: {
+      control: 'select',
+      options: ['short', 'medium', 'long'],
+    }
+  }
 };
 
 export function Primary() {

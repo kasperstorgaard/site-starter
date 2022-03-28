@@ -6,6 +6,16 @@ import './accordion.scss';
 
 export default {
   title: 'Design System/Molecules/Accordion',
+  args: {
+    numberOfItems: 2,
+    mode: 'multi',
+  },
+  argTypes: {
+    mode: {
+      options: ['multi', 'single'],
+      control: 'select',
+    },
+  }
 };
 
 interface Options {
@@ -29,18 +39,9 @@ function accordionFactory(options: Options) {
     `, container);
 
     return container;
-  }
-
-  fn.args = options;
-  fn.argTypes = {
-    ...fn.argTypes,
-    mode: {
-      options: ['multi', 'single'],
-      control: 'select',
-      defaultValue: 'multi',
-    },
   };
 
+  fn.args = options;
   return fn;
 }
 

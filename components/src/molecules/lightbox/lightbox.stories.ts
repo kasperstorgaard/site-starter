@@ -5,17 +5,16 @@ import './lightbox';
 
 export default {
   title: 'Design System/Molecules/Lightbox',
+  args: {
+    index: 0,
+    direction: 'up',
+  },
   argTypes: {
-    index: {
-      control: 'number',
-      defaultValue: 0,
-    },
     direction: {
       options: ['up', 'down'],
       control: 'select',
-      defaultValue: 'up',
     },
-  }
+  },
 };
 
 interface Options {

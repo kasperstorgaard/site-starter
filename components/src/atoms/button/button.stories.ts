@@ -5,6 +5,15 @@ import './button.scss';
 
 export default {
   title: 'Design System/Atoms/Button',
+  argTypes: {
+    theme: {
+      table: {
+        options: ['primary', 'secondary'],
+        control: 'select',
+        defaultValue: 'multi',
+      }
+    },
+  },
 };
 
 
@@ -34,15 +43,6 @@ function buttonFactory(options: Options) {
   }
 
   fn.args = options;
-  fn.argTypes = {
-    ...fn.argTypes,
-    theme: {
-      options: ['primary', 'secondary'],
-      control: 'select',
-      defaultValue: 'multi',
-    },
-  };
-
   return fn;
 }
 

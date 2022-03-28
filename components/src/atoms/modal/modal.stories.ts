@@ -4,6 +4,16 @@ import './modal.scss';
 
 export default {
   title: 'Design System/Atoms/Modal',
+  args: {
+    direction: 'up',
+    isOpen: false,
+  },
+  argTypes: {
+    direction: {
+      options: ['up', 'down'],
+      control: 'select',
+    },
+  }
 };
 
 interface Options {
@@ -40,15 +50,6 @@ function modalFactory(options?: Options, content?: Content) {
   }
 
   fn.args = options;
-  fn.argTypes = {
-    ...fn.argTypes,
-    direction: {
-      options: ['up', 'down'],
-      control: 'select',
-      defaultValue: 'up',
-    },
-  };
-
   return fn;
 }
 

@@ -8,6 +8,11 @@ import cities from './cities.json';
 
 export default {
   title: 'Design System/Molecules/Autocomplete',
+  args: {
+    showCountr: false,
+    label: 'citites',
+    minlength: 2,
+  },
 };
 
 interface Options {
@@ -66,26 +71,7 @@ const autocompleteFactory = (options?: Options) => {
     return container;
   }
 
-  fn.args = {
-    minlength: undefined,
-    showCountry: false,
-    ...options,
-  };
-  fn.argTypes = {
-    ...fn.argTypes,
-    label: {
-      control: 'text',
-      defaultValue: 'cities',
-    },
-    minlength: {
-      control: 'number',
-      defaultValue: 2,
-    },
-    showCountry: {
-      control: 'boolean',
-      defaultValue: false,
-    }
-  };
+  fn.args = options;
 
   return fn;
 }

@@ -6,15 +6,32 @@ import { createRef, ref } from 'lit/directives/ref.js';
 
 export default {
   title: 'Design System/Molecules/Sidebar',
+  args: {
+    direction: 'right',
+    isOpen: false,
+  },
+  argTypes: {
+    direction: {
+      control: 'select',
+      options: ['left', 'right'],
+    }
+  }
 };
 
-export function Primary() {
+interface Options {
+  direction: 'left'|'right';
+  isOpen: boolean;
+}
+
+export function Primary(options?: Options) {
   const container = document.createElement('div');
   const sidebar = createRef<SidebarElement>();
 
   const template = html`
   <button
     class="sg-button"
+    ?is-open=${options?.isOpen}
+    direction=${options?.direction}
     @click=${() => sidebar.value.open()}
   >open</button>
   <sg-sidebar ${ref(sidebar)}>
@@ -27,7 +44,28 @@ export function Primary() {
   return container;
 }
 
-export function PreOpened() {
+export function Left(options: Options) {
+  const container = document.createElement('div');
+  const sidebar = createRef<SidebarElement>();
+
+  const template = html`
+  <button
+    class="sg-button"
+    ?is-open=${options?.isOpen}
+    direction=${options?.direction}
+    @click=${() => sidebar.value.open()}
+  >open</button>
+  <sg-sidebar ${ref(sidebar)}>
+    hi from the sidebar :)
+  </sg-sidebar>
+  `;
+
+
+  render(template, container);
+  return container;
+}
+
+export function PreOpened(options?: Options) {
   const container = document.createElement('div');
   const sidebar = createRef<SidebarElement>();
 
@@ -36,7 +74,11 @@ export function PreOpened() {
     class="sg-button"
     @click=${() => sidebar.value.open()}
   >open</button>
-  <sg-sidebar is-open ${ref(sidebar)}>
+  <sg-sidebar
+    ?is-open=${options?.isOpen}
+    direction=${options?.direction}
+    ${ref(sidebar)}
+  >
     hi from the sidebar :)
   </sg-sidebar>
   `;
@@ -45,7 +87,7 @@ export function PreOpened() {
   return container;
 }
 
-export function HeaderAndFooter() {
+export function HeaderAndFooter(options?: Options) {
   const container = document.createElement('div');
   const sidebar = createRef<SidebarElement>();
 
@@ -54,7 +96,11 @@ export function HeaderAndFooter() {
     class="sg-button"
     @click=${() => sidebar.value.open()}
   >open</button>
-  <sg-sidebar ${ref(sidebar)}>
+  <sg-sidebar
+    ${ref(sidebar)}
+    ?is-open=${options?.isOpen}
+    direction=${options?.direction}
+  >
     <h2 slot="header">I'm a header</h2>
     hi from the sidebar :)
     <button class="sg-button" slot="footer">continue</button>
@@ -65,7 +111,7 @@ export function HeaderAndFooter() {
   return container;
 }
 
-export function ScrollLock() {
+export function ScrollLock(options?: Options) {
   const container = document.createElement('div');
   const sidebar = createRef<SidebarElement>();
 
@@ -77,7 +123,11 @@ export function ScrollLock() {
   <div style="height: 200vh; background: var(--cyan-1); margin-top: 1em; padding: 1em;">
     This is a test to see that scrolling while the sidebar is open, does not scroll the underlying page.
   </div>
-  <sg-sidebar ${ref(sidebar)}>
+  <sg-sidebar
+    ${ref(sidebar)}
+    ?is-open=${options?.isOpen}
+    direction=${options?.direction}
+  >
     hi from the sidebar :)
   </sg-sidebar>
   `;

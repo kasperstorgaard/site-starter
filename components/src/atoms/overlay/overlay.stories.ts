@@ -4,6 +4,9 @@ import { html, render } from 'lit';
 
 export default {
   title: 'Design System/Atoms/Overlay',
+  args: {
+    isOpen: false,
+  }
 };
 
 interface Options {
@@ -31,10 +34,8 @@ function overlayFactory(options?: Options) {
     return container;
   }
 
-  fn.args = {
-    isOpen: false,
-    ...options,
-  };
+  fn.args = options;
+
   return fn;
 };
 

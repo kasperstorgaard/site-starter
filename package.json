@@ -1,88 +1,31 @@
 {
   "name": "site-starter",
-  "version": "0.0.1",
-  "description": "A website starter template with 11ty, web components and open props",
-  "type": "module",
+  "version": "0.1.0",
+  "description": "monorepo of an astro site with web components and vite",
+  "main": "index.js",
   "scripts": {
-    "build": "astro build",
-    "build-storybook": "build-storybook",
-    "dev": "astro dev",
-    "lint": "eslint",
-    "preview": "astro preview",
-    "start": "astro dev",
-    "storybook": "start-storybook -p 6006",
-    "storybook:build": "build-storybook",
-    "test": "ava --serial"
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kasperstorgaard/site-starter.git"
   },
   "keywords": [
-    "11ty",
-    "vite",
-    "static",
+    "astro",
     "web",
-    "components"
+    "component",
+    "lit",
+    "ava",
+    "storybook"
   ],
   "author": "kasperstorgaard",
   "license": "ISC",
-  "dependencies": {
-    "@lit-labs/motion": "^1.0.2",
-    "astro": "^0.22.20",
-    "astro-icon": "^0.5.3",
-    "body-scroll-lock": "^4.0.0-beta.0",
-    "lit": "^2.1.1",
-    "throttle-debounce": "^3.0.1"
+  "bugs": {
+    "url": "https://github.com/kasperstorgaard/site-starter/issues"
   },
-  "devDependencies": {
-    "@babel/core": "^7.17.4",
-    "@mdx-js/preact": "^2.0.0",
-    "@storybook/addon-a11y": "^6.4.19",
-    "@storybook/addon-actions": "^6.4.19",
-    "@storybook/addon-essentials": "^6.4.19",
-    "@storybook/addon-links": "^6.4.19",
-    "@storybook/html": "^6.4.19",
-    "@storybook/testing-library": "0.0.9",
-    "@swc-node/register": "^1.4.2",
-    "@types/body-scroll-lock": "^3.1.0",
-    "ava": "^4.1.0",
-    "babel-loader": "^8.2.3",
-    "eslint": "^8.6.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-ava": "^13.2.0",
-    "eslint-plugin-import": "^2.25.4",
-    "playwright": "^1.20.0",
-    "storybook-builder-vite": "^0.1.16",
-    "typescript": "^4.6.2",
-    "vite": "^2.7.13"
-  },
-  "ava": {
-    "extensions": [
-      "ts"
-    ],
-    "require": [
-      "@swc-node/register"
-    ],
-    "files": [
-      "src/**/*.spec.ts"
-    ],
-    "ignoredByWatcher": [
-      "!**/*.{ts}"
-    ]
-  },
-  "eslintConfig": {
-    "env": {
-      "browser": true,
-      "node": true,
-      "es2021": true
-    },
-    "extends": [
-      "eslint:recommended",
-      "prettier"
-    ],
-    "plugins": ["prettier", "import", "ava"],
-    "rules": {
-      "semi": ["error", "always"],
-      "object-curly-spacing": ["warn", "always"],
-      "comma-dangle": ["warn", "always-multiline"],
-      "quotes": ["warn", "single"]
-    }
-  }
+  "homepage": "https://github.com/kasperstorgaard/site-starter#readme",
+  "workspaces": [
+    "site",
+    "components"
+  ]
 }

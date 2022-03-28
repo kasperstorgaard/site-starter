@@ -1,0 +1,60 @@
+:root {
+  /*
+   * Colors
+   */
+  --color-brand: var(--violet-2);
+  --color-dark: var(--gray-8);
+
+  /*
+   * App level utils
+   */
+  --app-gutter: var(--size-fluid-2);
+  --app-box-spacer: var(--size-fluid-3);
+  --app-text-spacer: var(--size-fluid-2);
+
+  /*
+   * Levels
+   */
+  --level-sticky: var(--layer-1);
+  --level-backdrop: var(--layer-2);
+  --level-modal: var(--layer-3);
+  --level-alert: var(--layer-4);
+
+  /*
+   * Typography
+   */
+  --font-size-note: var(--font-fluid-0);
+  --font-size-body: var(--font-size-fluid-1);
+  --font-size-sub: var(--font-size-fluid-2);
+  --font-size-head: var(--font-size-fluid-3);
+
+  --font-weight-thin: 100;
+  --font-weight-light: 350;
+  --font-weight-base: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 600;
+  --font-weight-chonk: 900;
+
+  --font-lineheight-neg: .95;
+  --font-lineheight-flat: 1.1;
+  --font-lineheight-compact: 1.25;
+  --font-lineheight-tight: 1.375;
+  --font-lineheight-base: 1.5;
+  --font-lineheight-loose: 1.75;
+
+  /*
+   * Borders
+   */
+  --border-base: 1px solid var(--gray-8);
+
+  /*
+   * Base
+   */
+  font-size: 16px;
+  line-height: 1.5;
+  font-family: Montserrat;
+  font-weight: 400;
+
+  font-family: 'SourceSans', sans-serif;
+}
+

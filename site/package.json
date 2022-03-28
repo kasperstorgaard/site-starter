@@ -1,5 +1,5 @@
 {
-  "name": "site",
+  "name": "@site-starter/site",
   "version": "0.1.0",
   "type": "module",
   "description": "the main astro site",

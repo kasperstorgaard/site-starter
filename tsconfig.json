@@ -1,12 +1,11 @@
 {
-  "compilerOptions": {
-		"module": "ES2020",
-    "target": "ES2020",
-    "experimentalDecorators": true,
-    "moduleResolution": "node",
-    "useDefineForClassFields": false,
-    "resolveJsonModule": true,
-    "allowSyntheticDefaultImports": true,
-    "inlineSourceMap": true
-  }
+  "files": [],
+  "references": [
+    {
+      "path": "./components/tsconfig.ref.json"
+    },
+    {
+      "path": "./site/tsconfig.ref.json"
+    }
+  ]
 }

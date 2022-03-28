@@ -1,8 +1,8 @@
 import { css, html, LitElement, PropertyValues } from 'lit';
 
 import { customElement, property, queryAssignedElements } from 'lit/decorators.js';
-import { Overlayable, overlayableStyles } from '../overlay/overlayable-mixin';
-import '../overlay/overlay';
+import { Overlayable, overlayableStyles } from '../../atoms/overlay/overlayable-mixin';
+import '../../atoms/overlay/overlay';
 
 @customElement('sg-modal')
 export class ModalElement extends Overlayable(LitElement) {

@@ -3,7 +3,7 @@ import './modal';
 import './modal.scss';
 
 export default {
-  title: 'Design System/Atoms/Modal',
+  title: 'Design System/Molecules/Modal',
   args: {
     direction: 'up',
     isOpen: false,

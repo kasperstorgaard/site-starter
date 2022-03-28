@@ -32,16 +32,13 @@ export function getChildrenIncludingSlotted(root: Element | ShadowRoot): HTMLEle
 
 // A simple visibility check, coupled with a check if element is in the bounds
 // of another element.
-export function isElementVisible(element: HTMLElement, bounds?: DOMRect) {
+export function isElementVisible(element: HTMLElement, boundingContainer?: Element) {
   // simplified (optimistic) visibility check
   if (!element.offsetHeight || !element.offsetWidth) {
     return false;
   }
 
-  if (!bounds) {
-    return true;
-  }
-
+  const bounds = boundingContainer.getBoundingClientRect();
   const { x, y } = element.getBoundingClientRect();
 
   // check if the element is outside the passed bounds

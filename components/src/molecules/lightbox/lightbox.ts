@@ -4,6 +4,7 @@ import { customElement, property, query, queryAssignedElements } from 'lit/decor
 import { Overlayable, overlayableStyles } from '../../atoms/overlay/overlayable-mixin';
 import { ScrollController } from '../../shared/controllers/scroll/scroll-controller';
 import '../../atoms/overlay/overlay';
+import { isElementVisible } from '../../shared/helpers/element-helpers';
 
 @customElement('sg-lightbox')
 export class LightboxElement extends Overlayable(LitElement) {
@@ -45,9 +46,6 @@ export class LightboxElement extends Overlayable(LitElement) {
     return this._scroll.index;
   }
 
-  get focusableBounds() {
-    return this.scrollContainer?.getBoundingClientRect() ?? null;
-  }
 
   @property({ type: String })
   backLabel: string = 'back';
@@ -113,6 +111,19 @@ export class LightboxElement extends Overlayable(LitElement) {
     super.disconnectedCallback();
 
     document.removeEventListener('keyup', this._navigateArrows);
+  }
+
+  // Used by focus trap to determine if a child element is in viewport so it can receive focus,
+  // in this case when it is visible, and within the scroll container viewport in the current viewport.
+  canElementReceiveFocus(element: HTMLElement) {
+    const val = this.shadowRoot.contains(element) ?
+      // if the element is a child of shadow root, it part of the internal template, eg. arrows, close button,
+      // and we should "just" check if it is visible.
+      element.offsetWidth > 0 && element.offsetHeight > 0 :
+      // if the element is part of the light dom, check if it is visible and sits within the scroll container viewport.
+      isElementVisible(element, this.scrollContainer);
+
+    return val;
   }
 
   private _backHandler(event: Event) {

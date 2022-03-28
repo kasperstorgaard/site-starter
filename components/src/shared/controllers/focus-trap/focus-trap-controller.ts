@@ -3,7 +3,7 @@ import { getChildrenIncludingSlotted, isElementVisible } from '../../helpers/ele
 
 export interface FocusTrapElement extends LitElement {
   isFocusTrapped: boolean;
-  focusableBounds?: DOMRect | null;
+  canElementReceiveFocus?: (element: HTMLElement) => boolean;
 }
 
 export class FocusTrapController<T extends FocusTrapElement> implements ReactiveController {
@@ -53,9 +53,7 @@ export class FocusTrapController<T extends FocusTrapElement> implements Reactive
   }
 
   private _focusNext(direction: 'forward'|'back' = 'forward') {
-    const bounds = this._host.focusableBounds;
-
-    const tabbableElements = getTabbableElements(this._host.shadowRoot, bounds);
+    const tabbableElements = this._getTabbableElements(this._host.shadowRoot);
 
     const activeElement = document.activeElement === this._host ?
       this._host.shadowRoot.activeElement :
@@ -81,15 +79,22 @@ export class FocusTrapController<T extends FocusTrapElement> implements Reactive
       }
     }
   }
-}
 
-// Gets the tabable elements of a shadow root and any elements assigned to slots.
-function getTabbableElements(root: Element | ShadowRoot, bounds?: DOMRect): HTMLElement[] {
-  const elements = getChildrenIncludingSlotted(root);
 
-  return elements
-    // make sure the element can receive tabs.
-    .filter(element => element.tabIndex >= 0)
-    // filter out any hidden elements and elements outside bounds.
-    .filter(node => isElementVisible(node, bounds));
+  // Gets the tabable elements of a shadow root and any elements assigned to slots.
+  // Optionally restricted by a being visible within a container.
+  private _getTabbableElements(root: Element | ShadowRoot): HTMLElement[] {
+    const elements = getChildrenIncludingSlotted(root);
+
+    return elements
+      // make sure the element can receive tabs.
+      .filter(element => element.tabIndex >= 0)
+      // filter out element that can't recieve focus by either
+      .filter(element => this._host.canElementReceiveFocus ?
+        // a) custom function
+        this._host.canElementReceiveFocus(element) :
+        // simple visibility check
+        element.offsetWidth > 0 && element.offsetHeight > 0
+      );
+  }
 }

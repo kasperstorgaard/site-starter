@@ -75,7 +75,7 @@ export function PreOpened(options?: Options) {
     @click=${() => sidebar.value.open()}
   >open</button>
   <sg-sidebar
-    ?is-open=${options?.isOpen}
+    ?is-open=${options?.isOpen ?? true}
     direction=${options?.direction}
     ${ref(sidebar)}
   >
@@ -86,6 +86,10 @@ export function PreOpened(options?: Options) {
   render(template, container);
   return container;
 }
+
+PreOpened.args = {
+  isOpen: true,
+};
 
 export function HeaderAndFooter(options?: Options) {
   const container = document.createElement('div');

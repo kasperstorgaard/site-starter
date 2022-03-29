@@ -393,6 +393,7 @@ function getStyles() {
     /* input */
     input {
       font-family: inherit;
+      font-size: var(--font-size-1);
       padding-right: 3em;
       padding: var(--autocomplete-input-padding, .4em .55em);
     }

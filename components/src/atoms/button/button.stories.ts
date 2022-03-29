@@ -27,10 +27,12 @@ interface Options {
 function renderButton(args?: Options) {
   return html`
     <button
-      class=${classMap({ 'sg-button': true })}
-      theme=${args.theme ?? ''}
-      ?inverse=${args.inverse}
-      size=${args.size}
+      class=${classMap({
+        'sg-button': true,
+        '-inverse': args.inverse,
+        ['-size-' + args.size]: args.size,
+        ['-theme-' + args.theme]: args.theme,
+      })}
     >${args?.text ?? 'click'}</button>
   `;
 }

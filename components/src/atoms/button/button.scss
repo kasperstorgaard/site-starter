@@ -15,40 +15,39 @@
   font-weight: var(--font-weight-7);
   text-transform: uppercase;
 
-  &[theme=primary] {
+  &.-theme-primary {
     --button-background: var(--color-brand);
     --button-color: var(--gray-9);
   }
 
-  &[theme=secondary] {
+  &.-theme-secondary {
     --button-background: var(--orange-3);
     --button-color: var(--gray-9);
   }
 
-  &[size=big] {
+  &.-size-big {
     --button-pad: var(--button-big-pad, .45em .8em);
     font-size: 1.15em;
   }
 
-  &[size=small] {
+  &.-size-small {
     font-size: .9em;
     --button-min-width: var(--button-small-min-width, 3em);
     --button-pad: var(--button-small-pad, .6em .8em);
   }
 
-  &[inverse]:not([theme]),
-  &[inverse][theme=''],
-  &[inverse][theme=default] {
+  &.-inverse:not([class*=theme]),
+  &.-inverse.-theme-default {
     --button-color: var(--gray-0);
     --button-background: var(--gray-9);
   }
 
-  &[inverse][theme=primary] {
+  &.-inverse.-theme-primary {
     --button-color: var(--color-brand, var(--gray-0));
     --button-background: unset;
   }
 
-  &[inverse][theme=secondary] {
+  &.-inverse.-theme-secondary {
     --button-color: var(--orange-3);
     --button-background: transparent;
   }

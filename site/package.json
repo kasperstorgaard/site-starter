@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/kasperstorgaard/site-starter#readme",
   "dependencies": {
-    "astro": "^0.22.20",
+    "astro": "^0.25.2",
     "astro-icon": "^0.5.3"
   },
   "devDependencies": {
@@ -46,12 +46,28 @@
       "eslint:recommended",
       "prettier"
     ],
-    "plugins": ["prettier", "import", "ava"],
+    "plugins": [
+      "prettier",
+      "import",
+      "ava"
+    ],
     "rules": {
-      "semi": ["error", "always"],
-      "object-curly-spacing": ["warn", "always"],
-      "comma-dangle": ["warn", "always-multiline"],
-      "quotes": ["warn", "single"]
+      "semi": [
+        "error",
+        "always"
+      ],
+      "object-curly-spacing": [
+        "warn",
+        "always"
+      ],
+      "comma-dangle": [
+        "warn",
+        "always-multiline"
+      ],
+      "quotes": [
+        "warn",
+        "single"
+      ]
     }
   }
 }

@@ -1,7 +1,14 @@
 ---
 import Header from '../components/header/Header.astro';
+
+import '@components/styles/props.scss';
+import '../styles/reset.css';
+import '../styles/brand.scss';
+import '../styles/fonts.css';
+
 const title = 'Site Starter';
 ---
+<!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
@@ -9,14 +16,9 @@ const title = 'Site Starter';
 	<title>{title}</title>
 
 	<link rel="icon" type="image/x-icon" href="/favicon.ico" />
-
-	<link rel="stylesheet" href={Astro.resolve('../styles/reset.css')} />
-	<link rel="stylesheet" href={Astro.resolve('../styles/props.scss')} />
-	<link rel="stylesheet" href={Astro.resolve('../styles/brand.scss')} />
-	<link rel="stylesheet" href={Astro.resolve('../styles/fonts.css')} />
 </head>
 <body>
-	<style>
+  <style>
     body, html {
       display: flex;
       flex-direction: column;

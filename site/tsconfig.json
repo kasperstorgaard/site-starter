@@ -7,6 +7,9 @@
     "useDefineForClassFields": false,
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
-    "inlineSourceMap": true
+    "baseUrl": ".",
+    "paths": {
+      "@components/*": ["../components/src/*"]
+    }
   }
 }

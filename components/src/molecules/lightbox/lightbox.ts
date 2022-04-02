@@ -3,8 +3,8 @@ import { css, html, LitElement, PropertyValues } from 'lit';
 import { customElement, property, query, queryAssignedElements } from 'lit/decorators.js';
 import { Overlayable, overlayableStyles } from '../../atoms/overlay/overlayable-mixin';
 import { ScrollController } from '../../shared/controllers/scroll/scroll-controller';
+import { isElementVisible, isElementWithinHorizontalBounds } from '../../shared/helpers/element-helpers';
 import '../../atoms/overlay/overlay';
-import { isElementVisible } from '../../shared/helpers/element-helpers';
 
 @customElement('sg-lightbox')
 export class LightboxElement extends Overlayable(LitElement) {
@@ -115,14 +115,19 @@ export class LightboxElement extends Overlayable(LitElement) {
   // Used by focus trap to determine if a child element is in viewport so it can receive focus,
   // in this case when it is visible, and within the scroll container viewport in the current viewport.
   canElementReceiveFocus(element: HTMLElement) {
-    const val = this.shadowRoot.contains(element) ?
-      // if the element is a child of shadow root, it part of the internal template, eg. arrows, close button,
-      // and we should "just" check if it is visible.
-      element.offsetWidth > 0 && element.offsetHeight > 0 :
-      // if the element is part of the light dom, check if it is visible and sits within the scroll container viewport.
-      isElementVisible(element, this.scrollContainer);
+    // make sure the element is visible
+    if (!isElementVisible(element)) {
+      return false;
+    }
 
-    return val;
+    // if the element is a child of shadow root, it part of the internal template, eg. arrows, close button,
+    // and we should "just" check if it is visible.
+    if (this.shadowRoot.contains(element)) {
+      return true;
+    }
+
+    // if the element is part of the light dom, check if it is visible and sits within the horizontal scroll container viewport.
+    return isElementWithinHorizontalBounds(element, this.scrollContainer);
   }
 
   private _backHandler(event: Event) {

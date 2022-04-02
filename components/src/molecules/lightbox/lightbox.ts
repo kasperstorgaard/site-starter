@@ -36,16 +36,15 @@ export class LightboxElement extends Overlayable(LitElement) {
   @property({ type: String, reflect: true, attribute: 'aria-label' })
   ariaLabel: string;
 
-  set index(value: number) {
-    this._scroll.goTo(value, { behavior: 'instant' });
-    this.requestUpdate();
-  }
-
-  @property({ type: Number, noAccessor: true })
   get index() {
     return this._scroll.index;
   }
 
+  @property({ type: Number, noAccessor: true })
+  set index(value: number) {
+    this._scroll.goTo(value, { behavior: 'instant' });
+    this.requestUpdate();
+  }
 
   @property({ type: String })
   backLabel: string = 'back';
@@ -292,6 +291,8 @@ function getStyles() {
     scroll-snap-align: center;
     max-height: 100%;
     max-height: 100vh;
+    object-fit: contain;
+    object-position: center;
     overflow-y: scroll;
   }
   `;

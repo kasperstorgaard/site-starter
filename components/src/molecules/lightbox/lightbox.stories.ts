@@ -71,6 +71,8 @@ function getImage(index: number, width = 1200, height = 800) {
     <img
       src="https://picsum.photos/${width}/${height}?_cb=${cacheBust}"
       alt="auto generated ${index}"
+      width=${width}
+      height=${height}
       loading=${index === 0 ? 'eager' : 'lazy'}
       aria-label="image ${index} of ?"
     >`;

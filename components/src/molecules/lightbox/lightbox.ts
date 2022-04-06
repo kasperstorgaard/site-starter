@@ -30,6 +30,10 @@ export class LightboxElement extends Overlayable(LitElement) {
   @queryAssignedElements()
   items: HTMLElement[]
 
+  get activeItem() {
+    return this.items[this.index ?? -1] ?? null;
+  }
+
   @property({ type: String })
   closeLabel: string = 'close';
 
@@ -62,12 +66,6 @@ export class LightboxElement extends Overlayable(LitElement) {
 
   render() {
     return html`
-    <div class="container" aria-live="polite">
-      <slot
-        @slotchange=${this._setAriaItemAttributes}
-        @click="${(event: Event) => event.stopPropagation()}"
-      ></slot>
-    </div>
     <button
       class="arrow-back"
       ?hidden=${this._scroll.isAtStart}
@@ -86,6 +84,12 @@ export class LightboxElement extends Overlayable(LitElement) {
         &#x203A&nbsp;<span class="visually-hidden">${this.forwardLabel}</span>
       </slot>
     </button>
+    <div class="container">
+      <slot
+        @slotchange=${this._setAriaItemAttributes}
+        @click="${(event: Event) => event.stopPropagation()}"
+      ></slot>
+    </div>
     <button
       class="close"
       @click=${this.close}
@@ -95,8 +99,8 @@ export class LightboxElement extends Overlayable(LitElement) {
 
   connectedCallback(): void {
     super.connectedCallback();
+
     this.addEventListener('click', () => this.close());
-    document.addEventListener('keyup', this._navigateArrows);
 
     if (!this.ariaLabel) {
       console.warn([
@@ -104,12 +108,6 @@ export class LightboxElement extends Overlayable(LitElement) {
         'https://www.w3.org/TR/wai-aria-practices/#carousel'
       ].join('\n'));
     }
-  }
-
-  disconnectedCallback(): void {
-    super.disconnectedCallback();
-
-    document.removeEventListener('keyup', this._navigateArrows);
   }
 
   // Used by focus trap to determine if a child element is in viewport so it can receive focus,
@@ -138,20 +136,6 @@ export class LightboxElement extends Overlayable(LitElement) {
   private _forwardHandler(event: Event) {
     event.stopPropagation();
     this._scroll.goForward();
-  }
-
-  private _navigateArrows = (event: KeyboardEvent) => {
-    switch (event.key) {
-      case 'ArrowRight': {
-        this._scroll.goForward();
-        break;
-      }
-      case 'ArrowLeft': {
-        this._scroll.goBack();
-        break;
-      }
-      default: break;
-    }
   }
 
   private _setAriaItemAttributes() {
@@ -294,11 +278,7 @@ function getStyles() {
 
   .container slot::slotted(*) {
     scroll-snap-align: center;
-    max-height: 100%;
-    max-height: 100vh;
-    object-fit: contain;
-    object-position: center;
-    overflow-y: scroll;
+    overflow-y: auto;
   }
   `;
 }

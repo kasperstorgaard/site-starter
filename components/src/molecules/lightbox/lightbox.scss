@@ -1,0 +1,8 @@
+sg-lightbox [aria-roledescription=slide] img,
+sg-lightbox [aria-roledescription=slide] picture,
+sg-lightbox [aria-roledescription=slide] video {
+  max-width: 100%;
+  max-height: 100vh;
+  object-fit: contain;
+  object-position: center;
+}

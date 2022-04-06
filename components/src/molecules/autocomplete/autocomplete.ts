@@ -5,6 +5,7 @@ import { when } from 'lit/directives/when.js';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import { customElement, property, query, queryAll, state } from 'lit/decorators.js';
 import { FormControllable } from '../../shared/mixins/form-control/form-controllable-mixin';
+import animationKeyframes from '../../styles/props/animation-keyframes';
 
 export interface AutocompleteItem extends Partial<Omit<Omit<HTMLOptionElement, keyof HTMLElement>, "form"|"index"|"defaultSelected">> {
   key?: string;
@@ -32,6 +33,7 @@ export interface AutocompleteItem extends Partial<Omit<Omit<HTMLOptionElement, k
 @customElement('sg-autocomplete')
 export class AutocompleteElement extends FormControllable(LitElement) {
   static styles = [
+    animationKeyframes,
     getStyles(),
   ];
 

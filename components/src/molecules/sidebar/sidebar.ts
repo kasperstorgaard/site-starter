@@ -7,7 +7,7 @@ import '../../atoms/overlay/overlay';
 @customElement('sg-sidebar')
 export class SidebarElement extends Overlayable(LitElement) {
   static styles = [
-    overlayableStyles,
+    ...overlayableStyles,
     getStyles(),
   ];
 
@@ -39,14 +39,6 @@ export class SidebarElement extends Overlayable(LitElement) {
       @click=${this.close}
     ><span class="visually-hidden">${this.closeLabel}</span></button>
     `;
-  }
-
-  open() {
-    this.isOpen = true;
-  }
-
-  close() {
-    this.isOpen = false;
   }
 }
 
@@ -105,8 +97,6 @@ function getStyles() {
     background: none;
     border: none;
     cursor: pointer;
-
-    transition: transform .33s var(--ease-3);
   }
 
   .close:before {

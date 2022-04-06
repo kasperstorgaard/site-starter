@@ -2,6 +2,7 @@ import { css, LitElement, PropertyValues } from 'lit';
 import { property } from 'lit/decorators.js';
 import { FocusTrapController } from '../../shared/controllers/focus-trap/focus-trap-controller';
 import { ScrollLockController } from '../../shared/controllers/scroll-lock/scroll-lock-controller';
+import animationKeyframes from '../../styles/props/animation-keyframes';
 import { OverlayElement } from './overlay';
 
 type Constructor<T> = new (...args: any[]) => T;
@@ -20,11 +21,16 @@ export const Overlayable = <T extends Constructor<LitElement>>(superClass: T) =>
 
       @property({ type: Boolean, reflect: true, attribute: 'is-open', noAccessor: true })
       set isOpen(value: boolean) {
+        if (value === this._isOpen) {
+          return;
+        }
+
         const oldVal = this._isOpen;
-        if (value !== oldVal) {
-          this._isOpen = value;
-          this.setAttribute('animates', 'animates');
-          this.requestUpdate('isOpen', oldVal);
+        this._isOpen = value;
+        this.requestUpdate('isOpen', oldVal);
+
+        if (value) {
+          this.removeAttribute('hidden');
         }
       }
 
@@ -45,10 +51,18 @@ export const Overlayable = <T extends Constructor<LitElement>>(superClass: T) =>
         this._overlayElement = document.createElement('sg-overlay') as OverlayElement;
         document.body.appendChild(this._overlayElement);
 
-        this.addEventListener('animationend', () => this.removeAttribute('animates'));
-        this.addEventListener('animationcancel', () => this.removeAttribute('animates'));
+        if (!this.isOpen) {
+          this.setAttribute('hidden', 'hidden');
+        }
+
+        this.addEventListener('animationend', () => this.toggleAttribute('hidden', !this.isOpen));
+        this.addEventListener('animationcancel', () => this.toggleAttribute('hidden', !this.isOpen));
 
         window.addEventListener('keyup', this._closeOnEscape);
+
+        if (!this.hasAttribute('tabindex')) {
+          this.setAttribute('tabindex', '-1');
+        }
 
         if (!this.hasAttribute('role')) {
           this.setAttribute('role', 'complementary');
@@ -68,6 +82,10 @@ export const Overlayable = <T extends Constructor<LitElement>>(superClass: T) =>
 
         if (changes.has('isOpen')) {
           this._overlayElement.isOpen = this.isOpen;
+
+          if (this.isOpen) {
+            this.focus();
+          }
         }
       }
 
@@ -102,65 +120,70 @@ export const Overlayable = <T extends Constructor<LitElement>>(superClass: T) =>
 /**
  * Styles for open/close animation
  */
-export const overlayableStyles = css`
-  /* hide when not open OR animating */
-  :host(:not([is-open], [animates])) {
-    display: none;
+export const overlayableStyles = [
+  animationKeyframes,
+  css`
+  :host([direction=up]) {
+    transform-origin: top center;
   }
 
-  :host([direction=up][animates]) {
-    transform-origin: left center;
-  }
-
-  :host([direction=up][is-open][animates]) {
+  :host([direction=up][is-open]) {
     animation:
       var(--animation-fade-in),
       var(--animation-slide-in-up);
   }
 
-  :host([direction=up]:not([is-open])[animates]) {
+  :host([direction=up]:not([is-open])) {
     animation:
       var(--animation-fade-out),
       var(--animation-slide-out-down);
   }
 
-  :host([direction=up][animates]) {
+  :host([direction=down]) {
     transform-origin: top center;
   }
 
-  :host([direction=down][is-open][animates]) {
+  :host([direction=down][is-open]) {
     animation:
       var(--animation-fade-in),
       var(--animation-slide-in-down);
   }
 
-  :host([direction=down]:not([is-open])[animates]) {
+  :host([direction=down]:not([is-open])) {
     animation:
       var(--animation-fade-out),
       var(--animation-slide-out-up);
   }
 
-  :host([direction=left][is-open][animates]) {
+  :host([direction=left]) {
+    transform-origin: right center;
+  }
+
+  :host([direction=left][is-open]) {
     animation:
       var(--animation-fade-in),
       var(--animation-slide-in-left);
   }
 
-  :host([direction=left]:not([is-open])[animates]) {
+  :host([direction=left]:not([is-open])) {
     animation:
       var(--animation-fade-out),
       var(--animation-slide-out-right);
   }
 
-  :host([direction=right][is-open][animates]) {
+  :host([direction=right]) {
+    transform-origin: left center;
+  }
+
+  :host([direction=right][is-open]) {
     animation:
       var(--animation-fade-in),
       var(--animation-slide-in-right);
   }
 
-  :host([direction=right]:not([is-open])[animates]) {
+  :host([direction=right]:not([is-open])) {
     animation:
       var(--animation-fade-out),
       var(--animation-slide-out-left);
   }
-`;
+`];

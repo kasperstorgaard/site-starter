@@ -1,9 +1,13 @@
 import { css, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
+import animationKeyframes from '../../styles/props/animation-keyframes';
 
 @customElement('sg-overlay')
 export class OverlayElement extends LitElement {
-  static styles = [styles()];
+  static styles = [
+    animationKeyframes,
+    styles()
+  ];
 
   private _isOpen = false;
 
@@ -17,7 +21,11 @@ export class OverlayElement extends LitElement {
 
     if (value !== oldVal) {
       this._isOpen = value;
-      this.setAttribute('animates', 'animates');
+
+      if (value) {
+        this.removeAttribute('hidden');
+      }
+
       this.requestUpdate('isOpen', oldVal);
     }
   }
@@ -25,8 +33,12 @@ export class OverlayElement extends LitElement {
   connectedCallback(): void {
     super.connectedCallback();
 
-    this.addEventListener('animationend', () => this.removeAttribute('animates'));
-    this.addEventListener('animationcancel', () => this.removeAttribute('animates'));
+    if (!this.isOpen) {
+      this.setAttribute('hidden', 'hidden');
+    }
+
+    this.addEventListener('animationend', () => this.toggleAttribute('hidden', !this.isOpen));
+    this.addEventListener('animationcancel', () => this.toggleAttribute('hidden', !this.isOpen));
   }
 
   open() {
@@ -63,15 +75,11 @@ function styles() {
     opacity: var(--overlay-opacity);
   }
 
-  :host(:not([is-open], [animates])) {
-    display: none;
-  }
-
-  :host([is-open][animates]) {
+  :host([is-open]) {
     animation: var(--animation-fade-in);
   }
 
-  :host(:not([is-open])[animates]) {
+  :host(:not([is-open])) {
     animation: var(--animation-fade-out);
   }
 

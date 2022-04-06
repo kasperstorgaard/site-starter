@@ -1,9 +1,11 @@
 import { css, html, LitElement } from 'lit';
-import { customElement, property, queryAssignedElements, state } from 'lit/decorators.js';
+import { customElement, property, queryAssignedElements } from 'lit/decorators.js';
+import animationKeyframes from '../../styles/props/animation-keyframes';
 
 @customElement('sg-snackbar')
 export class SnackbarElement extends LitElement {
   static styles = [
+    animationKeyframes,
     getStyles(),
   ];
 
@@ -48,7 +50,11 @@ export class SnackbarElement extends LitElement {
 
     if (value !== oldVal) {
       this._open = value;
-      this.setAttribute('animates', 'animates');
+
+      if (value) {
+        this.removeAttribute('hidden');
+      }
+
       this.requestUpdate('open', oldVal);
 
       if (value) {
@@ -68,8 +74,12 @@ export class SnackbarElement extends LitElement {
   connectedCallback(): void {
     super.connectedCallback();
 
-    this.addEventListener('animationend', () => this.removeAttribute('animates'));
-    this.addEventListener('animationcancel', () => this.removeAttribute('animates'));
+    if (!this.open) {
+      this.setAttribute('hidden', 'hidden');
+    }
+
+    this.addEventListener('animationend', () => this.toggleAttribute('hidden', !this.open));
+    this.addEventListener('animationcancel', () => this.toggleAttribute('hidden', !this.open));
 
     document.addEventListener('focusin', this._storeFocusOrigin);
   }
@@ -207,13 +217,13 @@ function getStyles() {
       content: "✕";
     }
 
-    :host([open][animates]) {
+    :host([open]) {
       animation:
         var(--animation-fade-in),
         var(--animation-slide-in-up);
     }
 
-    :host(:not([open])[animates]) {
+    :host(:not([open])) {
       animation:
         var(--animation-fade-out),
         var(--animation-slide-out-down);

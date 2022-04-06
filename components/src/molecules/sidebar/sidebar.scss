@@ -1,4 +1,0 @@
-// hide content by default until js is loaded.
-sg-sidebar:not([is-open],[animates]) > * {
-  display: none;
-}

@@ -7,7 +7,7 @@ import '../../atoms/overlay/overlay';
 @customElement('sg-modal')
 export class ModalElement extends Overlayable(LitElement) {
   static styles = [
-    overlayableStyles,
+    ...overlayableStyles,
     getStyles()
   ];
 
@@ -22,7 +22,7 @@ export class ModalElement extends Overlayable(LitElement) {
 
   render() {
     return html`
-    <header ?hidden=${!this._headerItems.length}>
+    <header>
       <slot name="header"></slot>
     </header>
     <div>
@@ -60,13 +60,20 @@ function getStyles() {
     /* on mobile: 100%, on desktop: 40% */
     --modal-size: 28rem;
     --modal-ratio: calc(4/3);
+    --modal-header-pad: var(--size-2) var(--app-gutter);
     --modal-width: min(var(--modal-size), 100vw);
     --modal-height: min(calc(var(--modal-size) / var(--modal-ratio)), 100vh);
     --modal-pad: var(--size-4) var(--app-gutter);
 
     position: fixed;
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 1fr min-content;
+    grid-template-rows: minmax(0, auto) 1fr minmax(0, auto);
+
+    grid-template-areas:
+      "header close "
+      " body   body "
+      "footer footer";
 
     width: var(--modal-width);
     height: var(--modal-height);
@@ -83,13 +90,18 @@ function getStyles() {
   }
 
   :host > div {
-    flex-grow: 1;
+    grid-area: body;
 
-    padding: var(--modal-pad, var(--size-4) var(--app-gutter));
+    padding: var(--modal-pad, var(--size-3) var(--app-gutter));
   }
 
   header {
-    padding: var(--modal-header-pad, var(--size-3) var(--app-gutter));
+    grid-area: header;
+
+    display: flex;
+    align-items: center;
+
+    padding: var(--modal-header-pad);
 
     text-transform: uppercase;
     font-weight: var(--font-weight-5);
@@ -102,10 +114,10 @@ function getStyles() {
   }
 
   .close {
-    position: absolute;
-    top: 0;
-    right: 0;
-    padding: var(--modal-header-pad, var(--size-3) var(--app-gutter));
+    grid-area: header;
+
+    margin-left: auto;
+    padding: var(--modal-header-pad);
 
     font-size: var(--font-size-2);
     line-height: 1.5em;
@@ -126,6 +138,8 @@ function getStyles() {
   }
 
   footer {
+    grid-area: footer;
+
     display: grid;
     grid-auto-flow: column;
     justify-content: center;
@@ -133,7 +147,7 @@ function getStyles() {
 
     gap: var(--size-3);
 
-    padding: var(--modal-header-pad, var(--size-3) var(--app-gutter));
+    padding: var(--modal-header-pad);
     border-top: var(--border-base);
   }
   `;

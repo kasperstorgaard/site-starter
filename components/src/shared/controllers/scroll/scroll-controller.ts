@@ -144,10 +144,18 @@ export class ScrollController<T extends ScrollHost> implements ReactiveControlle
   }
 
   private _scrollHandler = debounce(20, () => {
+    const prevIndex = this.index;
     this.index = this._findIndex();
     this.isAtEnd = isScrollAtEnd(this.host.scrollContainer);
 
-    this.host.requestUpdate();
+    if (prevIndex !== this.index) {
+      this.host.dispatchEvent(new CustomEvent('scroll-updated', {
+        detail: this,
+        bubbles: false,
+        cancelable: false,
+      }));
+      this.host.requestUpdate();
+    }
   });
 }
 

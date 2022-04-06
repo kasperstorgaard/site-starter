@@ -30,7 +30,6 @@ export class FocusTrapController<T extends FocusTrapElement> implements Reactive
 
   private _trapFocus() {
     this._focusOrigin = document.activeElement instanceof HTMLElement ? document.activeElement : null;
-    this._focusNext();
     this._host.addEventListener('keydown', this._handleTabs);
     this._isActive = true;
   }
@@ -53,7 +52,7 @@ export class FocusTrapController<T extends FocusTrapElement> implements Reactive
   }
 
   private _focusNext(direction: 'forward'|'back' = 'forward') {
-    const tabbableElements = this._getTabbableElements(this._host.shadowRoot);
+    const tabbableChildren = this._getTabbableChildren(this._host.shadowRoot);
 
     const activeElement = document.activeElement === this._host ?
       this._host.shadowRoot.activeElement :
@@ -61,21 +60,21 @@ export class FocusTrapController<T extends FocusTrapElement> implements Reactive
 
     // if we somehow have no current focus, focus the first or last, depending on direction wanted
     if (!activeElement) {
-      const target = direction === 'back' ? tabbableElements.length - 1 : 0;
+      const target = direction === 'back' ? tabbableChildren.length - 1 : 0;
 
       // this can sometimes be null when there is a race condition in animations
-      if (tabbableElements[target]) {
-        tabbableElements[target].focus();
+      if (tabbableChildren[target]) {
+        tabbableChildren[target].focus();
       }
     // otherwise focus the next in order, wrapping around the list if needed.
     } else {
-      const index = tabbableElements.indexOf(activeElement as HTMLElement);
+      const index = tabbableChildren.indexOf(activeElement as HTMLElement);
       const offset = direction === 'forward' ? 1 : -1;
-      const target = (index + offset + tabbableElements.length) % tabbableElements.length;
+      const target = (index + offset + tabbableChildren.length) % tabbableChildren.length;
 
       // this can sometimes be null when there is a race condition in animations
-      if (tabbableElements[target]) {
-        tabbableElements[target].focus();
+      if (tabbableChildren[target]) {
+        tabbableChildren[target].focus();
       }
     }
   }
@@ -83,10 +82,11 @@ export class FocusTrapController<T extends FocusTrapElement> implements Reactive
 
   // Gets the tabable elements of a shadow root and any elements assigned to slots.
   // Optionally restricted by a being visible within a container.
-  private _getTabbableElements(root: Element | ShadowRoot): HTMLElement[] {
-    const elements = getChildrenIncludingSlotted(root);
+  private _getTabbableChildren(root: Element | ShadowRoot): HTMLElement[] {
+    const children = getChildrenIncludingSlotted(root);
 
-    return elements
+
+    return children
       // make sure the element can receive tabs.
       .filter(element => element.tabIndex >= 0)
       // filter out element that can't recieve focus by either

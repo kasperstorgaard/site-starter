@@ -1,11 +1,14 @@
 name: "Components: PR Updated"
+
 on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
-  paths: components
+    paths: components
+
 defaults:
   run:
     working-directory: components
+
 jobs:
   test:
     runs-on: ubuntu-latest

@@ -3,7 +3,6 @@ name: "Components: PR Updated"
 on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
-    paths: components
 
 defaults:
   run:

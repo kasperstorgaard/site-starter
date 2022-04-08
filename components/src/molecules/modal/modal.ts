@@ -1,6 +1,7 @@
-import { css, html, LitElement, PropertyValues } from 'lit';
+import { css, html, LitElement } from 'lit';
 
 import { customElement, property, queryAssignedElements } from 'lit/decorators.js';
+import { when } from 'lit/directives/when.js';
 import { Overlayable, overlayableStyles } from '../../atoms/overlay/overlayable-mixin';
 import '../../atoms/overlay/overlay';
 
@@ -20,16 +21,27 @@ export class ModalElement extends Overlayable(LitElement) {
   @property({ type: String })
   closeLabel = 'close';
 
+  @property({ type: String })
+  title: string;
+
   render() {
     return html`
-    <header>
-      <slot name="header"></slot>
+    <header ?hidden=${!this._headerItems.length && !this.title}>
+      ${when(this._headerItems.length || this.title, () => this.closeSpacerTemplate)}
+      <slot
+        name="header"
+        @slotchange=${() => this.requestUpdate()}
+      >${when(this.title, () => html`<h1>${this.title}</h1>`)}</slot>
     </header>
-    <div>
+    <div class="body">
+      ${when(!this._headerItems.length && !this.title, () => this.closeSpacerTemplate)}
       <slot></slot>
     </div>
     <footer ?hidden=${!this._footerItems.length}>
-      <slot name="footer"></slot>
+      <slot
+        name="footer"
+        @slotchange=${() => this.requestUpdate()}
+      ></slot>
     </footer>
     <button
       class="close"
@@ -37,6 +49,14 @@ export class ModalElement extends Overlayable(LitElement) {
     ><span class="visually-hidden">${this.closeLabel}</span></button>
   `;
   }
+
+  // The close spacer ensures that the content never overlap with the close button
+  private closeSpacerTemplate = html`
+    <div
+      class="close-pusher"
+      aria-hidden="true"
+    >✕</div>
+  `;
 }
 
 function getStyles() {
@@ -60,48 +80,46 @@ function getStyles() {
     /* on mobile: 100%, on desktop: 40% */
     --modal-size: 28rem;
     --modal-ratio: calc(4/3);
-    --modal-header-pad: var(--size-2) var(--app-gutter);
-    --modal-width: min(var(--modal-size), 100vw);
+    --modal-width: min(var(--modal-size), 100vw - var(--app-gutter) * 2);
     --modal-height: min(calc(var(--modal-size) / var(--modal-ratio)), 100vh);
-    --modal-pad: var(--size-4) var(--app-gutter);
+
+    --modal-pad-vertical: var(--size-3);
+    --modal-pad-horizontal: var(--app-gutter);
+    --modal-pad: var(--modal-pad-vertical) var(--modal-pad-horizontal);
+    --modal-bg: var(--gray-0);
 
     position: fixed;
     display: grid;
-    grid-template-columns: 1fr min-content;
-    grid-template-rows: minmax(0, auto) 1fr minmax(0, auto);
 
-    grid-template-areas:
-      "header close "
-      " body   body "
-      "footer footer";
+    grid-template:
+        "header" minmax(max-content, 0px)
+        "body" 1fr
+        "footer" minmax(0px, max-content) / 1fr;
 
     width: var(--modal-width);
     height: var(--modal-height);
     z-index: var(--level-modal);
 
-    left: calc(50% - (var(--modal-width) / 2));
-    top: calc(50% - (var(--modal-height) / 2));
+    left: calc(50% - var(--modal-width) / 2);
+    top: calc(50% - var(--modal-height) / 2);
 
-    background: var(--modal-bg, var(--gray-0));
+    background: var(--modal-bg);
     border-radius: var(--modal-border-radius, var(--radius-1  ));
     border: var(--border-size-2) solid var(--gray-9);
     box-shadow: var(--shadow-2);
     outline: none;
   }
 
-  :host > div {
+  .body {
     grid-area: body;
-
-    padding: var(--modal-pad, var(--size-3) var(--app-gutter));
+    padding: var(--modal-pad);
+    overflow-y: auto;
   }
 
   header {
     grid-area: header;
 
-    display: flex;
-    align-items: center;
-
-    padding: var(--modal-header-pad);
+    padding: var(--modal-pad-vertical) var(--modal-pad-horizontal);
 
     text-transform: uppercase;
     font-weight: var(--font-weight-5);
@@ -109,23 +127,46 @@ function getStyles() {
     border-bottom: var(--border-base);
   }
 
-  header slot::slotted(*) {
+  header ::slotted(h1),
+  header h1 {
     font-size: inherit;
+    margin: 0;
+    line-height: var(--line-height-1);
+  }
+
+  .close-pusher,
+  .close {
+    font-size: var(--font-size-2);
+
+    /* Set a higher line height and padding to make it a bigger touch target */
+    padding: .5em;
+
+    /* Offset the padding to line up with top and right */
+    margin: calc(-1 * var(--modal-pad-vertical) + .3em) -0.5em 0 0;
+    line-height: 1em;
+  }
+
+  .close-pusher {
+    visibility: hidden;
+    display: block;
+    float: right;
+    margin-left: 1ch;
   }
 
   .close {
-    grid-area: header;
+    position: absolute;
+    top: var(--modal-pad-vertical);
+    right: var(--modal-pad-horizontal);
 
-    margin-left: auto;
-    padding: var(--modal-header-pad);
+    display: block;
 
-    font-size: var(--font-size-2);
-    line-height: 1.5em;
-
-    background: none;
+    background: var(--modal-bg);
     border: none;
+    border-radius: 5em;
 
-    transition: transform .33s var(--ease-3);
+    animation: var(--animate-fade-in);
+
+    cursor: pointer;
   }
 
   .close:before {
@@ -143,11 +184,11 @@ function getStyles() {
     display: grid;
     grid-auto-flow: column;
     justify-content: center;
-    /* ideally this should be flex, but grid gap support is better than flex gap */
 
+    /* ideally this should be flex, but grid gap support is better than flex gap */
     gap: var(--size-3);
 
-    padding: var(--modal-header-pad);
+    padding: var(--size-1) var(--modal-pad-horizontal);
     border-top: var(--border-base);
   }
   `;

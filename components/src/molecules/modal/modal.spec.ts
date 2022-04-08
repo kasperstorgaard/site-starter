@@ -1,4 +1,4 @@
-import { test, env, expect } from '../../../test/test-setup';
+import { test, expect } from '../../../test/test-setup';
 
 test('should expand on click', async ({ dsPage }) => {
   const page = await dsPage.goto('molecule', 'modal');

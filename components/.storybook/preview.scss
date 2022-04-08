@@ -1,3 +1,13 @@
+#root {
+  div > p {
+    margin: 1em 0;
+  }
+}
+
+.sb-show-main.sb-main-padded {
+  padding: var(--size-2) var(--app-gutter);
+}
+
 .sb-grid {
   table-layout: fixed;
   max-width: 100%;

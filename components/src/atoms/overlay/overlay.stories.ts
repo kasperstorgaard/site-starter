@@ -13,31 +13,46 @@ interface Options {
   isOpen: boolean;
 }
 
-function overlayFactory(options?: Options) {
-  const fn = (args?: Options) => {
-    const template = html`
-      <button
-        class="sg-button"
-        @click=${() => document.querySelector('sg-overlay')?.setAttribute('is-open', '')}
-      >
-        open
-      </button>
-      <sg-overlay
-        ?is-open=${args.isOpen}
-        @click=${() => document.querySelector('sg-overlay')?.removeAttribute('is-open')}
-      >
-      </sg-overlay>
-    `;
-    const container = document.createElement('div');
+export function Primary(args?: Options) {
+  const template = html`
+    <button
+      class="sg-button"
+      @click=${() => document.querySelector('sg-overlay')?.setAttribute('is-open', '')}
+    >
+      Open overlay
+    </button>
+    <sg-overlay
+      ?is-open=${args.isOpen}
+      @click=${() => document.querySelector('sg-overlay')?.removeAttribute('is-open')}
+    >
+    </sg-overlay>
+  `;
+  const container = document.createElement('div');
 
-    render(template, container);
-    return container;
-  }
+  render(template, container);
+  return container;
+}
 
-  fn.args = options;
+export function PreOpened(args?: Options) {
+  const template = html`
+    <button
+      class="sg-button"
+      @click=${() => document.querySelector('sg-overlay')?.setAttribute('is-open', '')}
+    >
+      Open overlay
+    </button>
+    <sg-overlay
+      ?is-open=${args.isOpen}
+      @click=${() => document.querySelector('sg-overlay')?.removeAttribute('is-open')}
+    >
+    </sg-overlay>
+  `;
+  const container = document.createElement('div');
 
-  return fn;
+  render(template, container);
+  return container;
 };
 
-export const Primary = overlayFactory({ isOpen: false });
-export const PreOpened = overlayFactory({ isOpen: true });
+PreOpened.args = {
+  isOpen: true,
+};

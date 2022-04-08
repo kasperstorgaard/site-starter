@@ -2,46 +2,46 @@ import { expect, test } from '../../../test/test-setup';
 
 test('should show when activated', async ({ dsPage }) => {
   const page = await dsPage.goto('atom', 'snackbar');
-  await page.locator('text=open').click();
-  await page.locator('text=snackbar message').waitFor();
+  await page.locator('text=show notification').click();
+  await page.locator('text=document saved').waitFor();
 });
 
 test('should hide itself after activation', async ({ dsPage }) => {
   const page = await dsPage.goto('atom', 'snackbar');
-  await page.locator('text=open').click();
-  await page.locator('text=snackbar message').waitFor();
-  await page.locator('text=snackbar message').waitFor({ state: 'hidden', timeout: 6000 });
+  await page.locator('text=show notification').click();
+  await page.locator('text=document saved').waitFor();
+  await page.locator('text=document saved').waitFor({ state: 'hidden', timeout: 6000 });
 });
 
 test('should close using close button', async ({ dsPage }) => {
   const page = await dsPage.goto('atom', 'snackbar');
-  await page.locator('text=open').click();
-  await page.locator('text=snackbar message').waitFor();
+  await page.locator('text=show notification').click();
+  await page.locator('text=document saved').waitFor();
   await page.locator('text=close').click();
-  await page.locator('text=snackbar message').waitFor({ state: 'hidden' });
+  await page.locator('text=document saved').waitFor({ state: 'hidden' });
 });
 
 test('should be closeable using keyboard navigation', async ({ dsPage }) => {
   const page = await dsPage.goto('atom', 'snackbar');
   await page.keyboard.press('Tab');
   await page.keyboard.press('Space');
-  await page.locator('text=snackbar message').waitFor();
+  await page.locator('text=document saved').waitFor();
   await page.keyboard.press('Tab');
   await page.keyboard.press('Space');
-  await page.locator('text=snackbar message').waitFor({ state: 'hidden', timeout: 1000 });
+  await page.locator('text=document saved').waitFor({ state: 'hidden', timeout: 1000 });
 });
 
 test('should restore focus when closing using keyboard', async ({ dsPage }) => {
   const page = await dsPage.goto('atom', 'snackbar');
   await page.keyboard.press('Tab');
   await page.keyboard.press('Space');
-  await page.locator('text=snackbar message').waitFor();
+  await page.locator('text=document saved').waitFor();
   await page.keyboard.press('Tab');
   await page.keyboard.press('Space');
-  await page.locator('text=snackbar message').waitFor({ state: 'hidden', timeout: 1000 });
+  await page.locator('text=document saved').waitFor({ state: 'hidden', timeout: 1000 });
   const focusText = await page.evaluate(() => document.activeElement.textContent);
 
-  expect(focusText).toBe('open');
+  expect(focusText).toBe('Show notification');
 });
 
 test('should set aria-live when opening', async ({ dsPage }) => {

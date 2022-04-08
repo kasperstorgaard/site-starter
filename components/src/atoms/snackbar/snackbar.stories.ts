@@ -28,11 +28,11 @@ export function Primary() {
     @click=${() => {
       snackbar.value.show();
     }}
-  >open</button>
+  >Show notification</button>
   <sg-snackbar
     ${ref(snackbar)}
   >
-    Hello I'm a snackbar message :)
+    Document saved 👍
   </sg-snackbar>
   `;
 
@@ -49,7 +49,7 @@ export function Interaction() {
   <button
     class="sg-button"
     @click=${() => snackbar.value.show()}
-  >open</button>
+  >Show notification</button>
   <p style="background: var(--red-1); padding: 1em; margin-top: 1em;">
     Please don't do this, a snackbar is a temporary info message,
     and should never be relied upon for any user interaction.
@@ -70,7 +70,7 @@ export function Interaction() {
   return container;
 }
 
-export function Long() {
+export function LongDuration() {
   const container = document.createElement('div');
   const snackbar = createRef<SnackbarElement>();
 
@@ -78,12 +78,12 @@ export function Long() {
   <button
     class="sg-button"
     @click=${() => snackbar.value.show()}
-  >open</button>
+  >Show notification</button>
   <sg-snackbar
     timeout="long"
     ${ref(snackbar)}
   >
-    Hello I'm a long snackbar message :)
+    Uff, it seems like you are offline
   </sg-snackbar>
   `;
 
@@ -92,7 +92,7 @@ export function Long() {
   return container;
 }
 
-export function Short() {
+export function ShortDuration() {
   const container = document.createElement('div');
   const snackbar = createRef<SnackbarElement>();
 
@@ -100,12 +100,12 @@ export function Short() {
   <button
     class="sg-button"
     @click=${() => snackbar.value.show()}
-  >open</button>
+  >Show notification</button>
   <sg-snackbar
     timeout="short"
     ${ref(snackbar)}
   >
-    Hello I'm a short snackbar message :)
+    Nice job!
   </sg-snackbar>
   `;
 

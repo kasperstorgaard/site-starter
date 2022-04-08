@@ -1,0 +1,26 @@
+name: "Components: PR Updated"
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+  paths: components
+defaults:
+  run:
+    working-directory: components
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 14.x
+      - name: Wait for Netlify deployment
+        uses: jakepartusch/wait-for-netlify-action@v1.2
+        id: waitForDeployment
+        with:
+          site_name: "capable-stardust-70089d"
+          max_timeout: 360 # 6 Minutes
+      - name: Run Playwright
+        run: npx -p @playwright/test playwright test -- --project "Desktop Chromium"
+        env:
+          PLAYWRIGHT_TEST_BASE_URL: ${{ steps.waitFor200.outputs.url }}

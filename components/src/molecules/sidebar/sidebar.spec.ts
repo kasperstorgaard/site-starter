@@ -1,4 +1,4 @@
-import { env, expect, test } from '../../../test/test-setup';
+import { expect, test } from '../../../test/test-setup';
 
 test('should expand on click', async ({ dsPage }) => {
   const page = await dsPage.goto('molecule', 'sidebar');
@@ -12,11 +12,9 @@ test('should close when clicking close button', async ({ dsPage }) => {
   await page.locator('text=hi from the sidebar :)').waitFor({ state: 'hidden'});
 });
 
-test('should close when clicking outside container on desktop', async ({ dsPage }) => {
+test('should close when clicking outside container on desktop', async ({ dsPage, viewport }) => {
   const page = await dsPage.goto('molecule', 'sidebar');
-  if (env.isMobile) {
-    return;
-  }
+  test.skip(() => viewport.width < 640);
 
   await page.locator('text=hi from the sidebar :)').waitFor();
   await page.click('html', { position: { x: 200, y: 200 }});

@@ -53,7 +53,7 @@ test('should focus self on open', async ({ dsPage }) => {
 test('should be able to close the with keyboard', async ({ dsPage }) => {
   const page = await dsPage.goto('molecule', 'modal', 'pre-opened');
 
-  await page.locator('text=What are Cookies').waitFor();
+  await page.locator('text=About Cookies').waitFor();
   await page.keyboard.press('Tab');
   await page.keyboard.press('Tab');
   await page.keyboard.press('Space');

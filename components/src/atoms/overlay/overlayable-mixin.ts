@@ -34,7 +34,15 @@ export const Overlayable = <T extends Constructor<LitElement>>(superClass: T) =>
         }
       }
 
-      @property({ type: String, reflect: true })
+      @property({
+        type: String,
+        reflect: true,
+        converter: (input: any) => {
+          const value = input.toString().toLowerCase();
+          const values = ['up', 'down', 'left', 'right'];
+          return values.includes(value) ? value : 'up';
+        }
+      })
       direction: 'up' | 'down' | 'left' | 'right' = 'up';
 
       get isScrollDisabled() {

@@ -1,4 +1,3 @@
-// playwright.config.ts
 import { PlaywrightTestConfig, devices } from '@playwright/test';
 
 const config: PlaywrightTestConfig = {
@@ -6,6 +5,7 @@ const config: PlaywrightTestConfig = {
   fullyParallel: true,
   workers: 4,
   timeout: 30000,
+  reporter: process.env.CI ? 'github' : 'list',
   use: {
     ignoreHTTPSErrors: true,
     baseURL: process.env.PLAYWRIGHT_TEST_BASE_URL || 'http://localhost:6006',

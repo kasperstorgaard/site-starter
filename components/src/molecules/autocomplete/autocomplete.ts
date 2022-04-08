@@ -58,6 +58,9 @@ export class AutocompleteElement extends FormControllable(LitElement) {
   @property({ type: Boolean, reflect: true })
   open = false;
 
+  @property({ type: String })
+  placeholder = 'start typing to see options';
+
   @state()
   focusedIndex: number = -1;
 
@@ -137,6 +140,7 @@ export class AutocompleteElement extends FormControllable(LitElement) {
         <input
           id="input"
           type="text"
+          placeholder=${this.placeholder}
 
           autocapitalize="none"
           autocomplete="off"

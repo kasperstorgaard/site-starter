@@ -48,8 +48,7 @@
     ],
     "plugins": [
       "prettier",
-      "import",
-      "ava"
+      "import"
     ],
     "rules": {
       "semi": [

@@ -25,7 +25,9 @@ export function Primary() {
   const template = html`
   <button
     class="sg-button"
-    @click=${() => snackbar.value.show()}
+    @click=${() => {
+      snackbar.value.show();
+    }}
   >open</button>
   <sg-snackbar
     ${ref(snackbar)}

@@ -15,7 +15,6 @@
     "web",
     "component",
     "lit",
-    "ava",
     "storybook"
   ],
   "author": "kasperstorgaard",

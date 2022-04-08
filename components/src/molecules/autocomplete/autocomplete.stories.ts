@@ -9,7 +9,7 @@ import cities from './cities.json';
 export default {
   title: 'Design System/Molecules/Autocomplete',
   args: {
-    showCountr: false,
+    showCountry: false,
     label: 'citites',
     minlength: 2,
   },
@@ -30,9 +30,10 @@ const autocompleteFactory = (options?: Options) => {
       <sg-autocomplete
         name="city"
         minlength=${options.minlength}
+        placeholder="start typing to see options"
         ${ref(autocomplete)}
       >
-        <span slot="label">cities</span>
+        <span slot="label">Pick a city</span>
       </sg-autocomplete>
     `, container);
 

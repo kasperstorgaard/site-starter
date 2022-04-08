@@ -1,38 +1,38 @@
-import test from 'ava';
-import { useStory } from '../../../test-utils';
+import { expect, test } from '../../../test/test-setup';
 
-test('should show when activated', useStory('snackbar'), async (t, page) => {
+test('should show when activated', async ({ dsPage }) => {
+  const page = await dsPage.goto('atom', 'snackbar');
   await page.locator('text=open').click();
   await page.locator('text=snackbar message').waitFor();
-  t.pass();
 });
 
-test('should hide itself after activation', useStory('snackbar'), async (t, page) => {
+test('should hide itself after activation', async ({ dsPage }) => {
+  const page = await dsPage.goto('atom', 'snackbar');
   await page.locator('text=open').click();
   await page.locator('text=snackbar message').waitFor();
   await page.locator('text=snackbar message').waitFor({ state: 'hidden', timeout: 6000 });
-  t.pass();
 });
 
-test('should close using close button', useStory('snackbar'), async (t, page) => {
+test('should close using close button', async ({ dsPage }) => {
+  const page = await dsPage.goto('atom', 'snackbar');
   await page.locator('text=open').click();
   await page.locator('text=snackbar message').waitFor();
   await page.locator('text=close').click();
   await page.locator('text=snackbar message').waitFor({ state: 'hidden' });
-  t.pass();
 });
 
-test('should be closeable using keyboard navigation', useStory('snackbar'), async (t, page) => {
+test('should be closeable using keyboard navigation', async ({ dsPage }) => {
+  const page = await dsPage.goto('atom', 'snackbar');
   await page.keyboard.press('Tab');
   await page.keyboard.press('Space');
   await page.locator('text=snackbar message').waitFor();
   await page.keyboard.press('Tab');
   await page.keyboard.press('Space');
   await page.locator('text=snackbar message').waitFor({ state: 'hidden', timeout: 1000 });
-  t.pass();
 });
 
-test('should restore focus when closing using keyboard', useStory('snackbar'), async (t, page) => {
+test('should restore focus when closing using keyboard', async ({ dsPage }) => {
+  const page = await dsPage.goto('atom', 'snackbar');
   await page.keyboard.press('Tab');
   await page.keyboard.press('Space');
   await page.locator('text=snackbar message').waitFor();
@@ -40,12 +40,13 @@ test('should restore focus when closing using keyboard', useStory('snackbar'), a
   await page.keyboard.press('Space');
   await page.locator('text=snackbar message').waitFor({ state: 'hidden', timeout: 1000 });
   const focusText = await page.evaluate(() => document.activeElement.textContent);
-  t.is(focusText, 'open');
+
+  expect(focusText).toBe('open');
 });
 
-test('should set aria-live when opening', useStory('snackbar'), async (t, page) => {
+test('should set aria-live when opening', async ({ dsPage }) => {
+  const page = await dsPage.goto('atom', 'snackbar');
   await page.keyboard.press('Tab');
   await page.keyboard.press('Space');
   await page.locator('[aria-live]').waitFor();
-  t.pass();
 });

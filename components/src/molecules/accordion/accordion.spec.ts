@@ -1,32 +1,35 @@
-import test from 'ava';
-import { useStory } from '../../../test-utils';
+import { test } from '../../../test/test-setup';
 
-test('should expand on click', useStory('accordion'), async (t, page) => {
-  await page.locator('text=item 0').click();
-  await page.locator('text=content 0').waitFor();
-  t.pass();
+test('should expand on click', async ({ dsPage }) => {
+  const page = await dsPage.goto('molecule', 'accordion');
+
+  await page.locator('text=How many species').click();
+  await page.locator('text=There are two universally').waitFor();
 });
 
-test('should close on click', useStory('accordion'), async (t, page) => {
-  await page.locator('text=item 0').click();
-  await page.locator('text=content 0').waitFor();
-  await page.locator('text=item 0').click();
-  await page.locator('text=content 0').waitFor({ state: 'hidden' });
-  t.pass();
+test('should close on click', async ({ dsPage }) => {
+  const page = await dsPage.goto('molecule', 'accordion');
+
+  await page.locator('text=How many species').click();
+  await page.locator('text=There are two universally').waitFor();
+  await page.locator('text=How many species').click();
+  await page.locator('text=There are two universally').waitFor({ state: 'hidden' });
 });
 
-test('should close other item in single mode', useStory('accordion', 'single-mode'), async (t, page) => {
-  await page.locator('text=item 0').click();
-  await page.locator('text=content 0').waitFor();
-  await page.locator('text=item 1').click();
-  await page.locator('text=content 1').waitFor();
-  await page.locator('text=content 0').waitFor({ state: 'hidden' });
-  t.pass();
+test('should close other item in single mode', async ({ dsPage }) => {
+  const page = await dsPage.goto('molecule', 'accordion', 'single');
+
+  await page.locator('text=Which is the tallest animal in the world?').click();
+  await page.locator('text=Answer: Giraffe').waitFor();
+  await page.locator('text=Which animal has the longest lifeline?').click();
+  await page.locator('text=Answer: The arctic whale').waitFor();
+  await page.locator('text=Answer: Giraffe').waitFor({ state: 'hidden' });
 });
 
-test('should be able to use with keyboard', useStory('accordion'), async (t, page) => {
+test('should be able to use with keyboard', async ({ dsPage }) => {
+  const page = await dsPage.goto('molecule', 'accordion');
+
   await page.keyboard.press('Tab');
   await page.keyboard.press('Space');
-  await page.locator('text=content 0').waitFor();
-  t.pass();
+  await page.locator('text=There are two universally').waitFor();
 });

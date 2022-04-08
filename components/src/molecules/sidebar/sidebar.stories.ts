@@ -7,7 +7,7 @@ import { createRef, ref } from 'lit/directives/ref.js';
 export default {
   title: 'Design System/Molecules/Sidebar',
   args: {
-    direction: 'right',
+    direction: 'left',
     isOpen: false,
   },
   argTypes: {
@@ -30,36 +30,16 @@ export function Primary(options?: Options) {
   const template = html`
   <button
     class="sg-button"
-    ?is-open=${options?.isOpen}
-    direction=${options?.direction}
     @click=${() => sidebar.value.open()}
   >open</button>
-  <sg-sidebar ${ref(sidebar)}>
+  <sg-sidebar
+    ${ref(sidebar)}
+    ?is-open=${options?.isOpen ?? false}
+    direction=${options.direction ?? 'left'}
+  >
     hi from the sidebar :)
   </sg-sidebar>
   `;
-
-
-  render(template, container);
-  return container;
-}
-
-export function Left(options: Options) {
-  const container = document.createElement('div');
-  const sidebar = createRef<SidebarElement>();
-
-  const template = html`
-  <button
-    class="sg-button"
-    ?is-open=${options?.isOpen}
-    direction=${options?.direction}
-    @click=${() => sidebar.value.open()}
-  >open</button>
-  <sg-sidebar ${ref(sidebar)}>
-    hi from the sidebar :)
-  </sg-sidebar>
-  `;
-
 
   render(template, container);
   return container;
@@ -75,9 +55,9 @@ export function PreOpened(options?: Options) {
     @click=${() => sidebar.value.open()}
   >open</button>
   <sg-sidebar
-    ?is-open=${options?.isOpen ?? true}
-    direction=${options?.direction}
     ${ref(sidebar)}
+    ?is-open=${options?.isOpen ?? true}
+    direction=${options?.direction ?? 'left'}
   >
     hi from the sidebar :)
   </sg-sidebar>
@@ -88,7 +68,34 @@ export function PreOpened(options?: Options) {
 }
 
 PreOpened.args = {
+  direction: 'left',
   isOpen: true,
+};
+
+export function Right(options?: Options) {
+  const container = document.createElement('div');
+  const sidebar = createRef<SidebarElement>();
+
+  const template = html`
+  <button
+    class="sg-button"
+    @click=${() => sidebar.value.open()}
+  >open</button>
+  <sg-sidebar
+    ${ref(sidebar)}
+    ?is-open=${options?.isOpen ?? false}
+    direction=${options?.direction ?? 'right'}
+  >
+    hi from the sidebar :)
+  </sg-sidebar>
+  `;
+
+  render(template, container);
+  return container;
+}
+
+Right.args = {
+  direction: 'right',
 };
 
 export function HeaderAndFooter(options?: Options) {
@@ -102,8 +109,8 @@ export function HeaderAndFooter(options?: Options) {
   >open</button>
   <sg-sidebar
     ${ref(sidebar)}
-    ?is-open=${options?.isOpen}
-    direction=${options?.direction}
+    ?is-open=${options?.isOpen ?? false}
+    direction=${options?.direction ?? 'left'}
   >
     <h2 slot="header">I'm a header</h2>
     hi from the sidebar :)
@@ -129,8 +136,8 @@ export function ScrollLock(options?: Options) {
   </div>
   <sg-sidebar
     ${ref(sidebar)}
-    ?is-open=${options?.isOpen}
-    direction=${options?.direction}
+    ?is-open=${options?.isOpen ?? false}
+    direction=${options?.direction ?? 'left'}
   >
     hi from the sidebar :)
   </sg-sidebar>

@@ -8,12 +8,10 @@
       "type": "node",
       "request": "launch",
       "name": "storybook:test",
-      "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/ava",
+      "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/playwright",
       "runtimeArgs": [
-        "--serial",
-        "${file}",
-        // TODO: check again if line numbers can work with .ts and ava setup
-        // "${file}:${lineNumber}"
+        "test",
+        "${file}"
       ],
       "sourceMaps": true,
       "env": {
@@ -30,12 +28,11 @@
       "type": "node",
       "request": "launch",
       "name": "storybook:debug",
-      "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/ava",
+      "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/playwright",
       "runtimeArgs": [
-        "--serial",
-        "${file}",
-        // TODO: check again if line numbers can work with .ts and ava setup
-        // "${file}:${lineNumber}"
+        "test",
+        "--headed",
+        "${file}"
       ],
       "sourceMaps": true,
       "env": {

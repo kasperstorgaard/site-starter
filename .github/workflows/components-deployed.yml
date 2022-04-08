@@ -1,0 +1,25 @@
+name: "Components: Deployed"
+on:
+  deployment_status:
+jobs:
+  # Generate static files, and upload them to S3
+  test:
+    runs-on: ubuntu-latest
+    if: github.event.deployment_status.state == 'success'
+    defaults:
+      run:
+        working-directory: components
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v2
+      with:
+        node-version: '14.x'
+    - name: Install dependencies
+      run: npm install
+    - name: Install Playwright
+      run: npx playwright install --with-deps
+    - name: Run Playwright tests
+      run: npm run test -- --project "Desktop Chromium"
+      env:
+        # This might depend on your test-runner/language binding
+        PLAYWRIGHT_TEST_BASE_URL: ${{ github.event.deployment_status.target_url }}

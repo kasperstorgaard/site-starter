@@ -4,13 +4,18 @@ const config: PlaywrightTestConfig = {
   // Options shared for all projects.
   fullyParallel: true,
   workers: 4,
-  timeout: 30000,
+  timeout: 10000,
   reporter: process.env.CI ? 'github' : 'list',
+  outputDir: './test-results',
   use: {
     ignoreHTTPSErrors: true,
     baseURL: process.env.PLAYWRIGHT_TEST_BASE_URL || 'http://localhost:6006',
   },
-  outputDir: './test-results',
+  expect: {
+    toMatchSnapshot: {
+      maxDiffPixelRatio: .04,
+    }
+  },
 
   // Options specific to each project.
   projects: [

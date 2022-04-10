@@ -70,11 +70,15 @@ test('should send back focus to opening element when closing', async ({ dsPage }
   expect(focusedText).toBe('open');
 });
 
-test('should not scroll body on long page', async ({ dsPage }) => {
+test('should not scroll body on long page', async ({ dsPage, browserName, viewport }) => {
+  // TODO: find way to emulate touch scroll
+  test.skip(browserName === 'webkit' && viewport.width < 640, 'webkit mobile does not support scroll wheel');
+
   const page = await dsPage.goto('molecule', 'lightbox', 'scroll-lock');
 
   await page.locator('button >> text=open').click();
   await page.mouse.wheel(0, 1000);
+
   await page.locator('text=close').click();
   const scrollTop = await page.locator('html').evaluate(body => body.scrollTop);
 

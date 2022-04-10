@@ -18,7 +18,7 @@ const config: PlaywrightTestConfig = {
       use: devices['Pixel 5'],
     },
     {
-      name: 'mobile safari',
+      name: 'mobile webkit',
       use: devices['iPhone 12'],
     },
     {
@@ -29,7 +29,7 @@ const config: PlaywrightTestConfig = {
       },
     },
     {
-      name: 'desktop safari',
+      name: 'desktop webkit',
       use: {
         browserName: 'webkit',
         viewport: { width: 1280, height: 720 },

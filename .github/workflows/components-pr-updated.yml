@@ -13,8 +13,17 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        test-type: [Desktop, Mobile]
-        browser: [Chromium, Safari, Firefox]
+        include:
+          - device: desktop
+            browser: chromium
+          - device: desktop
+            browser: safari
+          - device: desktop
+            browser: firefox
+          - device: mobile
+            browser: chromium
+          - device: mobile
+            browser: safari
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -45,6 +54,6 @@ jobs:
           site_name: "capable-stardust-70089d"
           max_timeout: 360 # 6 Minutes
       - name: Run Playwright tests
-        run: npx -p @playwright/test playwright test --project "${{ matrix.test-type }} ${{ matrix.browser }}"
+        run: npx -p @playwright/test playwright test --project "${{ matrix.device }} ${{ matrix.browser }}"
         env:
           PLAYWRIGHT_TEST_BASE_URL: ${{ steps.waitForDeployment.outputs.url }}

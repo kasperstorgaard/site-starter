@@ -14,32 +14,32 @@ const config: PlaywrightTestConfig = {
   // Options specific to each project.
   projects: [
     {
-      name: 'Desktop Chromium',
+      name: 'desktop chromium',
       use: {
         browserName: 'chromium',
         viewport: { width: 1280, height: 720 },
       },
     },
     {
-      name: 'Desktop Safari',
+      name: 'desktop safari',
       use: {
         browserName: 'webkit',
         viewport: { width: 1280, height: 720 },
       }
     },
     {
-      name: 'Desktop Firefox',
+      name: 'desktop firefox',
       use: {
         browserName: 'firefox',
         viewport: { width: 1280, height: 720 },
       }
     },
     {
-      name: 'Mobile Chrome',
+      name: 'mobile chrome',
       use: devices['Pixel 5'],
     },
     {
-      name: 'Mobile Safari',
+      name: 'mobile safari',
       use: devices['iPhone 12'],
     },
   ],

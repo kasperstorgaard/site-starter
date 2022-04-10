@@ -14,16 +14,18 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          - device: mobile
+            browser: chromium
+          - device: mobile
+            browser: webkit
           - device: desktop
             browser: chromium
           - device: desktop
-            browser: safari
+            browser: webkit
           - device: desktop
             browser: firefox
-          - device: mobile
-            browser: chromium
-          - device: mobile
-            browser: safari
+          - device: desktop
+            browser: msedge
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

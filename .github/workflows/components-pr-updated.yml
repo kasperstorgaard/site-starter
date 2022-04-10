@@ -24,8 +24,6 @@ jobs:
             browser: webkit
           - device: desktop
             browser: firefox
-          - device: desktop
-            browser: msedge
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

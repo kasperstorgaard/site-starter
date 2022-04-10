@@ -11,6 +11,11 @@ const config: PlaywrightTestConfig = {
     baseURL: process.env.PLAYWRIGHT_TEST_BASE_URL || 'http://localhost:6006',
   },
   outputDir: './test-results',
+  expect: {
+    toMatchSnapshot: {
+      threshold: 0.2,
+    },
+  },
 
   // Options specific to each project.
   projects: [

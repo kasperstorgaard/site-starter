@@ -6,6 +6,9 @@ export class DesignSystemPage {
 
   constructor(page: Page) {
     this.page = page;
+
+    // blocks any netlify tooling, so they don't interfere with tests.
+    page.route('**/netlify.js', route => route.abort('blockedbyclient'));
   }
 
   async goto(type: 'atom'|'molecule'|'organism', name: string, variant?: string) {
@@ -16,6 +19,7 @@ export class DesignSystemPage {
       `${this.basePath}-${type}s-${name}`;
 
     await this.page.goto(`${basePath}?id=${idPath}&viewMode=story`);
+    await this.page.locator('#root > div').waitFor();
 
     return this.page;
   }

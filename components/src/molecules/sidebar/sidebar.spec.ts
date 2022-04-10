@@ -1,4 +1,4 @@
-import { env, expect, test } from '../../../test/test-setup';
+import { expect, test } from '../../../test/test-setup';
 
 test('should expand on click', async ({ dsPage }) => {
   const page = await dsPage.goto('molecule', 'sidebar');
@@ -12,23 +12,25 @@ test('should close when clicking close button', async ({ dsPage }) => {
   await page.locator('text=hi from the sidebar :)').waitFor({ state: 'hidden'});
 });
 
-test('should close when clicking outside container on desktop', async ({ dsPage }) => {
+test('should close when clicking outside container', async ({ dsPage, viewport }) => {
+  test.skip(viewport.width < 640, 'There is no area to click outside on mobile');
   const page = await dsPage.goto('molecule', 'sidebar');
-  if (env.isMobile) {
-    return;
-  }
 
+  await page.click('text=open');
   await page.locator('text=hi from the sidebar :)').waitFor();
-  await page.click('html', { position: { x: 200, y: 200 }});
+  await page.click('body', { position: { x: 200, y: 200 }});
 
   await page.locator('text=hi from the sidebar :)').waitFor({ state: 'hidden'});
 });
 
-test('should not scroll body on long page', async ({ dsPage }) => {
+test('should not scroll body on long page', async ({ dsPage, browserName, viewport }) => {
+  // TODO: find way to emulate touch scroll
+  test.skip(browserName === 'webkit' && viewport.width < 640, 'webkit mobile does not support scroll wheel');
   const page = await dsPage.goto('molecule', 'sidebar');
 
   await page.locator('text="open"').click();
   await page.mouse.wheel(0, 1000);
+
   await page.locator('text=close').click();
   const scrollTop = await page.locator('html').evaluate(body => body.scrollTop);
 

@@ -16,13 +16,45 @@ export default {
   },
 };
 
-
 interface Options {
   theme?: string;
   text: string;
   size?: string;
   inverse?: boolean;
 }
+
+export function Default(args: Options) {
+  const container = document.createElement('div');
+  render(renderButton(args), container);
+  return container;
+}
+
+Default.args = {
+  text: 'default',
+} as Options;
+
+export function Primary(args: Options) {
+  const container = document.createElement('div');
+  render(renderButton(args), container);
+  return container;
+}
+
+Primary.args = {
+  text: 'Default',
+  theme: 'primary',
+} as Options;
+
+export function Secondary(args: Options) {
+  const container = document.createElement('div');
+  render(renderButton(args), container);
+  return container;
+}
+
+Secondary.args = {
+  text: 'secondary',
+  theme: 'secondary',
+} as Options;
+
 
 function renderButton(args?: Options) {
   return html`
@@ -37,18 +69,7 @@ function renderButton(args?: Options) {
   `;
 }
 
-function buttonFactory(options: Options) {
-  const fn = (args: any) => {
-    const container = document.createElement('div');
-    render(renderButton(args), container);
-    return container;
-  }
-
-  fn.args = options;
-  return fn;
-}
-
-function buttonGrid() {
+export function Grid() {
   const sizes = ['big', 'small'];
 
   const states = ['default', 'big', 'small', 'inverse'];
@@ -85,9 +106,3 @@ function buttonGrid() {
 
   return container;
 }
-
-export const Default = buttonFactory({ text: 'default' });
-export const Primary = buttonFactory({ text: 'primary', theme: 'primary' });
-export const Secondary = buttonFactory({ text: 'secondary', theme: 'secondary' });
-
-export const Grid = buttonGrid;

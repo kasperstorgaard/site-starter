@@ -2,26 +2,20 @@ import { Page } from '@playwright/test';
 
 export class DesignSystemPage {
   readonly page: Page;
-  readonly baseURL: string;
   readonly basePath = 'design-system';
 
-  constructor(page: Page, baseURL: string) {
+  constructor(page: Page) {
     this.page = page;
-    this.baseURL = baseURL;
   }
 
   async goto(type: 'atom'|'molecule'|'organism', name: string, variant?: string) {
-    const location = new URL(this.baseURL);
-    location.pathname = '/iframe.html';
+    const basePath = '/iframe.html';
 
     const idPath = variant ?
       `${this.basePath}-${type}s-${name}--${variant}` :
       `${this.basePath}-${type}s-${name}`;
 
-    location.searchParams.set('id', idPath);
-    location.searchParams.set('viewMode', 'story');
-
-    await this.page.goto(location.href);
+    await this.page.goto(`${basePath}?id=${idPath}&viewMode=story`);
 
     return this.page;
   }

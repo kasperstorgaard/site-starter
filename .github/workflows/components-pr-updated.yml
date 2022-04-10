@@ -3,7 +3,6 @@ name: "Components: PR Updated"
 on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
-    paths: components
 
 defaults:
   run:
@@ -11,19 +10,50 @@ defaults:
 
 jobs:
   test:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - device: mobile
+            browser: chromium
+          - device: mobile
+            browser: webkit
+          - device: desktop
+            browser: chromium
+          - device: desktop
+            browser: webkit
+          - device: desktop
+            browser: firefox
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
-          node-version: 14.x
+          node-version: 16.x
+      - name: Cache node modules
+        id: cache-node-modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+      - name: Install node modules
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
+        run: npm ci
+      - name: Install playwright
+        run: npx playwright install --with-deps ${{ matrix.browser }}
       - name: Wait for Netlify deployment
         uses: jakepartusch/wait-for-netlify-action@v1.2
         id: waitForDeployment
         with:
           site_name: "capable-stardust-70089d"
           max_timeout: 360 # 6 Minutes
-      - name: Run Playwright
-        run: npx -p @playwright/test playwright test -- --project "Desktop Chromium"
+      - name: Run Playwright tests
+        run: npx -p @playwright/test playwright test --project "${{ matrix.device }} ${{ matrix.browser }}"
         env:
-          PLAYWRIGHT_TEST_BASE_URL: ${{ steps.waitFor200.outputs.url }}
+          PLAYWRIGHT_TEST_BASE_URL: ${{ steps.waitForDeployment.outputs.url }}

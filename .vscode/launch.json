@@ -11,7 +11,13 @@
       "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/playwright",
       "runtimeArgs": [
         "test",
-        "${file}"
+        "${file}",
+        "--config",
+        "${workspaceFolder}/components/playwright.config.ts",
+        "--project",
+        "Desktop Chromium",
+        "--reporter",
+        "dot"
       ],
       "sourceMaps": true,
       "env": {
@@ -32,7 +38,13 @@
       "runtimeArgs": [
         "test",
         "--headed",
-        "${file}"
+        "${file}",
+        "--config",
+        "${workspaceFolder}/components/playwright.config.ts",
+        "--project",
+        "Desktop Chromium",
+        "--reporter",
+        "dot"
       ],
       "sourceMaps": true,
       "env": {

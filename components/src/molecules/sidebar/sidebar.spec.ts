@@ -12,17 +12,13 @@ test('should close when clicking close button', async ({ dsPage }) => {
   await page.locator('text=hi from the sidebar :)').waitFor({ state: 'hidden'});
 });
 
-test('should close when clicking outside container', async ({ dsPage, viewport }) => {
-  if (viewport.width < 640) {
-    // this should work according to docs, but it doesn't, so we just return early instead...
-    // test.skip(() => viewport.width < 640, 'There is no area to click outside on mobile');
-    return;
-  }
-
+test.only('should close when clicking outside container', async ({ dsPage, viewport }) => {
+  test.skip(viewport.width < 640, 'There is no area to click outside on mobile');
   const page = await dsPage.goto('molecule', 'sidebar');
 
+  await page.click('text=open');
   await page.locator('text=hi from the sidebar :)').waitFor();
-  await page.click('html', { position: { x: 200, y: 200 }});
+  await page.click('body', { position: { x: 200, y: 200 }});
 
   await page.locator('text=hi from the sidebar :)').waitFor({ state: 'hidden'});
 });

@@ -3,6 +3,3 @@ node_modules
 
 # macOS
 .DS_Store
-
-# Playwright test results
-test-results/

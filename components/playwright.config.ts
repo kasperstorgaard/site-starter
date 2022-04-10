@@ -10,6 +10,7 @@ const config: PlaywrightTestConfig = {
     ignoreHTTPSErrors: true,
     baseURL: process.env.PLAYWRIGHT_TEST_BASE_URL || 'http://localhost:6006',
   },
+  outputDir: './test-results',
 
   // Options specific to each project.
   projects: [

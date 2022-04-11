@@ -4,10 +4,10 @@
   "description": "design system",
   "main": "index.js",
   "scripts": {
-    "build": "build-storybook -o dist",
-    "lint": "eslint",
-    "start": "start-storybook -p 6006",
-    "test": "playwright test \\.spec\\.ts"
+    "build": "npx -p storybook build-storybook -o dist",
+    "lint": "npx eslint",
+    "start": "npx -p storybook start-storybook -p 6006",
+    "test": "npx -p @playwright/test playwright test \\.spec\\.ts"
   },
   "repository": {
     "type": "git",
@@ -49,6 +49,7 @@
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.25.4",
     "playwright": "^1.20.1",
+    "storybook": "^6.4.21",
     "typescript": "^4.6.3",
     "vite": "^2.9.0"
   },

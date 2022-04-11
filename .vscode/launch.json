@@ -19,16 +19,7 @@
         "--reporter",
         "dot"
       ],
-      "sourceMaps": true,
-      "env": {
-        "DEVICE": "android"
-      },
-      "port": 9229,
-      "outputCapture": "std",
-      "skipFiles": [
-        "<node_internals>/**",
-        "**/node_modules/**"
-      ]
+      "sourceMaps": true
     },
     {
       "type": "node",
@@ -49,15 +40,38 @@
       "sourceMaps": true,
       "env": {
         "DEBUG": "pw:input",
-        "HEADLESS": "false",
-        "DEVICE": "android"
-      },
-      "port": 9229,
-      "outputCapture": "std",
-      "skipFiles": [
-        "<node_internals>/**",
-        "**/node_modules/**"
-      ]
+      }
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "storybook:test:all",
+      "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/playwright",
+      "runtimeArgs": [
+        "test",
+        "${file}",
+        "--config",
+        "${workspaceFolder}/components/playwright.config.ts",
+        "--reporter",
+        "dot"
+      ],
+      "sourceMaps": true
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "storybook:test:snap",
+      "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/playwright",
+      "runtimeArgs": [
+        "test",
+        "${file}",
+        "--config",
+        "${workspaceFolder}/components/playwright.config.ts",
+        "--reporter",
+        "dot",
+        "--update-snapshots",
+      ],
+      "sourceMaps": true
     }
   ]
 }

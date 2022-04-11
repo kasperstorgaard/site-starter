@@ -4,7 +4,7 @@ const config: PlaywrightTestConfig = {
   // Options shared for all projects.
   fullyParallel: true,
   workers: 4,
-  timeout: 10000,
+  timeout: 20000,
   reporter: process.env.CI ? 'github' : 'list',
   outputDir: './test-results',
   use: {

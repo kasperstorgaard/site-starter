@@ -11,11 +11,6 @@ const config: PlaywrightTestConfig = {
     ignoreHTTPSErrors: true,
     baseURL: process.env.PLAYWRIGHT_TEST_BASE_URL || 'http://localhost:6006',
   },
-  expect: {
-    toMatchSnapshot: {
-      maxDiffPixelRatio: .04,
-    }
-  },
 
   // Options specific to each project.
   projects: [

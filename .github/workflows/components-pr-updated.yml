@@ -2,7 +2,7 @@ name: "Components: PR Updated"
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened, ready_for_review]
+    types: [opened, reopened, ready_for_review]
 
 defaults:
   run:
@@ -11,7 +11,8 @@ defaults:
 jobs:
   test:
     strategy:
-      fail-fast: false
+      fail-fast: true
+      max-parallel: 2
       matrix:
         include:
           - device: mobile

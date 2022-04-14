@@ -1,9 +1,10 @@
 import { PlaywrightTestConfig, devices } from '@playwright/test';
+import { cpus } from 'os';
 
 const config: PlaywrightTestConfig = {
   // Options shared for all projects.
   fullyParallel: true,
-  workers: 4,
+  workers: process.env.CI ? 1 : cpus().length / 2,
   timeout: 20000,
   reporter: process.env.CI ? 'github' : 'list',
   outputDir: './test-results',

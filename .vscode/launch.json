@@ -7,7 +7,24 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "storybook:test",
+      "name": "cmp:test:mobile",
+      "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/playwright",
+      "runtimeArgs": [
+        "test",
+        "${file}",
+        "--config",
+        "${workspaceFolder}/components/playwright.config.ts",
+        "--project",
+        "Mobile Webkit",
+        "--reporter",
+        "dot"
+      ],
+      "sourceMaps": true
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "cmp:test:desktop",
       "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/playwright",
       "runtimeArgs": [
         "test",
@@ -24,7 +41,25 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "storybook:debug",
+      "name": "cmp:debug:mobile",
+      "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/playwright",
+      "runtimeArgs": [
+        "test",
+        "--headed",
+        "${file}",
+        "--config",
+        "${workspaceFolder}/components/playwright.config.ts",
+        "--project",
+        "Mobile Webkit",
+        "--reporter",
+        "dot"
+      ],
+      "sourceMaps": true
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "cmp:debug:desktop",
       "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/playwright",
       "runtimeArgs": [
         "test",
@@ -42,7 +77,7 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "storybook:test:all",
+      "name": "cmp:test:all",
       "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/playwright",
       "runtimeArgs": [
         "test",
@@ -57,7 +92,7 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "storybook:test:snap",
+      "name": "cmp:test:snap",
       "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/playwright",
       "runtimeArgs": [
         "test",

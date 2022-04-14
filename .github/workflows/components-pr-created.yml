@@ -11,8 +11,8 @@ defaults:
 jobs:
   test:
     strategy:
+      max-parallel: 1
       fail-fast: true
-      max-parallel: 2
       matrix:
         include:
           - device: mobile

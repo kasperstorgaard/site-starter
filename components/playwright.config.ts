@@ -1,14 +1,23 @@
 import { PlaywrightTestConfig, devices } from '@playwright/test';
+import { cpus } from 'os';
 
 const config: PlaywrightTestConfig = {
   // Options shared for all projects.
   fullyParallel: true,
-  workers: 4,
-  timeout: 30000,
+  workers: process.env.CI ? 1 : cpus().length / 2,
+  timeout: 20000,
   reporter: process.env.CI ? 'github' : 'list',
+  outputDir: './test-results',
   use: {
     ignoreHTTPSErrors: true,
     baseURL: process.env.PLAYWRIGHT_TEST_BASE_URL || 'http://localhost:6006',
+  },
+
+  expect: {
+    toMatchSnapshot: {
+      maxDiffPixels: 10,
+      threshold: 0.5,
+    }
   },
 
   // Options specific to each project.

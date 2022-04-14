@@ -37,10 +37,7 @@
         "--reporter",
         "dot"
       ],
-      "sourceMaps": true,
-      "env": {
-        "DEBUG": "pw:input",
-      }
+      "sourceMaps": true
     },
     {
       "type": "node",
@@ -69,7 +66,7 @@
         "${workspaceFolder}/components/playwright.config.ts",
         "--reporter",
         "dot",
-        "--update-snapshots",
+        "--update-snapshots"
       ],
       "sourceMaps": true
     }

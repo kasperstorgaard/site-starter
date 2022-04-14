@@ -2,7 +2,7 @@ name: "Components: PR Updated"
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened, ready_for_review]
+    types: [opened, reopened, ready_for_review]
 
 defaults:
   run:
@@ -11,7 +11,8 @@ defaults:
 jobs:
   test:
     strategy:
-      fail-fast: false
+      fail-fast: true
+      max-parallel: 2
       matrix:
         include:
           - device: mobile
@@ -24,7 +25,7 @@ jobs:
             browser: webkit
           - device: desktop
             browser: firefox
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
@@ -57,3 +58,9 @@ jobs:
         run: npx -p @playwright/test playwright test --project "${{ matrix.device }} ${{ matrix.browser }}"
         env:
           PLAYWRIGHT_TEST_BASE_URL: ${{ steps.waitForDeployment.outputs.url }}
+      - name: Upload test results on failure
+        uses: actions/upload-artifact@v3
+        if: ${{ failure() }}
+        with:
+          name: test-results
+          path: components/test-results/

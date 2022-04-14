@@ -10,7 +10,7 @@ module.exports = {
   ],
   framework: '@storybook/html',
   core: {
-    builder: 'storybook-builder-vite',
+    builder: '@storybook/builder-vite',
   },
   viteFinal(defaultConfig) {
     return {

@@ -1,2 +1,5 @@
 # Generated files
 dist
+
+# Playwright test results
+test-results/

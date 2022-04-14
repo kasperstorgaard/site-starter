@@ -1,6 +1,5 @@
 import { html, render } from 'lit';
 import { classMap } from 'lit/directives/class-map.js';
-import { map } from 'lit/directives/map.js';
 import './button.scss';
 
 export default {
@@ -69,39 +68,101 @@ function renderButton(args?: Options) {
   `;
 }
 
-export function Grid() {
+export function Overview() {
   const sizes = ['big', 'small'];
-
   const states = ['default', 'big', 'small', 'inverse'];
   const themes: string[] = ['default', 'primary', 'secondary'];
 
   const container = document.createElement('div');
 
   render(html`
-    <table class="sb-grid">
-      <thead>
-        <tr>
-          ${map(['\\', ...states], attribute => html`<th>${attribute}</th>`)}
-        </tr>
-      </thead>
-      <tbody>
-        ${map(themes, (theme) => html`
-          <tr>
-            ${map(['', ...states], (state, index) => html`
-            <td>${index === 0 ?
-              theme :
-              renderButton({
-                text: state === 'small' ? 'yes' : 'click me',
-                theme,
-                size: sizes.includes(state) ? state : undefined,
-                inverse: state === 'inverse',
-              })
-            }</td>
-            `)}
-          </tr>
-        `)}
-      </tbody>
-    </table>
+    <div class="sb-states">
+      <p>Default</p>
+      <div>
+        <div>
+          <label>default</label>
+          <button class="sg-button">sign up</button>
+        </div>
+        <div>
+          <label>primary</label>
+          <button class="sg-button -theme-primary">sign up</button>
+        </div>
+        <div>
+          <label>secondary</label>
+          <button class="sg-button -theme-secondary">sign up</button>
+        </div>
+        <div>
+          <label>default inverse</label>
+          <button class="sg-button -inverse">sign up</button>
+        </div>
+        <div>
+          <label>primary inverse</label>
+          <button class="sg-button -theme-primary -inverse">sign up</button>
+        </div>
+        <div>
+          <label>secondary inverse</label>
+          <button class="sg-button -theme-secondary -inverse">sign up</button>
+        </div>
+      </div>
+    </div>
+    <div class="sb-states">
+      <p>Big</p>
+      <div>
+        <div>
+          <label>default</label>
+          <button class="sg-button -size-big">sign up</button>
+        </div>
+        <div>
+          <label>primary</label>
+          <button class="sg-button -size-big -theme-primary">sign up</button>
+        </div>
+        <div>
+          <label>secondary</label>
+          <button class="sg-button -size-big -theme-secondary">sign up</button>
+        </div>
+        <div>
+          <label>default inverse</label>
+          <button class="sg-button -size-big -inverse">sign up</button>
+        </div>
+        <div>
+          <label>primary inverse</label>
+          <button class="sg-button -size-big -theme-primary -inverse">sign up</button>
+        </div>
+        <div>
+          <label>secondary inverse</label>
+          <button class="sg-button -size-big -theme-secondary -inverse">sign up</button>
+        </div>
+      </div>
+    </div>
+    <div class="sb-states">
+      <p>Small</p>
+      <div>
+        <div>
+          <label>default</label>
+          <button class="sg-button -size-small">sign up</button>
+        </div>
+        <div>
+          <label>primary</label>
+          <button class="sg-button -size-small -theme-primary">sign up</button>
+        </div>
+        <div>
+          <label>secondary</label>
+          <button class="sg-button -size-small -theme-secondary">sign up</button>
+        </div>
+        <div>
+          <label>default inverse</label>
+          <button class="sg-button -size-small -inverse">sign up</button>
+        </div>
+        <div>
+          <label>primary inverse</label>
+          <button class="sg-button -size-small -theme-primary -inverse">sign up</button>
+        </div>
+        <div>
+          <label>secondary inverse</label>
+          <button class="sg-button -size-small -theme-secondary -inverse">sign up</button>
+        </div>
+      </div>
+    </div>
   `, container);
 
   return container;

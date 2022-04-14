@@ -4,10 +4,10 @@
   "description": "design system",
   "main": "index.js",
   "scripts": {
-    "build": "build-storybook -o dist",
-    "lint": "eslint",
-    "start": "start-storybook -p 6006",
-    "test": "playwright test \\.spec\\.ts"
+    "build": "npx -p storybook build-storybook -o dist",
+    "lint": "npx eslint",
+    "start": "npx -p storybook start-storybook -p 6006",
+    "test": "npx -p @playwright/test playwright test \\.spec\\.ts"
   },
   "repository": {
     "type": "git",
@@ -41,6 +41,8 @@
     "@storybook/addon-actions": "^6.4.19",
     "@storybook/addon-essentials": "^6.4.19",
     "@storybook/addon-links": "^6.4.19",
+    "@storybook/builder-vite": "^0.1.27",
+    "@storybook/cli": "^6.4.22",
     "@storybook/html": "^6.4.19",
     "@types/body-scroll-lock": "^3.1.0",
     "babel-loader": "^8.2.4",
@@ -48,7 +50,7 @@
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.25.4",
     "playwright": "^1.20.1",
-    "storybook-builder-vite": "^0.1.22",
+    "storybook": "^6.4.21",
     "typescript": "^4.6.3",
     "vite": "^2.9.0"
   },

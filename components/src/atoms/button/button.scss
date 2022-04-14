@@ -40,6 +40,9 @@
   &.-inverse.-theme-default {
     --button-color: var(--gray-0);
     --button-background: var(--gray-9);
+
+    // for inverse default, use a solid background, not inverse outlined.
+    border-color: var(--button-background);
   }
 
   &.-inverse.-theme-primary {

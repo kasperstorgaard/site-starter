@@ -42,6 +42,7 @@
     "@storybook/addon-essentials": "^6.4.19",
     "@storybook/addon-links": "^6.4.19",
     "@storybook/builder-vite": "^0.1.27",
+    "@storybook/cli": "^6.4.22",
     "@storybook/html": "^6.4.19",
     "@types/body-scroll-lock": "^3.1.0",
     "babel-loader": "^8.2.4",

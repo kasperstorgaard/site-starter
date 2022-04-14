@@ -1,4 +1,4 @@
-name: "Components: PR Updated"
+name: "Components: PR Created"
 
 on:
   pull_request:

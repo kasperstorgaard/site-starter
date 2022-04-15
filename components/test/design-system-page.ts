@@ -35,6 +35,16 @@ export class DesignSystemPage {
     }
   }
 
+  /**
+   * Captures a screenshot of the design system page.
+   */
+  capture() {
+    return this.page.locator('#root').screenshot({
+      animations: 'disabled',
+      scale: 'css'
+    });
+  }
+
   private async _blockNetlifyScripts() {
     // blocks any netlify tooling, so they don't interfere with tests.
     await this.page.route('**/netlify.js', route => !this.page.isClosed() ?

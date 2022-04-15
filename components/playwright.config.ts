@@ -19,7 +19,7 @@ const config: PlaywrightTestConfig = {
 
   expect: {
     toMatchSnapshot: {
-      threshold: 1,
+      maxDiffPixelRatio: 0.02,
     }
   },
 

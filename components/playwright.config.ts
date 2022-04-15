@@ -1,11 +1,15 @@
 import { PlaywrightTestConfig, devices } from '@playwright/test';
 import { cpus } from 'os';
 
+// Options shared for all projects.
 const config: PlaywrightTestConfig = {
-  // Options shared for all projects.
+  // Makes sure that the CI fails if any tests are marked as .only (debug)
+  forbidOnly: !!process.env.CI,
   fullyParallel: true,
   workers: process.env.CI ? 1 : cpus().length / 2,
   timeout: 20000,
+  // Github connects failures inline with tests files,
+  // making it easier to pinpoint issues.
   reporter: process.env.CI ? 'github' : 'list',
   outputDir: './test-results',
   use: {

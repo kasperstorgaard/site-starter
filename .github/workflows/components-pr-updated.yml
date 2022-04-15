@@ -13,6 +13,7 @@ defaults:
 
 jobs:
   test:
+    if: github.event.pull_request.draft == false
     # Run this on macos to make it match the local development environment
     # (macos is expensive and somewhat ineffective though, so don't go ham in here.)
     runs-on: macos-latest

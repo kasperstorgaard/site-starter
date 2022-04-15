@@ -17,12 +17,6 @@ const config: PlaywrightTestConfig = {
     baseURL: process.env.PLAYWRIGHT_TEST_BASE_URL || 'http://localhost:6006',
   },
 
-  expect: {
-    toMatchSnapshot: {
-      maxDiffPixelRatio: 0.02,
-    }
-  },
-
   // Options specific to each project.
   projects: [
     {

@@ -13,6 +13,9 @@ defaults:
 
 jobs:
   test:
+    # Run this on macos to make it match the local development environment
+    # (macos is expensive and somewhat ineffective though, so don't go ham in here.)
+    runs-on: macos-latest
     strategy:
       max-parallel: 1
       fail-fast: true
@@ -28,9 +31,6 @@ jobs:
             browser: webkit
           - device: desktop
             browser: firefox
-    # Run this on macos to make it match the local development environment
-    # (macos is expensive and somewhat ineffective though, so don't go ham in here.)
-    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2

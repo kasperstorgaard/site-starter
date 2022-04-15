@@ -21,22 +21,22 @@ test('should close using close button', async ({ dsPage }) => {
   await page.locator('text=document saved').waitFor({ state: 'hidden' });
 });
 
-test('should be closeable using keyboard navigation', async ({ dsPage }) => {
+test('should be closeable using keyboard navigation', async ({ dsPage, tabKey }) => {
   const page = await dsPage.goto('atom', 'snackbar');
-  await page.keyboard.press('Tab');
+  await page.keyboard.press(tabKey);
   await page.keyboard.press('Space');
   await page.locator('text=document saved').waitFor();
-  await page.keyboard.press('Tab');
+  await page.keyboard.press(tabKey);
   await page.keyboard.press('Space');
   await page.locator('text=document saved').waitFor({ state: 'hidden', timeout: 1000 });
 });
 
-test('should restore focus when closing using keyboard', async ({ dsPage }) => {
+test('should restore focus when closing using keyboard', async ({ dsPage, tabKey }) => {
   const page = await dsPage.goto('atom', 'snackbar');
-  await page.keyboard.press('Tab');
+  await page.keyboard.press(tabKey);
   await page.keyboard.press('Space');
   await page.locator('text=document saved').waitFor();
-  await page.keyboard.press('Tab');
+  await page.keyboard.press(tabKey);
   await page.keyboard.press('Space');
   await page.locator('text=document saved').waitFor({ state: 'hidden', timeout: 1000 });
   const focusText = await page.evaluate(() => document.activeElement.textContent);
@@ -44,9 +44,9 @@ test('should restore focus when closing using keyboard', async ({ dsPage }) => {
   expect(focusText).toBe('Show notification');
 });
 
-test('should set aria-live when opening', async ({ dsPage }) => {
+test('should set aria-live when opening', async ({ dsPage, tabKey }) => {
   const page = await dsPage.goto('atom', 'snackbar');
-  await page.keyboard.press('Tab');
+  await page.keyboard.press(tabKey);
   await page.keyboard.press('Space');
-  await page.locator('[aria-live]').waitFor();
+  await page.locator('[aria-live="polite"]').waitFor();
 });

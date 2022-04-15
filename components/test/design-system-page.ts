@@ -6,21 +6,50 @@ export class DesignSystemPage {
 
   constructor(page: Page) {
     this.page = page;
-
-    // blocks any netlify tooling, so they don't interfere with tests.
-    page.route('**/netlify.js', route => route.abort('blockedbyclient'));
   }
 
   async goto(type: 'atom'|'molecule'|'organism', name: string, variant?: string) {
-    const basePath = '/iframe.html';
+    if (this.page.isClosed()) {
+      return;
+    }
 
-    const idPath = variant ?
-      `${this.basePath}-${type}s-${name}--${variant}` :
-      `${this.basePath}-${type}s-${name}`;
+    try {
+      await this._blockNetlifyScripts();
 
-    await this.page.goto(`${basePath}?id=${idPath}&viewMode=story`);
-    await this.page.locator('#root > div').waitFor();
+      const basePath = '/iframe.html';
 
-    return this.page;
+      const idPath = variant ?
+        `${this.basePath}-${type}s-${name}--${variant}` :
+        `${this.basePath}-${type}s-${name}`;
+
+      await this.page.goto(`${basePath}?id=${idPath}&viewMode=story`);
+      await this.page.locator('#root > div').waitFor();
+
+      return this.page;
+    } catch (err) {
+      if (this.page.isClosed()) {
+        return;
+      }
+
+      throw err;
+    }
+  }
+
+  /**
+   * Captures a screenshot of the design system page.
+   */
+  capture() {
+    return this.page.locator('#root').screenshot({
+      animations: 'disabled',
+      scale: 'css'
+    });
+  }
+
+  private async _blockNetlifyScripts() {
+    // blocks any netlify tooling, so they don't interfere with tests.
+    await this.page.route('**/netlify.js', route => !this.page.isClosed() ?
+      route.abort('blockedbyclient') :
+      null
+    );
   }
 }

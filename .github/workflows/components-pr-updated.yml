@@ -1,8 +1,11 @@
-name: "Components: PR Created"
+# Runs all of code quality checks for PR's targeting components package.
+name: "Components: PR Updated"
 
 on:
   pull_request:
-    types: [opened, reopened, ready_for_review]
+    types: [opened, reopened, synchronize, ready_for_review]
+    paths:
+      - 'components/**'
 
 defaults:
   run:
@@ -10,9 +13,13 @@ defaults:
 
 jobs:
   test:
+    if: github.event.pull_request.draft == false
+    # Run this on macos to make it match the local development environment
+    # (macos is expensive and somewhat ineffective though, so don't go ham in here.)
+    runs-on: macos-latest
     strategy:
+      max-parallel: 1
       fail-fast: true
-      max-parallel: 2
       matrix:
         include:
           - device: mobile
@@ -25,7 +32,6 @@ jobs:
             browser: webkit
           - device: desktop
             browser: firefox
-    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2

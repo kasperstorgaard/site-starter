@@ -39,7 +39,7 @@ export function Primary(args: Options) {
 }
 
 Primary.args = {
-  text: 'Default',
+  text: 'primary',
   theme: 'primary',
 } as Options;
 

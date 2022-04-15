@@ -4,9 +4,10 @@
   "description": "design system",
   "main": "index.js",
   "scripts": {
-    "build": "npx -p storybook build-storybook -o dist",
+    "build": "build-storybook -o dist",
     "lint": "npx eslint",
-    "start": "npx -p storybook start-storybook -p 6006",
+    "start": "start-storybook -p 6006",
+    "serve": "npx http-server ./dist -p 6006",
     "test": "npx -p @playwright/test playwright test \\.spec\\.ts"
   },
   "repository": {
@@ -37,7 +38,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.17.8",
-    "@playwright/test": "^1.20.2",
+    "@playwright/test": "^1.21.0",
     "@storybook/addon-actions": "^6.4.19",
     "@storybook/addon-essentials": "^6.4.19",
     "@storybook/addon-links": "^6.4.19",

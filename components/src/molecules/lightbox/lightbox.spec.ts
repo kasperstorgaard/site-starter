@@ -43,36 +43,9 @@ test('should navigate back on arrow click', async ({ dsPage }) => {
   expect(index).toBe(0);
 });
 
-test('should wrap focus', async ({ dsPage }) => {
-  const page = await dsPage.goto('molecule', 'lightbox');
-
-  await page.locator('text=open').click();
-  await page.locator('img').first().waitFor();
-  await page.keyboard.press('Tab');
-  await page.keyboard.press('Tab');
-  await page.keyboard.press('Tab');
-
-  const lightbox$ = page.locator('sg-lightbox');
-  const focusText = await lightbox$.evaluate(el => el.shadowRoot.activeElement.textContent);
-
-  // using regex matcher because of whitespace
-  expect(focusText).toMatch(/forward/);
-});
-
-test('should send back focus to opening element when closing', async ({ dsPage }) => {
-  const page = await dsPage.goto('molecule', 'lightbox');
-
-  await page.locator('text=open').click();
-  await page.locator('img').first().waitFor();
-  await page.locator('text=close').click();
-  const focusedText = await page.evaluate(() => document.activeElement?.textContent);
-
-  expect(focusedText).toBe('open');
-});
-
-test('should not scroll body on long page', async ({ dsPage, browserName, viewport }) => {
+test('should not scroll body on long page', async ({ dsPage, isMobile }) => {
   // TODO: find way to emulate touch scroll
-  test.skip(browserName === 'webkit' && viewport.width < 640, 'webkit mobile does not support scroll wheel');
+  test.skip(isMobile, 'Mobile does not support scroll wheel');
 
   const page = await dsPage.goto('molecule', 'lightbox', 'scroll-lock');
 
@@ -85,10 +58,38 @@ test('should not scroll body on long page', async ({ dsPage, browserName, viewpo
   expect(scrollTop).toBe(0);
 });
 
-test('should focus self when opened', async ({ dsPage }) => {
+test('should wrap focus', async ({ dsPage, tabKey }) => {
+  const page = await dsPage.goto('molecule', 'lightbox');
+
+  await page.locator('text=open').click();
+  await page.locator('img').first().waitFor();
+  await page.keyboard.press(tabKey);
+  await page.keyboard.press(tabKey);
+  await page.keyboard.press(tabKey);
+
+  const lightbox$ = page.locator('sg-lightbox');
+  const focusText = await lightbox$.evaluate(el => el.shadowRoot.activeElement.textContent);
+
+  // using regex matcher because of whitespace
+  expect(focusText).toMatch(/forward/);
+});
+
+test('should send back focus to opening element when closing', async ({ dsPage, tabKey }) => {
+  const page = await dsPage.goto('molecule', 'lightbox');
+
+  await page.keyboard.press(tabKey);
+  await page.keyboard.press('Space');
+  await page.locator('img').first().waitFor();
+  await page.locator('text=close').click();
+  const focusedText = await page.evaluate(() => document.activeElement?.textContent);
+
+  expect(focusedText).toBe('open');
+});
+
+test('should focus self when opened', async ({ dsPage, tabKey }) => {
   const page = await dsPage.goto('molecule', 'lightbox', 'links');
 
-  await page.keyboard.press('Tab');
+  await page.keyboard.press(tabKey);
   await page.keyboard.press('Space');
   await page.locator('img').first().waitFor();
   await page.waitForTimeout(1000);
@@ -98,10 +99,10 @@ test('should focus self when opened', async ({ dsPage }) => {
   expect(focusedTag).toBe('SG-LIGHTBOX');
 });
 
-test('should close on escape', async ({ dsPage }) => {
+test('should close on escape', async ({ dsPage, tabKey }) => {
   const page = await dsPage.goto('molecule', 'lightbox');
 
-  await page.keyboard.press('Tab');
+  await page.keyboard.press(tabKey);
   await page.keyboard.press('Space');
   await page.locator('img').first().waitFor();
   await page.keyboard.press('Escape');

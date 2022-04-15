@@ -8,7 +8,7 @@ test.beforeEach(({}, testInfo) => {
 });
 
 test('should match snapshot', async ({ dsPage }) => {
-  const page = await dsPage.goto('atom', 'button', 'overview');
-  const screenshot = await page.locator('#root').screenshot();
+  await dsPage.goto('atom', 'button', 'overview');
+  const screenshot = await dsPage.capture();
   expect(screenshot).toMatchSnapshot('button-overview.png');
 });

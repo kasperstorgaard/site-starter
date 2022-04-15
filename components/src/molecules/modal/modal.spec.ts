@@ -21,9 +21,9 @@ test('should close when clicking outside container on desktop', async ({ dsPage,
   await page.locator('text=About Cookies').waitFor({ state: 'hidden'});
 });
 
-test('should not scroll body on long page', async ({ dsPage, browserName, viewport }) => {
+test('should not scroll body on long page', async ({ dsPage, isMobile }) => {
   // TODO: find way to emulate touch scroll
-  test.skip(browserName === 'webkit' && viewport.width < 640, 'webkit mobile does not support scroll wheel');
+  test.skip(isMobile, 'mobile OS\'s don\'t support scroll wheel well');
 
   const page = await dsPage.goto('molecule', 'modal', 'scroll-lock');
 
@@ -35,9 +35,12 @@ test('should not scroll body on long page', async ({ dsPage, browserName, viewpo
   expect(scrollTop).toBe(0);
 });
 
-test('should send back focus to opening element when closing', async ({ dsPage }) => {
+test('should send back focus to opening element when closing', async ({ dsPage, isMobile }) => {
+  test.skip(isMobile, 'Unable to properly test keyboard navigation on mobile');
+
   const page = await dsPage.goto('molecule', 'modal');
-  await page.locator('text=open the modal').click();
+  await page.keyboard.press('Tab');
+  await page.keyboard.press('Space');
   await page.locator('text=A modal is a window').waitFor();
   await page.locator('button >> text=close').click();
   const focusedText = await page.evaluate(() => document.activeElement?.textContent);

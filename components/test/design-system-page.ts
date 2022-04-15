@@ -35,12 +35,11 @@ export class DesignSystemPage {
     }
   }
 
-  tab(options?: { direction: 'back' | 'forward' }) {
-    this.page.context()
-  }
-
   private async _blockNetlifyScripts() {
     // blocks any netlify tooling, so they don't interfere with tests.
-    await this.page.route('**/netlify.js', route => route.abort('blockedbyclient'));
+    await this.page.route('**/netlify.js', route => !this.page.isClosed() ?
+      route.abort('blockedbyclient') :
+      null
+    );
   }
 }

@@ -1,13 +1,9 @@
 # Runs all of code quality checks for PR's targeting components package.
-name: "Components: PR Created"
+name: "Components: PR Updated"
 
 on:
   pull_request:
-    # Limit to on open, as a new PR should be of high quality,
-    # and not something you continually update for weeks.
-    # When you are doing making fixes/adjustments after review,
-    # You should manually re-run this task on github.
-    types: [opened, reopened, ready_for_review]
+    types: [opened, reopened, synchronize, ready_for_review]
     paths:
       - 'components/**'
 

@@ -4,9 +4,9 @@
   "description": "design system",
   "main": "index.js",
   "scripts": {
-    "build": "build-storybook -o dist",
+    "build": "npx -p @storybook/html build-storybook -o dist",
     "lint": "npx eslint",
-    "start": "start-storybook -p 6006",
+    "start": "npx -p @storybook/html start-storybook -p 6006",
     "serve": "npx http-server ./dist -p 6006",
     "test": "npx -p @playwright/test playwright test \\.spec\\.ts"
   },

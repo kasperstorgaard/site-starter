@@ -9,18 +9,34 @@ export class DesignSystemPage {
   }
 
   async goto(type: 'atom'|'molecule'|'organism', name: string, variant?: string) {
-    await this._blockNetlifyScripts();
+    if (this.page.isClosed()) {
+      return;
+    }
 
-    const basePath = '/iframe.html';
+    try {
+      await this._blockNetlifyScripts();
 
-    const idPath = variant ?
-      `${this.basePath}-${type}s-${name}--${variant}` :
-      `${this.basePath}-${type}s-${name}`;
+      const basePath = '/iframe.html';
 
-    await this.page.goto(`${basePath}?id=${idPath}&viewMode=story`);
-    await this.page.locator('#root > div').waitFor();
+      const idPath = variant ?
+        `${this.basePath}-${type}s-${name}--${variant}` :
+        `${this.basePath}-${type}s-${name}`;
 
-    return this.page;
+      await this.page.goto(`${basePath}?id=${idPath}&viewMode=story`);
+      await this.page.locator('#root > div').waitFor();
+
+      return this.page;
+    } catch (err) {
+      if (this.page.isClosed()) {
+        return;
+      }
+
+      throw err;
+    }
+  }
+
+  tab(options?: { direction: 'back' | 'forward' }) {
+    this.page.context()
   }
 
   private async _blockNetlifyScripts() {

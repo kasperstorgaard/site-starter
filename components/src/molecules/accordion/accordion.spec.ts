@@ -26,10 +26,10 @@ test('should close other item in single mode', async ({ dsPage }) => {
   await page.locator('text=Answer: Giraffe').waitFor({ state: 'hidden' });
 });
 
-test('should be able to use with keyboard', async ({ dsPage }) => {
+test('should be able to use with keyboard', async ({ dsPage, tabKey }) => {
   const page = await dsPage.goto('molecule', 'accordion');
 
-  await page.keyboard.press('Tab');
+  await page.keyboard.press(tabKey);
   await page.keyboard.press('Space');
   await page.locator('text=There are two universally').waitFor();
 });

@@ -12,8 +12,9 @@ test('should close when clicking close button', async ({ dsPage }) => {
   await page.locator('text=hi from the sidebar :)').waitFor({ state: 'hidden'});
 });
 
-test('should close when clicking outside container', async ({ dsPage, viewport }) => {
-  test.skip(viewport.width < 640, 'There is no area to click outside on mobile');
+test('should close when clicking outside container', async ({ dsPage, isMobile }) => {
+  test.skip(isMobile, 'There is no area to click outside on mobile');
+
   const page = await dsPage.goto('molecule', 'sidebar');
 
   await page.click('text=open');
@@ -23,9 +24,10 @@ test('should close when clicking outside container', async ({ dsPage, viewport }
   await page.locator('text=hi from the sidebar :)').waitFor({ state: 'hidden'});
 });
 
-test('should not scroll body on long page', async ({ dsPage, browserName, viewport }) => {
+test('should not scroll body on long page', async ({ dsPage, isMobile }) => {
   // TODO: find way to emulate touch scroll
-  test.skip(browserName === 'webkit' && viewport.width < 640, 'webkit mobile does not support scroll wheel');
+  test.skip(isMobile, 'Mobile does not support scroll wheel');
+
   const page = await dsPage.goto('molecule', 'sidebar');
 
   await page.locator('text="open"').click();
@@ -65,12 +67,12 @@ test('should focus sidebar on open', async ({ dsPage }) => {
   expect(focusedTag).toBe('SG-SIDEBAR');
 });
 
-test('should be able to close the sidebar with keyboard', async ({ dsPage }) => {
+test('should be able to close the sidebar with keyboard', async ({ dsPage, tabKey }) => {
   const page = await dsPage.goto('molecule', 'sidebar');
 
   await page.locator('text=open').click();
   await page.locator('text=hi from the sidebar :)').waitFor();
-  await page.keyboard.press('Tab');
+  await page.keyboard.press(tabKey);
   await page.keyboard.press('Space');
 
   await page.locator('text=hi from the sidebar :)').waitFor({ state: 'hidden'});
@@ -87,14 +89,14 @@ test('should be able to close sidebar with keyboard when tabbing backwards', asy
   await page.locator('text=hi from the sidebar :)').waitFor({ state: 'hidden'});
 });
 
-test('should wrap around focus when tabbing past elements', async ({ dsPage }) => {
+test('should wrap around focus when tabbing past elements', async ({ dsPage, tabKey }) => {
   const page = await dsPage.goto('molecule', 'sidebar', 'header-and-footer');
 
   await page.locator('text=open').click();
   await page.locator('text=hi from the sidebar :)').waitFor();
-  await page.keyboard.press('Tab');
-  await page.keyboard.press('Tab');
-  await page.keyboard.press('Tab');
+  await page.keyboard.press(tabKey);
+  await page.keyboard.press(tabKey);
+  await page.keyboard.press(tabKey);
 
   const focusedText = await page.evaluate(() => document.activeElement?.textContent);
   expect(focusedText).toBe('continue');

@@ -40,13 +40,13 @@ test('should close results when arrow up after down', async ({ dsPage }) => {
   await page.locator('text=copenhagen').waitFor({ state: 'hidden' });
 });
 
-test('should reopen results when focusing and using arrow down', async ({ dsPage }) => {
+test('should reopen results when focusing and using arrow down', async ({ dsPage, tabKey }) => {
   const page = await dsPage.goto('molecule', 'autocomplete');
 
   await page.locator('text=city').click();
   await page.keyboard.type('cope');
   await page.locator('text=copenhagen').waitFor();
-  await page.keyboard.press('Tab');
+  await page.keyboard.press(tabKey);
   await page.locator('text=copenhagen').waitFor({ state: 'hidden' });
   await page.keyboard.press('Shift+Tab');
   await page.keyboard.press('ArrowDown');

@@ -35,11 +35,11 @@ test('should not scroll body on long page', async ({ dsPage, isMobile }) => {
   expect(scrollTop).toBe(0);
 });
 
-test('should send back focus to opening element when closing', async ({ dsPage, isMobile }) => {
+test('should send back focus to opening element when closing', async ({ dsPage, isMobile, tabKey }) => {
   test.skip(isMobile, 'Unable to properly test keyboard navigation on mobile');
 
   const page = await dsPage.goto('molecule', 'modal');
-  await page.keyboard.press('Tab');
+  await page.keyboard.press(tabKey);
   await page.keyboard.press('Space');
   await page.locator('text=A modal is a window').waitFor();
   await page.locator('button >> text=close').click();
@@ -57,12 +57,12 @@ test('should focus self on open', async ({ dsPage }) => {
   expect(focusedTag).toBe('SG-MODAL')
 });
 
-test('should be able to close the with keyboard', async ({ dsPage }) => {
+test('should be able to close with keyboard', async ({ dsPage, tabKey }) => {
   const page = await dsPage.goto('molecule', 'modal', 'pre-opened');
 
   await page.locator('text=About Cookies').waitFor();
-  await page.keyboard.press('Tab');
-  await page.keyboard.press('Tab');
+  await page.keyboard.press(tabKey);
+  await page.keyboard.press(tabKey);
   await page.keyboard.press('Space');
 
   await page.locator('text=About Cookies').waitFor({ state: 'hidden'});
@@ -78,13 +78,13 @@ test('should be able to close with keyboard when tabbing backwards', async ({ ds
   await page.locator('text=About Cookies').waitFor({ state: 'hidden'});
 });
 
-test('should wrap around focus when tabbing past elements', async ({ dsPage }) => {
+test('should wrap around focus when tabbing past elements', async ({ dsPage, tabKey }) => {
   const page = await dsPage.goto('molecule', 'modal', 'pre-opened');
 
   await page.locator('text=About Cookies on This Site').waitFor();
-  await page.keyboard.press('Tab');
-  await page.keyboard.press('Tab');
-  await page.keyboard.press('Tab');
+  await page.keyboard.press(tabKey);
+  await page.keyboard.press(tabKey);
+  await page.keyboard.press(tabKey);
 
   const focusedText = await page.evaluate(() => document.activeElement?.textContent);
 

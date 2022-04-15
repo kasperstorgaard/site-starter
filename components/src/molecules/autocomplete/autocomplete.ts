@@ -20,7 +20,7 @@ export interface AutocompleteItem extends Partial<Omit<Omit<HTMLOptionElement, k
 
 /*
   AUTOCOMPLETE ELEMENT
-  ====================
+  --------------------
   inclusive take on an autocomplete, based on Adam Silver's blog post
   uses form attachInternals if available, falling back to hidden input if not.
 

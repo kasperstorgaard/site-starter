@@ -9,10 +9,14 @@ import (
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
+	"github.com/kamva/mgm/v3"
+	"go.mongodb.org/mongo-driver/mongo/options"
 
 	"site-starter/api/shared/authenticator"
-	authRouter "site-starter/api/web/auth/router"
-	usersRouter "site-starter/api/web/users"
+	"site-starter/api/shared/mongodb"
+	"site-starter/api/web/auth"
+	"site-starter/api/web/locations"
+	"site-starter/api/web/users"
 )
 
 type routes struct {
@@ -33,15 +37,24 @@ func main() {
 	store := cookie.NewStore([]byte("secret"))
 	rtr.Use(sessions.Sessions("auth-session", store))
 
-	auth, err := authenticator.New()
+	u := mongodb.BuildURI()
+	// Set up mongodb models (mgm)
+	err := mgm.SetDefaultConfig(nil, "locations", options.Client().ApplyURI(u))
+
+	if err != nil {
+		log.Fatalf("Failed to establish connection to mongodb")
+	}
+
+	auth0, err := authenticator.New()
 	if err != nil {
 		log.Fatalf("Failed to initialize the authenticator: %v", err)
 	}
 
 	api := rtr.Group("/api")
 
-	authRouter.AddRoutes(api, auth)
-	usersRouter.AddRoutes(api, auth)
+	auth.AddRoutes(api, auth0)
+	users.AddRoutes(api, auth0)
+	locations.AddRoutes(api)
 
 	log.Print("Server listening on http://localhost:3003/")
 	if err := http.ListenAndServe("0.0.0.0:3003", rtr); err != nil {

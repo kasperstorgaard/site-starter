@@ -16,15 +16,8 @@ type Authenticator struct {
 }
 
 type Profile struct {
-	aud        string `json:"aud"`
-	exp        string `json:"exp"`
-	iat        string `json:"iat"`
-	iss        string `json:"iss"`
-	name       string `json:"name"`
-	nickname   string `json:"nickname"`
-	picture    string `json:"picture"`
-	sub        string `json:"sub"`
-	updated_at string `json:"updated_at"`
+	Username string `json:"username"`
+	Nickname string `json:"nickname"`
 }
 
 // New instantiates the *Authenticator.

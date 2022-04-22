@@ -3,6 +3,8 @@ package authenticator
 import (
 	"context"
 	"errors"
+	"log"
+	"net/url"
 	"os"
 
 	"github.com/coreos/go-oidc/v3/oidc"
@@ -30,10 +32,17 @@ func New() (*Authenticator, error) {
 		return nil, err
 	}
 
+	redirUrl, err := url.Parse(os.Getenv("DEPLOY_URL"))
+	if err != nil {
+		log.Fatal("failed to parse netlify deploy url")
+	}
+
+	redirUrl.Path = os.Getenv("AUTH0_CALLBACK_PATH")
+
 	conf := oauth2.Config{
 		ClientID:     os.Getenv("AUTH0_CLIENT_ID"),
 		ClientSecret: os.Getenv("AUTH0_CLIENT_SECRET"),
-		RedirectURL:  os.Getenv("AUTH0_CALLBACK_URL"),
+		RedirectURL:  redirUrl.String(),
 		Endpoint:     provider.Endpoint(),
 		Scopes:       []string{oidc.ScopeOpenID, "profile"},
 	}

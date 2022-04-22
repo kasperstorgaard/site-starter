@@ -1,6 +1,7 @@
 package callback
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-contrib/sessions"
@@ -13,8 +14,10 @@ import (
 func Handler(auth *authenticator.Authenticator) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		session := sessions.Default(ctx)
+
+		// TODO: figure out why we cant save "state" in session???
 		if ctx.Query("state") != session.Get("state") {
-			ctx.String(http.StatusBadRequest, "Invalid state parameter.")
+			ctx.String(http.StatusBadRequest, fmt.Sprintf("Invalid state parameter. %s", session.Get("state")))
 			return
 		}
 

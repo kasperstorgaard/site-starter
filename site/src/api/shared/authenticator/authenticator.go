@@ -32,9 +32,17 @@ func New() (*Authenticator, error) {
 		return nil, err
 	}
 
-	redirUrl, err := url.Parse(os.Getenv("DEPLOY_URL"))
+	u := os.Getenv("DEPLOY_URL")
+	if u == "" {
+		u = os.Getenv("DEPLOY_PRIME_URL")
+	}
+	if u == "" {
+		u = os.Getenv("URL")
+	}
+
+	redirUrl, err := url.Parse(u)
 	if err != nil {
-		log.Fatal("failed to parse netlify deploy url")
+		log.Fatal("failed to parse netlify url")
 	}
 
 	redirUrl.Path = os.Getenv("AUTH0_CALLBACK_PATH")

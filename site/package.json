@@ -20,7 +20,7 @@
   "homepage": "https://github.com/kasperstorgaard/site-starter#readme",
   "scripts": {
     "build": "npx astro build",
-    "dev": "netlify dev",
+    "dev": "astro dev",
     "start": "npm run dev",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

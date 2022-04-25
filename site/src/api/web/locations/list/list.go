@@ -1,7 +1,6 @@
 package list
 
 import (
-	"log"
 	"net/http"
 	"site-starter/api/shared/middleware"
 	"site-starter/api/web/locations/models"
@@ -12,7 +11,6 @@ import (
 )
 
 func AddRoutes(grp *gin.RouterGroup) {
-	log.Print("Adding locations routes")
 	grp.GET("", middleware.IsAuthenticated, getAll)
 }
 

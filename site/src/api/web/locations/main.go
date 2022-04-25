@@ -33,12 +33,10 @@ func init() {
 	rtr.Use(sessions.Sessions("auth-session", store))
 
 	u := mongodb.BuildURI()
-	err := mgm.SetDefaultConfig(nil, "location", options.Client().ApplyURI(u))
+	err := mgm.SetDefaultConfig(nil, "locations", options.Client().ApplyURI(u))
 	if err != nil {
 		log.Fatalf("Unable to connect to mongodb")
 	}
-
-	rtr.Use(sessions.Sessions("auth-session", store))
 
 	grp := rtr.Group("/api/locations")
 

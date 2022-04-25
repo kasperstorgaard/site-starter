@@ -48,8 +48,6 @@ github.com/awslabs/aws-lambda-go-api-proxy v0.13.2 h1:Sy8mCKR8GKRRQBU5jt5p6KHD9J
 github.com/awslabs/aws-lambda-go-api-proxy v0.13.2/go.mod h1:+c4BkN5CUEoXrdrOmBruhtRIcmwXWQBu6vz6xCFAvdA=
 github.com/aymerick/douceur v0.2.0/go.mod h1:wlT5vV2O3h55X9m7iVYN0TBM0NH/MmbLnd30/FjWUq4=
 github.com/aymerick/raymond v2.0.3-0.20180322193309-b565731e1464+incompatible/go.mod h1:osfaiScAUVup+UC9Nfq76eWqDhXlp+4UYaA8uhTBO6g=
-github.com/bos-hieu/mongostore v0.0.2 h1:RS2CLzHoRmI/6Cz+sldlva9lJxICHS6odDOGpoFgbUE=
-github.com/bos-hieu/mongostore v0.0.2/go.mod h1:8AbbVmDEb0yqJsBrWxZIAZOxIfv/tsP8CDtdHduZHGg=
 github.com/census-instrumentation/opencensus-proto v0.2.1/go.mod h1:f6KPmirojxKA12rnyqOA5BBL4O983OfeGPqjHWSTneU=
 github.com/chzyer/logex v1.1.10/go.mod h1:+Ywpsq7O8HXn0nuIou7OrIPyXbp3wmkHB+jjWRnGsAI=
 github.com/chzyer/readline v0.0.0-20180603132655-2972be24d48e/go.mod h1:nSuG5e5PlCu98SY8svDHJxuZscDgtXS6KTTbou5AhLI=

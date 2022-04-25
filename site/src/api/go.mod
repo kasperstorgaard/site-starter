@@ -13,8 +13,6 @@ require (
 
 require github.com/aws/aws-lambda-go v1.19.1
 
-require github.com/bos-hieu/mongostore v0.0.2 // indirect
-
 require (
 	github.com/awslabs/aws-lambda-go-api-proxy v0.13.2
 	github.com/davecgh/go-spew v1.1.1 // indirect

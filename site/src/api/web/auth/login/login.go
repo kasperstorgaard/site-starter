@@ -1,10 +1,12 @@
 package login
 
 import (
+	"bytes"
 	"crypto/rand"
 	"encoding/base64"
-	"log"
+	"encoding/json"
 	"net/http"
+	"strings"
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
@@ -12,13 +14,17 @@ import (
 	"site-starter/api/shared/authenticator"
 )
 
+type NextResponse struct {
+	Next string `json:"next"`
+}
+
 // Handler for our login.
 func Handler(auth *authenticator.Authenticator) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		log.Print("login")
 		state, err := generateRandomState()
 
 		if err != nil {
+			ctx.Error(err)
 			ctx.String(http.StatusInternalServerError, err.Error())
 			return
 		}
@@ -28,11 +34,36 @@ func Handler(auth *authenticator.Authenticator) gin.HandlerFunc {
 		session.Set("state", state)
 
 		if err := session.Save(); err != nil {
+			ctx.Error(err)
 			ctx.String(http.StatusInternalServerError, err.Error())
 			return
 		}
 
-		ctx.Redirect(http.StatusTemporaryRedirect, auth.AuthCodeURL(state))
+		// Multi value headers are still not working with netlify lambda,
+		// so use client side response instead to call the url.
+		u := auth.AuthCodeURL(state)
+		u = strings.Replace(u, "\u0026", "&", -1)
+
+		ctx.Header("Location", u)
+		ctx.Header("Cache-Control", "no-cache")
+
+		// Using our own json serializer bc. the auth code url contains html characters,
+		// and we don't want those to be escaped here
+		// TODO: figure out a better way to do this
+		var b bytes.Buffer
+
+		enc := json.NewEncoder(&b)
+		enc.SetEscapeHTML(false)
+		err = enc.Encode(&NextResponse{Next: u})
+
+		if err != nil {
+			ctx.Error(err)
+			ctx.String(http.StatusInternalServerError, "Failed")
+			return
+		}
+
+		ctx.Header("Content-Type", "application/json")
+		ctx.String(http.StatusFound, b.String())
 	}
 }
 
@@ -44,7 +75,6 @@ func generateRandomState() (string, error) {
 	}
 
 	state := base64.StdEncoding.EncodeToString(b)
-	log.Printf("random state: %s", state)
 
 	return state, nil
 }

@@ -18,13 +18,13 @@ func findById(ctx *gin.Context) {
 	ctx.String(http.StatusInternalServerError, "Not implemented")
 }
 
-type invalidSessionError struct {
-	session interface{}
-}
+// type invalidSessionError struct {
+// 	session interface{}
+// }
 
-func (e *invalidSessionError) Error() string {
-	return "invalid session"
-}
+// func (e *invalidSessionError) Error() string {
+// 	return "invalid session"
+// }
 
 func getMe(ctx *gin.Context) {
 	// d, ok := session.Get("profile").(map[string]interface{})
@@ -32,8 +32,8 @@ func getMe(ctx *gin.Context) {
 	// TODO: get user from id in cookie
 
 	// if !ok {
-	ctx.Error(&invalidSessionError{session: ""})
-	ctx.String(http.StatusUnauthorized, "Unauthorized")
+	// ctx.Error(&invalidSessionError{session: ""})
+	ctx.String(http.StatusUnauthorized, "Not implemented")
 	// 	return
 	// }
 

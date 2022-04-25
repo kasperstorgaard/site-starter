@@ -1,7 +1,6 @@
 package logout
 
 import (
-	"log"
 	"net/http"
 	"net/url"
 	"os"
@@ -17,23 +16,13 @@ func Handler(ctx *gin.Context) {
 	logoutUrl, err := url.Parse("https://" + os.Getenv("AUTH0_DOMAIN") + "/v2/logout")
 
 	if err != nil {
+		ctx.Error(err)
 		ctx.String(http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	scheme := "http"
-	if ctx.Request.TLS != nil {
-		scheme = "https"
-	}
-
-	log.Printf("scheme: %s, url: %s", scheme, ctx.Request.URL)
-
-	// Not sure why gin-gonic + lambda can't find localhost in either
-	// .Host or .URL (concerning...)
-	u, err := url.Parse(os.Getenv("DEPLOY_URL") + "/api/auth/logout")
-	// TODO: better handling of returnTo, if query param specified
-
 	if err != nil {
+		ctx.Error(err)
 		ctx.String(http.StatusInternalServerError, err.Error())
 	}
 
@@ -42,9 +31,16 @@ func Handler(ctx *gin.Context) {
 	session.Delete("profile")
 
 	parameters := url.Values{}
-	parameters.Add("returnTo", u.String())
+	parameters.Add("returnTo", ctx.Request.Referer())
 	parameters.Add("client_id", os.Getenv("AUTH0_CLIENT_ID"))
 	logoutUrl.RawQuery = parameters.Encode()
 
-	ctx.Redirect(http.StatusTemporaryRedirect, logoutUrl.String())
+	// Multi value headers are still not working with netlify lambda,
+	// so use client side response instead to call the url.
+	ctx.Header("Location", logoutUrl.String())
+	ctx.Header("Cache-Control", "no-cache")
+
+	ctx.JSON(http.StatusFound, gin.H{
+		"next": logoutUrl.String(),
+	})
 }

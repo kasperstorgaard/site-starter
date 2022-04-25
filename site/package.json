@@ -19,14 +19,16 @@
   },
   "homepage": "https://github.com/kasperstorgaard/site-starter#readme",
   "scripts": {
-    "build": "astro build",
-    "dev": "astro dev",
+    "build": "npx astro build",
+    "dev": "netlify dev",
     "start": "npm run dev",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
     "astro": "^0.25.4",
     "astro-icon": "^0.6.1",
+    "lit": "^2.2.2",
+    "netlify-cli": "^10.0.0",
     "picocolors": "^1.0.0",
     "source-map": "^0.6.1",
     "vite": "^2.9.0"

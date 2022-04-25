@@ -8,3 +8,4 @@
 
 [dev]
   framework = "astro"
+  port = 8888

@@ -1,14 +1,8 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import '@components/atoms/button/button.scss';
 ---
 <BaseLayout>
-
   <style lang="scss">
-    aside {
-      width: 100%;
-    }
-
     section {
       flex-grow: 1;
       align-self: center;
@@ -20,7 +14,6 @@ import '@components/atoms/button/button.scss';
   </style>
 
   <section>
-    hi :)
-    <button class="sg-button -theme-primary">click me!</button>
+    <a href="/locations">locations</a>
   </section>
 </BaseLayout>

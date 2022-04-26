@@ -1,13 +1,20 @@
 package logout
 
 import (
+	"bytes"
+	"encoding/json"
 	"net/http"
 	"net/url"
 	"os"
+	"site-starter/api/shared/env"
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
+
+type NextResponse struct {
+	Next string `json:"next"`
+}
 
 // Handler for our logout.
 func Handler(ctx *gin.Context) {
@@ -32,7 +39,7 @@ func Handler(ctx *gin.Context) {
 
 	returnTo := ctx.Request.Referer()
 	if returnTo == "" {
-		returnTo = ctx.Request.URL.String()
+		returnTo = env.ApiUrl().String() + "/api/auth/logout"
 	}
 
 	parameters := url.Values{}
@@ -45,7 +52,20 @@ func Handler(ctx *gin.Context) {
 	ctx.Header("Location", logoutUrl.String())
 	ctx.Header("Cache-Control", "no-cache")
 
-	ctx.JSON(http.StatusFound, gin.H{
-		"next": logoutUrl.String(),
-	})
+	// Using our own json serializer bc. the auth code url contains html characters,
+	// and we don't want those to be escaped here
+	// TODO: figure out a better way to do this
+	var b bytes.Buffer
+
+	enc := json.NewEncoder(&b)
+	enc.SetEscapeHTML(false)
+	err = enc.Encode(&NextResponse{Next: logoutUrl.String()})
+
+	if err != nil {
+		ctx.Error(err)
+		ctx.String(http.StatusInternalServerError, "Failed")
+		return
+	}
+	ctx.Header("Content-Type", "application/json")
+	ctx.String(http.StatusFound, b.String())
 }

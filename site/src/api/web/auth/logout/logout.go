@@ -3,10 +3,10 @@ package logout
 import (
 	"bytes"
 	"encoding/json"
+	"log"
 	"net/http"
 	"net/url"
 	"os"
-	"site-starter/api/shared/env"
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
@@ -37,9 +37,15 @@ func Handler(ctx *gin.Context) {
 	session.Delete("state")
 	session.Delete("profile")
 
+	log.Printf("url: %s", ctx.Request.URL.String())
+
 	returnTo := ctx.Request.Referer()
+	// TODO: extract?
 	if returnTo == "" {
-		returnTo = env.ApiUrl().String() + "/api/auth/logout"
+		u := ctx.Request.URL
+		if u.Host == "" {
+			u.Host = "localhost:8888"
+		}
 	}
 
 	parameters := url.Values{}

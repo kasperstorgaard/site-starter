@@ -23,6 +23,8 @@ func Handler(auth *authenticator.Authenticator) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		state, err := generateRandomState()
 
+		auth.SetRedirectUrl(ctx)
+
 		if err != nil {
 			ctx.Error(err)
 			ctx.String(http.StatusInternalServerError, err.Error())

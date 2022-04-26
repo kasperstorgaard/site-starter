@@ -17,6 +17,8 @@ func Handler(auth *authenticator.Authenticator) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		isDev := env.IsDev()
 
+		auth.SetRedirectUrl(ctx)
+
 		// TODO: figure out why we cant save "state" in session???
 		session := sessions.Default(ctx)
 

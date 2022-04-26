@@ -30,8 +30,13 @@ func Handler(ctx *gin.Context) {
 	session.Delete("state")
 	session.Delete("profile")
 
+	returnTo := ctx.Request.Referer()
+	if returnTo == "" {
+		returnTo = ctx.Request.URL.String()
+	}
+
 	parameters := url.Values{}
-	parameters.Add("returnTo", ctx.Request.Referer())
+	parameters.Add("returnTo", returnTo)
 	parameters.Add("client_id", os.Getenv("AUTH0_CLIENT_ID"))
 	logoutUrl.RawQuery = parameters.Encode()
 

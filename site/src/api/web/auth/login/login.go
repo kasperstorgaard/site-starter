@@ -41,20 +41,20 @@ func Handler(auth *authenticator.Authenticator) gin.HandlerFunc {
 
 		// Multi value headers are still not working with netlify lambda,
 		// so use client side response instead to call the url.
-		u := auth.AuthCodeURL(state)
-		u = strings.Replace(u, "\u0026", "&", -1)
+		authURL := auth.AuthCodeURL(state)
+		authURL = strings.Replace(authURL, "\u0026", "&", -1)
 
-		ctx.Header("Location", u)
+		ctx.Header("Location", authURL)
 		ctx.Header("Cache-Control", "no-cache")
 
 		// Using our own json serializer bc. the auth code url contains html characters,
 		// and we don't want those to be escaped here
 		// TODO: figure out a better way to do this
-		var b bytes.Buffer
+		var resp bytes.Buffer
 
-		enc := json.NewEncoder(&b)
+		enc := json.NewEncoder(&resp)
 		enc.SetEscapeHTML(false)
-		err = enc.Encode(&NextResponse{Next: u})
+		err = enc.Encode(&NextResponse{Next: authURL})
 
 		if err != nil {
 			ctx.Error(err)
@@ -63,7 +63,7 @@ func Handler(auth *authenticator.Authenticator) gin.HandlerFunc {
 		}
 
 		ctx.Header("Content-Type", "application/json")
-		ctx.String(http.StatusFound, b.String())
+		ctx.String(http.StatusFound, resp.String())
 	}
 }
 

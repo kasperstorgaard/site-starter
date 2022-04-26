@@ -16,33 +16,14 @@ func IsDev() bool {
 	return u.Hostname() == "localhost"
 }
 
+// TODO: figure out why netlify DEPLOY_URL is not reliably usable in deploy preview context?
 func ApiUrl() *url.URL {
 	switch os.Getenv("CONTEXT") {
-	case "deploy-preview":
-		v := os.Getenv("DEPLOY_URL")
-
-		// Special case/bug for deploy preview here,
-		// instead building what should have been set for us already
-		if v == "" {
-			v := os.Getenv("DEPLOY_PRIME_URL")
-			u, err := url.Parse(v)
-			if err != nil {
-				log.Fatalf("unable to parse environment variable DEPLOY_PRIME_URL")
-			}
-			u.Host = fmt.Sprintf("%s--%s", os.Getenv("DEPLOY_ID"), u.Host)
-			return u
-		}
-
-		u, err := url.Parse(v)
-		if err != nil {
-			log.Fatalf("unable to parse environment variable  DEPLOY_URL")
-		}
-		return u
 	case "branch-deploy":
 		v := os.Getenv("DEPLOY_PRIME_URL")
 		u, err := url.Parse(v)
 		if err != nil {
-			log.Fatalf("unable to parse environment variable  DEPLOY_PRIME_URL")
+			log.Fatalf("unable to parse environment variable DEPLOY_PRIME_URL")
 		}
 		return u
 	case "production":
@@ -53,11 +34,31 @@ func ApiUrl() *url.URL {
 		}
 		return u
 	default:
-		v := os.Getenv("DEPLOY_URL")
-		u, err := url.Parse(v)
+		u, err := url.Parse(os.Getenv("DEPLOY_URL"))
 		if err != nil {
 			log.Fatalf("unable to parse environment variable DEPLOY_URL")
 		}
+
+		// primary fallback
+		if u.String() == "" {
+			u, err = url.Parse(os.Getenv("DEPLOY_PRIME_URL"))
+			if err != nil {
+				log.Fatalf("unable to parse environment variable DEPLOY_PRIME_URL")
+			}
+			id := os.Getenv("DEPLOY_ID")
+			if id != "" {
+				u.Host = fmt.Sprintf("%s--%s", id, u.Host)
+			}
+		}
+
+		// secondary fallback
+		if u.String() == "" {
+			u, err = url.Parse(os.Getenv("URL"))
+			if err != nil {
+				log.Fatalf("unable to get environment variable URL")
+			}
+		}
+
 		return u
 	}
 }

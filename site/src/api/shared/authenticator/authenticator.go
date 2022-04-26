@@ -3,9 +3,8 @@ package authenticator
 import (
 	"context"
 	"errors"
-	"log"
-	"net/url"
 	"os"
+	"site-starter/api/shared/env"
 
 	"github.com/coreos/go-oidc/v3/oidc"
 	"golang.org/x/oauth2"
@@ -32,19 +31,7 @@ func New() (*Authenticator, error) {
 		return nil, err
 	}
 
-	u := os.Getenv("DEPLOY_URL")
-	if u == "" {
-		u = os.Getenv("DEPLOY_PRIME_URL")
-	}
-	if u == "" {
-		u = os.Getenv("URL")
-	}
-
-	redirUrl, err := url.Parse(u)
-	if err != nil {
-		log.Fatal("failed to parse netlify url")
-	}
-
+	redirUrl := env.ApiUrl()
 	redirUrl.Path = os.Getenv("AUTH0_CALLBACK_PATH")
 
 	conf := oauth2.Config{

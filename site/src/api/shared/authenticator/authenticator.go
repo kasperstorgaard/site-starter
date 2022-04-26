@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/url"
 	"os"
+	"site-starter/api/shared/env"
 
 	"github.com/coreos/go-oidc/v3/oidc"
 	"github.com/gin-gonic/gin"
@@ -70,13 +71,13 @@ func (a *Authenticator) VerifyIDToken(ctx context.Context, token *oauth2.Token) 
 
 func (a *Authenticator) SetRedirectUrl(ctx *gin.Context) {
 	// clone the url and build a new one
-	u, _ := url.Parse(ctx.Request.URL.String())
-
-	// TODO: find a better way to do this?
-	if u.Host == "" {
-		u.Host = "localhost:8888"
-		u.Scheme = "http"
+	if env.IsDev() {
+		a.Config.RedirectURL = "http://localhost:8888/api/auth/callback"
+		return
 	}
+
+	r := ctx.Request.Referer()
+	u, _ := url.Parse(r)
 
 	u.Path = "/api/auth/callback"
 	a.Config.RedirectURL = u.String()

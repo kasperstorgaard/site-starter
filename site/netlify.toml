@@ -16,3 +16,6 @@
 
 [context.production]
   environment = { API_URL = "$URL" }
+
+[[plugins]]
+  package = "/plugins/netlify-plugin-functions-config"

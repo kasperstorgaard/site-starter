@@ -3,13 +3,10 @@ package authenticator
 import (
 	"context"
 	"errors"
-	"log"
-	"net/url"
 	"os"
-	"site-starter/api/shared/env"
+	"site-starter/api/shared/config"
 
 	"github.com/coreos/go-oidc/v3/oidc"
-	"github.com/gin-gonic/gin"
 	"golang.org/x/oauth2"
 )
 
@@ -34,17 +31,13 @@ func New() (*Authenticator, error) {
 		return nil, err
 	}
 
-	redirUrl, err := url.Parse(os.Getenv("URL"))
-	if err != nil {
-		log.Fatalf("unable to parse environment variable URL")
-	}
-
+	redirUrl := config.ApiURL()
 	redirUrl.Path = os.Getenv("AUTH0_CALLBACK_PATH")
 
 	conf := oauth2.Config{
 		ClientID:     os.Getenv("AUTH0_CLIENT_ID"),
 		ClientSecret: os.Getenv("AUTH0_CLIENT_SECRET"),
-		RedirectURL:  "",
+		RedirectURL:  redirUrl.String(),
 		Endpoint:     provider.Endpoint(),
 		Scopes:       []string{oidc.ScopeOpenID, "profile"},
 	}
@@ -67,18 +60,4 @@ func (a *Authenticator) VerifyIDToken(ctx context.Context, token *oauth2.Token) 
 	}
 
 	return a.Verifier(oidcConfig).Verify(ctx, rawIDToken)
-}
-
-func (a *Authenticator) SetRedirectUrl(ctx *gin.Context) {
-	// clone the url and build a new one
-	if env.IsDev() {
-		a.Config.RedirectURL = "http://localhost:8888/api/auth/callback"
-		return
-	}
-
-	u := ctx.Request.URL
-	u.Host = ctx.Request.Host
-	u.Path = "/api/auth/callback"
-
-	a.Config.RedirectURL = u.String()
 }

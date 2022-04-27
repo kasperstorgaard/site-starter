@@ -9,15 +9,13 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"site-starter/api/shared/authenticator"
-	"site-starter/api/shared/env"
+	"site-starter/api/shared/config"
 )
 
 // Handler for our callback.
 func Handler(auth *authenticator.Authenticator) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		isDev := env.IsDev()
-
-		auth.SetRedirectUrl(ctx)
+		isDev := config.IsDev()
 
 		// TODO: figure out why we cant save "state" in session???
 		session := sessions.Default(ctx)

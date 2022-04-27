@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"site-starter/api/shared/config"
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
@@ -37,13 +38,13 @@ func Handler(ctx *gin.Context) {
 	session.Delete("state")
 	session.Delete("profile")
 
-	log.Printf("url: %s", ctx.Request.URL.String())
+	r := config.ApiURL()
+	r.Path = "/api/auth/logout"
 
-	returnTo := ctx.Request.URL
-	returnTo.Host = ctx.Request.Host
+	log.Printf("url: %s, host: %s", r.String(), r.Host)
 
 	parameters := url.Values{}
-	parameters.Add("returnTo", returnTo.String())
+	parameters.Add("returnTo", r.String())
 	parameters.Add("client_id", os.Getenv("AUTH0_CLIENT_ID"))
 	logoutUrl.RawQuery = parameters.Encode()
 

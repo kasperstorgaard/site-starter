@@ -76,9 +76,9 @@ func (a *Authenticator) SetRedirectUrl(ctx *gin.Context) {
 		return
 	}
 
-	r := ctx.Request.Referer()
-	u, _ := url.Parse(r)
-
+	u := ctx.Request.URL
+	u.Host = ctx.Request.Host
 	u.Path = "/api/auth/callback"
+
 	a.Config.RedirectURL = u.String()
 }

@@ -39,17 +39,11 @@ func Handler(ctx *gin.Context) {
 
 	log.Printf("url: %s", ctx.Request.URL.String())
 
-	returnTo := ctx.Request.Referer()
-	// TODO: extract?
-	if returnTo == "" {
-		u := ctx.Request.URL
-		if u.Host == "" {
-			u.Host = "localhost:8888"
-		}
-	}
+	returnTo := ctx.Request.URL
+	returnTo.Host = ctx.Request.Host
 
 	parameters := url.Values{}
-	parameters.Add("returnTo", returnTo)
+	parameters.Add("returnTo", returnTo.String())
 	parameters.Add("client_id", os.Getenv("AUTH0_CLIENT_ID"))
 	logoutUrl.RawQuery = parameters.Encode()
 

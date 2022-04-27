@@ -1,81 +1,42 @@
 package config
 
 import (
-	"encoding/json"
-	"io/ioutil"
 	"log"
 	"net/url"
 	"os"
-	"path"
 )
 
-type values struct {
+type Config struct {
 	ApiURL  string `json:"apiURL"`
 	Context string `json:"context"`
 }
 
-type Config struct {
-	values
-}
+var conf *Config
 
 // simple singleton concept to minimize reads
-var instance *Config
-
-func readConfig() *Config {
-	if instance != nil {
-		return instance
+func init() {
+	conf = &Config{
+		ApiURL:  os.Getenv("DEPLOY_URL"),
+		Context: os.Getenv("CONTEXT"),
 	}
 
-	// Open our jsonFile
-	dir, err := os.Getwd()
-	if err != nil {
-		log.Fatalf("unable to get working dir")
+	// Placeholder values, to be replaced at build time.
+	// TODO: find a better way
+	// Would _love_ for there to be a better/easier way to do this in netlify
+	// with environment variables, but there doesn't seem to be any bc. of a
+	// aws lambda env variables size restriction.
+	if os.Getenv("CONTEXT") != "dev" {
+		conf.ApiURL = "$$API_URL"
+		conf.Context = "$$CONTEXT"
 	}
-
-	var f string
-
-	// Load the checked in dev file here
-	if os.Getenv("CONTEXT") == "dev" {
-		f = "dev.config.json"
-	} else {
-		// Or the one written in build plugin "netlify-plugins-config-functions"
-		f = "config.json"
-	}
-
-	p := path.Join(dir, "../../", f)
-	file, err := os.Open(p)
-
-	if err != nil {
-		log.Fatalf("unable to open file at: %s", p)
-	}
-
-	// defer the closing of our jsonFile so that we can parse it later on
-	defer file.Close()
-
-	b, err := ioutil.ReadAll(file)
-	if err != nil {
-		log.Fatalf("unable to read file contents")
-	}
-
-	var result values
-	err = json.Unmarshal(b, &result)
-	if err != nil {
-		log.Fatalf("unable to unmarshal into json: %v", b)
-	}
-
-	instance = &Config{
-		result,
-	}
-
-	return instance
 }
 
 func IsDev() bool {
-	return readConfig().Context == "dev"
+	return conf.Context == "dev"
 }
 
 func ApiURL() *url.URL {
-	u, err := url.Parse(readConfig().ApiURL)
+	u, err := url.Parse(conf.ApiURL)
 	if err != nil {
 		log.Fatal("Invalid url for ApiURL config")
 	}

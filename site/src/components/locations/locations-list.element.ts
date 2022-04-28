@@ -16,7 +16,7 @@ export class LocationsList extends LitElement  {
   constructor() {
     super();
 
-    this.controller = new LocationsListController(this, { port: 8888, isDev: true });
+    this.controller = new LocationsListController(this);
   }
 
   connectedCallback(): void {
@@ -46,9 +46,6 @@ function getStyles() {
   return css`
   [hidden] {
     display: none !important;
-  }
-
-  :host {
   }
   `;
 }

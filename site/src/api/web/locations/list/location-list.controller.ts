@@ -15,7 +15,7 @@ export class LocationsListController<T extends LitElement = any> implements Reac
   public state: 'ready'|'loading'|'error'|'initial' = 'initial';
 
   // TODO: extract to shared api controller configs,
-  constructor(host: T | null) {
+  constructor(host?: T | null) {
     this.host = host;
     this.host?.addController(this);
   }

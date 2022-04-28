@@ -24,8 +24,7 @@ func Handler(auth *authenticator.Authenticator) gin.HandlerFunc {
 		state, err := generateRandomState()
 
 		if err != nil {
-			ctx.Error(err)
-			ctx.String(http.StatusInternalServerError, err.Error())
+			ctx.AbortWithError(http.StatusInternalServerError, err)
 			return
 		}
 
@@ -34,8 +33,7 @@ func Handler(auth *authenticator.Authenticator) gin.HandlerFunc {
 		session.Set("state", state)
 
 		if err := session.Save(); err != nil {
-			ctx.Error(err)
-			ctx.String(http.StatusInternalServerError, err.Error())
+			ctx.AbortWithError(http.StatusInternalServerError, err)
 			return
 		}
 
@@ -57,8 +55,7 @@ func Handler(auth *authenticator.Authenticator) gin.HandlerFunc {
 		err = enc.Encode(&NextResponse{Next: authURL})
 
 		if err != nil {
-			ctx.Error(err)
-			ctx.String(http.StatusInternalServerError, "Failed")
+			ctx.AbortWithError(http.StatusInternalServerError, err)
 			return
 		}
 

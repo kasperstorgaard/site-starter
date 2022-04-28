@@ -24,14 +24,12 @@ func Handler(ctx *gin.Context) {
 	logoutUrl, err := url.Parse("https://" + os.Getenv("AUTH0_DOMAIN") + "/v2/logout")
 
 	if err != nil {
-		ctx.Error(err)
-		ctx.String(http.StatusInternalServerError, err.Error())
+		ctx.AbortWithError(http.StatusInternalServerError, err)
 		return
 	}
 
 	if err != nil {
-		ctx.Error(err)
-		ctx.String(http.StatusInternalServerError, err.Error())
+		ctx.AbortWithError(http.StatusInternalServerError, err)
 	}
 
 	// Is this needed?
@@ -63,8 +61,7 @@ func Handler(ctx *gin.Context) {
 	err = enc.Encode(&NextResponse{Next: logoutUrl.String()})
 
 	if err != nil {
-		ctx.Error(err)
-		ctx.String(http.StatusInternalServerError, "Failed")
+		ctx.AbortWithError(http.StatusInternalServerError, err)
 		return
 	}
 	ctx.Header("Content-Type", "application/json")

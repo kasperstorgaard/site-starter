@@ -39,8 +39,7 @@ func Handler(auth *authenticator.Authenticator) gin.HandlerFunc {
 		// Verify the exchanged token using open id (oidc)
 		idToken, err := auth.VerifyIDToken(ctx.Request.Context(), token)
 		if err != nil {
-			ctx.Error(err)
-			ctx.String(http.StatusInternalServerError, "Failed to verify ID Token.")
+			ctx.AbortWithError(http.StatusInternalServerError, err)
 			return
 		}
 
@@ -48,8 +47,7 @@ func Handler(auth *authenticator.Authenticator) gin.HandlerFunc {
 		// TODO: what is the role of "claims" here?
 		var profile map[string]interface{}
 		if err := idToken.Claims(&profile); err != nil {
-			ctx.Error(err)
-			ctx.String(http.StatusInternalServerError, err.Error())
+			ctx.AbortWithError(http.StatusInternalServerError, errors.New("Not implemented"))
 			return
 		}
 
@@ -58,8 +56,7 @@ func Handler(auth *authenticator.Authenticator) gin.HandlerFunc {
 		session.Set("access_token", token.AccessToken)
 		session.Set("profile", profile)
 		if err := session.Save(); err != nil {
-			ctx.Error(err)
-			ctx.String(http.StatusInternalServerError, err.Error())
+			ctx.AbortWithError(http.StatusInternalServerError, errors.New("Not implemented"))
 			return
 		}
 

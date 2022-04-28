@@ -1,6 +1,7 @@
 package list
 
 import (
+	"errors"
 	"net/http"
 	"site-starter/api/shared/middleware"
 
@@ -15,5 +16,5 @@ func AddRoutes(grp *gin.RouterGroup) {
 func getAll(ctx *gin.Context) {
 	// Steps:
 	// 1. Get all users from auth0 using mgmt token
-	ctx.String(http.StatusInternalServerError, "Not implemented")
+	ctx.AbortWithError(http.StatusInternalServerError, errors.New("not implemented"))
 }

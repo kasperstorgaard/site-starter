@@ -1,6 +1,7 @@
 package single
 
 import (
+	"errors"
 	"net/http"
 	"site-starter/api/shared/middleware"
 
@@ -15,7 +16,7 @@ func AddRoutes(grp *gin.RouterGroup) {
 func findById(ctx *gin.Context) {
 	// Steps:
 	// 1. Get user from auth0 using mgmt token
-	ctx.String(http.StatusInternalServerError, "Not implemented")
+	ctx.AbortWithError(http.StatusInternalServerError, errors.New("not implemented"))
 }
 
 // type invalidSessionError struct {

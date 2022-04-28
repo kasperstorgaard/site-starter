@@ -1,6 +1,7 @@
 package claim
 
 import (
+	"errors"
 	"net/http"
 	"site-starter/api/shared/middleware"
 
@@ -17,5 +18,5 @@ func claim(ctx *gin.Context) {
 	// Check to see if location is already claimed
 	// Claim if available
 	// Error if already claimed
-	ctx.String(http.StatusInternalServerError, "Not implemented yet")
+	ctx.AbortWithError(http.StatusInternalServerError, errors.New("Not implemented"))
 }

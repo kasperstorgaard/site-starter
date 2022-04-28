@@ -13,12 +13,9 @@ import (
 func IsAuthenticated(ctx *gin.Context) {
 	// TODO: add role based auth configs (rbac) to this middleware,
 	// so we have a shared way to set up what kind of users can access each endpoint.
-	isDev := config.IsDev()
-
-	if !isDev && sessions.Default(ctx).Get("profile") == nil {
-		// return a more helpful error in dev mode?
-		// TODO: logging
+	if !config.IsDev() && sessions.Default(ctx).Get("profile") == nil {
 		ctx.String(http.StatusUnauthorized, "not authorized to access resource")
+		ctx.Abort()
 	} else {
 		ctx.Next()
 	}

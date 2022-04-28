@@ -35,8 +35,7 @@ func create(ctx *gin.Context) {
 	err = mgm.Coll(in).Create(in)
 
 	if err != nil {
-		ctx.Error(err)
-		ctx.String(http.StatusInternalServerError, "Failed to create location")
+		ctx.AbortWithError(http.StatusInternalServerError, err)
 		return
 	}
 
@@ -83,8 +82,7 @@ func updateById(ctx *gin.Context) {
 	mgm.Coll(in).Update(in)
 
 	if err != nil {
-		ctx.Error(err)
-		ctx.String(http.StatusInternalServerError, "Failed to update location")
+		ctx.AbortWithError(http.StatusInternalServerError, err)
 		return
 	}
 
@@ -102,8 +100,7 @@ func deleteById(ctx *gin.Context) {
 
 	err = mgm.Coll(t).Delete(t)
 	if err != nil {
-		ctx.Error(err)
-		ctx.String(http.StatusInternalServerError, "Unable to delete location")
+		ctx.AbortWithError(http.StatusInternalServerError, err)
 		return
 	}
 

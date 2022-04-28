@@ -2,3 +2,20 @@
   base = "site/"
   command = "npm run build"
   publish = "dist/"
+
+[functions]
+  directory = "src/api/web"
+
+[dev]
+  framework = "astro"
+  port = 8888
+  environment = { API_URL = "$DEPLOY_URL" }
+
+[context.deploy-preview]
+  environment = { API_URL = "$DEPLOY_URL" }
+
+[context.production]
+  environment = { API_URL = "$URL" }
+
+[[plugins]]
+  package = "/plugins/netlify-plugin-config"

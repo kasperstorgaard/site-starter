@@ -1,3 +1,6 @@
 # Generated files
 dist
 
+# Generated config file
+src/api/config.json
+

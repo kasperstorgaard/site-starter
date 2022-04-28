@@ -1,0 +1,31 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+<BaseLayout>
+  <style lang="scss">
+    aside {
+      width: 100%;
+    }
+
+    section {
+      flex-grow: 1;
+      align-self: center;
+
+      display: flex;
+      flex-direction: column;
+    }
+  </style>
+
+  <section>
+    <p>
+    This is a client side fetched list of locations, as they should not be publicly available.<br />
+    TODO: can this be done in the edge with netlify edge functions?
+    </p>
+
+    <script hoist>
+      import "../../components/locations/locations-list.element.ts";
+    </script>
+    <sg-locations-list>
+    </sg-locations-list>
+  </section>
+</BaseLayout>

@@ -18,4 +18,4 @@
   environment = { API_URL = "$URL" }
 
 [[plugins]]
-  package = "/plugins/netlify-plugin-functions-config"
+  package = "/plugins/netlify-plugin-config"

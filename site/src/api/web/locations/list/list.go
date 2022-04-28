@@ -2,6 +2,7 @@ package list
 
 import (
 	"net/http"
+	"site-starter/api/shared/middleware"
 	"site-starter/api/web/locations/models"
 
 	"github.com/gin-gonic/gin"
@@ -10,7 +11,7 @@ import (
 )
 
 func AddRoutes(grp *gin.RouterGroup) {
-	grp.GET("", getAll)
+	grp.GET("", middleware.IsAuthenticated, getAll)
 }
 
 func getAll(ctx *gin.Context) {

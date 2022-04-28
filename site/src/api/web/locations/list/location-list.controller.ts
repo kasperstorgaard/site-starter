@@ -47,7 +47,6 @@ export class LocationsListController<T extends LitElement = any> implements Reac
       return this.data;
     } finally {
       this.host?.requestUpdate();
-      console.log(this.state);
     }
   }
 }

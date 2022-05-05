@@ -1,0 +1,13 @@
+diff --git a/node_modules/vite-plugin-pwa/dist/index.js b/node_modules/vite-plugin-pwa/dist/index.js
+index 6862f54..4926e2d 100644
+--- a/node_modules/vite-plugin-pwa/dist/index.js
++++ b/node_modules/vite-plugin-pwa/dist/index.js
+@@ -726,7 +726,7 @@ function VitePWA(userOptions = {}) {
+       },
+       api: {
+         get disabled() {
+-          return options2.disable;
++          return options2 && options2.disable;
+         },
+         generateBundle: _generateBundle,
+         generateSW: _generateSW,

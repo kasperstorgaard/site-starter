@@ -6,3 +6,7 @@ sg-modal h1 {
 sg-modal > * + p {
   margin-top: 1em;
 }
+
+sg-modal:not([loaded]) {
+  display: none !important;
+}

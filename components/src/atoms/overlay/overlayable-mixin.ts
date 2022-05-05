@@ -56,6 +56,8 @@ export const Overlayable = <T extends Constructor<LitElement>>(superClass: T) =>
       connectedCallback(): void {
         super.connectedCallback();
 
+        this.setAttribute('loaded', 'loaded');
+
         this._overlayElement = document.createElement('sg-overlay') as OverlayElement;
         document.body.appendChild(this._overlayElement);
 
@@ -81,7 +83,7 @@ export const Overlayable = <T extends Constructor<LitElement>>(superClass: T) =>
             return;
           }
 
-          this.isOpen = false;
+          this.close();
         });
       }
 
@@ -105,14 +107,20 @@ export const Overlayable = <T extends Constructor<LitElement>>(superClass: T) =>
 
       open() {
         this.isOpen = true;
+        this.dispatchEvent(new CustomEvent('open'));
       }
 
       close() {
         this.isOpen = false;
+        this.dispatchEvent(new CustomEvent('close'));
       }
 
       toggle() {
-        this.isOpen = !this.isOpen;
+        if (this.isOpen) {
+          this.close();
+        } else {
+          this.open();
+        }
       }
 
       private _closeOnEscape = (event: KeyboardEvent) => {

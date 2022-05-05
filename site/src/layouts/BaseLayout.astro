@@ -2,6 +2,8 @@
 import Header from '../components/header/Header.astro';
 
 import '@components/styles/props.scss';
+import '@components/molecules/modal/modal.scss';
+import '@components/atoms/button/button.scss';
 import '../styles/reset.css';
 import '../styles/brand.scss';
 import '../styles/fonts.css';
@@ -43,5 +45,24 @@ const title = 'Site Starter';
   <main>
     <slot />
 	</main>
+  <sg-modal id="login-modal">
+    <p>
+      It seems you were either logged out, or you don't have access to view the page you are on.
+    </p>
+    <a
+      href="/"
+    >Take me back</a>
+    <a
+      id="login-modal-continue"
+      href="/api/auth/login"
+    >Log me in scotty</a>
+  </sg-modal>
+  <script>
+    import '../main.ts';
+  </script>
+  <script>
+    import '@components/molecules/modal/modal.ts';
+    import '@components/atoms/overlay/overlay.ts';
+  </script>
 </body>
 </html>

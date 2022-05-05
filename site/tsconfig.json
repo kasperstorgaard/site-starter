@@ -10,6 +10,8 @@
     "baseUrl": ".",
     "paths": {
       "@components/*": ["../components/src/*"]
-    }
+    },
+    "types": ["vite/client"],
+    "lib": ["ESNext", "DOM", "WebWorker"],
   }
 }

@@ -23,6 +23,14 @@ func init() {
 		ApiURL:  os.Getenv("PUBLIC_API_URL"),
 		Context: os.Getenv("PUBLIC_CONTEXT"),
 	}
+
+	if conf.ApiURL == "" {
+		conf.ApiURL = os.Getenv("DEPLOY_URL")
+	}
+
+	if conf.Context == "" {
+		conf.Context = os.Getenv("CONTEXT")
+	}
 }
 
 func IsDev() bool {

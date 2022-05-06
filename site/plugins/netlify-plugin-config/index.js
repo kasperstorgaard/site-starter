@@ -22,7 +22,7 @@ module.exports = {
     };
 
     for (const key in variables) {
-      contents = contents + `${key}=${variables[key]}\n`
+      contents = contents + `PUBLIC_${key}=${variables[key]}\n`
     }
 
     fs.writeFileSync(filePath, contents, 'utf8');
